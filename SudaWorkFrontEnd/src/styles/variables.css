@@ -1,0 +1,16 @@
+:root {
+  /* Brand Colors */
+  --color-primary-dark: #00543B;   /* Hero bg, nav buttons, badges */
+  --color-primary: #0B6E4F;         /* Signup card button, icon bg */
+  --color-accent: #00DCAC;          /* Primary CTA buttons */
+  --color-white: #FFFFFF;           /* Card & section backgrounds */
+
+  /* Text (verify exact values in Figma) */
+  --color-text-dark: #1A1A1A;
+  --color-text-light: #FFFFFF;
+  --font-primary: 'Tajawal', sans-serif;
+}
+
+body{
+  font-family: var(--font-primary);
+}

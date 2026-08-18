@@ -1,0 +1,84 @@
+.hero {
+  background-color: var(--color-primary-dark);
+  padding: 100px 24px;
+  text-align: center;
+  direction: rtl;
+}
+
+.hero-container {
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 32px;
+}
+
+.hero-headline {
+  font-family: var(--font-primary);
+  font-size: 48px;
+  font-weight: 800;
+  color: var(--color-white);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.hero-headline .accent-text {
+  color: var(--color-accent);
+}
+
+.hero-search-wrapper {
+  width: 100%;
+  max-width: 600px;
+}
+
+/* Override SearchBar for Hero styles if needed */
+.hero-search {
+  max-width: 100% !important;
+  background-color: var(--color-white) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  padding: 8px 16px !important;
+}
+
+.hero-tags {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.hero-tag-btn {
+  border-radius: 50px !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: var(--color-white) !important;
+  padding: 8px 20px !important;
+  font-size: 14px !important;
+  background-color: transparent !important;
+}
+
+.hero-tag-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-color: var(--color-accent) !important;
+  color: var(--color-accent) !important;
+}
+
+.arrow-icon {
+  margin-right: 8px;
+  display: inline-block;
+  transition: transform 0.3s ease;
+}
+
+.hero-tag-btn:hover .arrow-icon {
+  transform: translateX(-4px);
+}
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 60px 16px;
+  }
+  
+  .hero-headline {
+    font-size: 32px;
+  }
+}
