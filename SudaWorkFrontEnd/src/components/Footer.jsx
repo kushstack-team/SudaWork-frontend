@@ -1,5 +1,8 @@
 import React from 'react';
 import './Footer.css';
+import Logo from '../assets/logo.svg';
+import languageIcon from '../assets/language.svg';
+import { FaX, FaInstagram, FaLinkedin, FaFacebook, FaTiktok } from 'react-icons/fa6';
 
 const Footer = () => {
   const currentYear = new Date().getFullYear();
@@ -85,26 +88,23 @@ const Footer = () => {
       <div className="footer-bottom">
         <div className="footer-bottom-container">
           <div className="footer-bottom-logo">
-            <svg className="footer-logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-              <path d="M2 17l10 5 10-5"></path>
-              <path d="M2 12l10 5 10-5"></path>
-            </svg>
-            <span className="footer-logo-text">SudaWork</span>
-          </div>
-
-          <div className="footer-bottom-selectors">
-            <span className="selector-item">SAR ريال</span>
-            <span className="selector-item">العربية</span>
+            <img src={Logo} alt="" />
           </div>
 
           <div className="footer-socials">
-            <a href="#x" aria-label="X">𝕏</a>
-            <a href="#instagram" aria-label="Instagram">📸</a>
-            <a href="#linkedin" aria-label="LinkedIn">in</a>
-            <a href="#facebook" aria-label="Facebook">f</a>
-            <a href="#tiktok" aria-label="TikTok">🎵</a>
-            <a href="#twitter" aria-label="Twitter">🐦</a>
+            <div className="footer-bottom-selectors">
+              <span className="selector-item">العربية <svg className="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg></span>
+              <span className="selector-item">SAR ريال</span>
+            </div>
+            <a href="#x" aria-label="X"><FaX /></a>
+            <a href="#instagram" aria-label="Instagram"><FaInstagram /></a>
+            <a href="#linkedin" aria-label="LinkedIn"><FaLinkedin /></a>
+            <a href="#facebook" aria-label="Facebook"><FaFacebook /></a>
+            <a href="#tiktok" aria-label="TikTok"><FaTiktok /></a>
           </div>
         </div>
       </div>

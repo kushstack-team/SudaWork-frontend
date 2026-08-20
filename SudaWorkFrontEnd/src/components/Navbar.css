@@ -30,7 +30,16 @@
 }
 
 .logo-icon {
-  color: var(--color-primary);
+  width: 120px;
+}
+
+.navbar hr{
+  
+  width: 20px;
+  height: 0;
+  border: none;
+  border-top: 1px solid #9F9F9F;
+  transform: rotate(90deg);
 }
 
 .logo-text {
@@ -108,7 +117,7 @@
   color: var(--color-white) !important;
   border-radius: 8px !important;
   font-weight: 700 !important;
-  padding: 8px 20px !important;
+  padding: 2px 8px !important;
 }
 
 .btn-register-filled:hover {

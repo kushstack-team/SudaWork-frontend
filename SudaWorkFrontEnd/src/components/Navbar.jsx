@@ -1,19 +1,15 @@
 import React from 'react';
 import './Navbar.css';
 import Button from './Button';
-
+import logo from '../assets/logo.svg';
+import downarrow from '../assets/downarrow.png';
 const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="navbar-container">
         {/* Left side (logo with a small icon) */}
         <div className="navbar-logo">
-          <svg className="logo-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M12 2L2 7l10 5 10-5-10-5z"></path>
-            <path d="M2 17l10 5 10-5"></path>
-            <path d="M2 12l10 5 10-5"></path>
-          </svg>
-          <span className="logo-text">SudaWork</span>
+          <img src={logo} alt="Logo" className="logo-icon" />
         </div>
 
         {/* Right side (nav links & dropdowns & action buttons) */}
@@ -21,7 +17,8 @@ const Navbar = () => {
           <ul className="navbar-links">
             <li className="nav-item-dropdown">
               <a href="#why-sudawork" className="nav-link">
-                لماذا سوداوورك <span className="dropdown-arrow">▼</span>
+                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                لماذا سوداوورك 
               </a>
             </li>
             <li className="nav-item-dropdown">
@@ -31,19 +28,22 @@ const Navbar = () => {
                   <line x1="2" y1="12" x2="22" y2="12"></line>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
                 </svg>
-                اللغة <span className="dropdown-arrow">▼</span>
+                اللغة 
               </a>
             </li>
             <li className="nav-item-dropdown">
               <a href="#hire-talent" className="nav-link">
-                وظف موهبة <span className="dropdown-arrow">▼</span>
+                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                وظف موهبة 
               </a>
             </li>
             <li className="nav-item-dropdown">
               <a href="#find-work" className="nav-link">
-                ابحث عن عمل <span className="dropdown-arrow">▼</span>
+                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                ابحث عن عمل 
               </a>
             </li>
+            <hr />
             <li>
               <a href="#login" className="nav-link nav-link-login">تسجيل الدخول</a>
             </li>

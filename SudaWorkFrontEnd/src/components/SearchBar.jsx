@@ -13,13 +13,6 @@ const SearchBar = ({ onSearch, placeholder = 'بحث...', className = '' }) => {
 
   return (
     <form className={`search-bar ${className}`} onSubmit={handleSubmit}>
-      <input
-        type="text"
-        className="search-input"
-        placeholder={placeholder}
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-      />
       <button type="submit" className="search-button">
         <svg
           width="20"
@@ -35,6 +28,13 @@ const SearchBar = ({ onSearch, placeholder = 'بحث...', className = '' }) => {
           <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
         </svg>
       </button>
+      <input
+        type="text"
+        className="search-input"
+        placeholder={placeholder}
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+      />
     </form>
   );
 };

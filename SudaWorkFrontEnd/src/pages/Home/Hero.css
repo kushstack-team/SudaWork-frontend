@@ -1,16 +1,16 @@
 .hero {
   background-color: var(--color-primary-dark);
-  padding: 100px 24px;
-  text-align: center;
+  padding: 100px 50px;
+  text-align: right;
   direction: rtl;
 }
 
 .hero-container {
   max-width: 800px;
-  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  margin-right: 0 !important;
   gap: 32px;
 }
 
@@ -24,7 +24,7 @@
 }
 
 .hero-headline .accent-text {
-  color: var(--color-accent);
+  color: var(--color-white);
 }
 
 .hero-search-wrapper {
@@ -38,12 +38,13 @@
   background-color: var(--color-white) !important;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
   padding: 8px 16px !important;
+  margin: 0;
 }
 
 .hero-tags {
   display: flex;
   flex-wrap: wrap;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   margin-top: 12px;
 }
@@ -54,7 +55,7 @@
   color: var(--color-white) !important;
   padding: 8px 20px !important;
   font-size: 14px !important;
-  background-color: transparent !important;
+  background-color: #3D5F5A !important;
 }
 
 .hero-tag-btn:hover {
