@@ -1,0 +1,422 @@
+/* ==========================================================================
+   Arabic RTL Client Registration Page Styles
+   ========================================================================== */
+
+.client-register-page {
+  direction: rtl;
+  text-align: right;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Header */
+.client-register-header {
+  width: 100%;
+  padding: 32px 56px 16px 56px;
+  box-sizing: border-box;
+}
+
+.client-register-header__container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.client-register-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.client-register-logo:hover {
+  opacity: 0.88;
+}
+
+.client-register-logo__img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Main Content Area */
+.client-register-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px 48px 24px;
+  max-width: 680px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Main Title */
+.client-register-title {
+  font-size: 2.35rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 32px 0;
+  text-align: center;
+  line-height: 1.3;
+}
+
+/* Social Buttons */
+.client-register-socials {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.social-btn {
+  flex: 1;
+  height: 50px;
+  border-radius: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-sizing: border-box;
+}
+
+/* Google Button */
+.social-btn--google {
+  background-color: #5c9dff;
+  color: #ffffff;
+  border: none;
+  box-shadow: 0 2px 10px rgba(92, 157, 255, 0.24);
+}
+
+.social-btn--google:hover {
+  background-color: #488ff9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 14px rgba(92, 157, 255, 0.32);
+}
+
+.social-icon-wrapper--google {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Apple Button */
+.social-btn--apple {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1.5px solid #d5dbdb;
+}
+
+.social-btn--apple:hover {
+  border-color: #1a1a1a;
+  background-color: #fcfcfc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.social-icon-wrapper--apple {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000000;
+}
+
+/* Divider with "او" */
+.client-register-divider {
+  position: relative;
+  width: 100%;
+  text-align: center;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.client-register-divider::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background-color: #e5e7eb;
+  z-index: 1;
+}
+
+.client-register-divider__text {
+  position: relative;
+  z-index: 2;
+  background-color: #ffffff;
+  padding: 0 16px;
+  color: #1a1a1a;
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+
+/* Form Styles */
+.client-register-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row--two-col {
+  display: flex;
+  gap: 18px;
+  width: 100%;
+}
+
+.form-row--two-col .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: #000000;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-input {
+  width: 100%;
+  height: 50px;
+  border-radius: 14px;
+  border: 1.5px solid #d5dbdb;
+  padding: 12px 18px;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.05rem;
+  color: #1a1a1a;
+  background-color: #ffffff;
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-input:focus {
+  border-color: #0a5c43;
+  box-shadow: 0 0 0 3px rgba(10, 92, 67, 0.12);
+}
+
+/* Password input with eye toggle */
+.input-with-icon {
+  position: relative;
+  width: 100%;
+}
+
+.form-input--password {
+  padding-left: 48px;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #4b5563;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  transition: color 0.2s ease;
+  outline: none;
+}
+
+.password-toggle-btn:hover {
+  color: #0a5c43;
+}
+
+/* Checkbox */
+.form-checkbox-group {
+  margin-top: 6px;
+  margin-bottom: 32px;
+}
+
+.checkbox-container {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 12px;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.custom-checkbox {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  border: 1.5px solid #0a5c43;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.checkmark-icon {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all 0.2s ease;
+}
+
+.checkbox-container input:checked ~ .custom-checkbox {
+  background-color: #0a5c43;
+  border-color: #0a5c43;
+}
+
+.checkbox-container input:checked ~ .custom-checkbox .checkmark-icon {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.checkbox-label {
+  font-size: 1rem;
+  color: #000000;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+/* Form Action Area */
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+.client-register-submit-btn {
+  width: 270px;
+  max-width: 100%;
+  height: 52px;
+  border-radius: 26px;
+  background-color: #0a5c43;
+  color: #ffffff;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(10, 92, 67, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.client-register-submit-btn:hover {
+  background-color: #074532;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(10, 92, 67, 0.28);
+}
+
+.client-register-submit-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 6px rgba(10, 92, 67, 0.2);
+}
+
+.client-register-footer-text {
+  margin-top: 20px;
+  font-size: 1.05rem;
+  color: #000000;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.client-register-login-link {
+  color: #0a5c43;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.client-register-login-link:hover {
+  text-decoration: underline;
+  color: #063124;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 640px) {
+  .client-register-header {
+    padding: 20px 20px 8px 20px;
+  }
+
+  .client-register-header__container {
+    justify-content: center;
+  }
+
+  .client-register-main {
+    padding: 16px 20px 36px 20px;
+  }
+
+  .client-register-title {
+    font-size: 1.85rem;
+    margin-bottom: 24px;
+  }
+
+  .client-register-socials {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .form-row--two-col {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .client-register-submit-btn {
+    width: 100%;
+    max-width: 320px;
+    height: 48px;
+    font-size: 1.05rem;
+  }
+
+  .checkbox-label {
+    font-size: 0.92rem;
+  }
+
+  .client-register-footer-text {
+    font-size: 0.95rem;
+  }
+}

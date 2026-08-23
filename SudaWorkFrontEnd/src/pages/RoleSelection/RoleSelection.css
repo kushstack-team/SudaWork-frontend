@@ -1,0 +1,229 @@
+/* ==========================================================================
+   Arabic RTL Role Selection Page Styles
+   ========================================================================== */
+
+.role-selection-page {
+  direction: rtl;
+  text-align: right;
+  min-height: 100vh;
+  background-color: #ffffff;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+/* Header */
+.role-selection-header {
+  width: 100%;
+  padding: 32px 56px 16px 56px;
+  box-sizing: border-box;
+}
+
+.role-selection-header__container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.role-selection-logo {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
+}
+
+.role-selection-logo:hover {
+  opacity: 0.88;
+}
+
+.role-selection-logo__img {
+  height: 38px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* Main Content Area */
+.role-selection-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 24px 48px 24px;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+/* Hero Section */
+.role-selection-hero {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.role-selection-hero__title {
+  font-size: 2.35rem;
+  font-weight: 700;
+  color: #000000;
+  margin: 0 0 10px 0;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.role-selection-hero__subtitle {
+  font-size: 1.15rem;
+  font-weight: 500;
+  color: #8c8c8c;
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Role Cards Grid/Flex */
+.role-selection-cards {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 24px;
+  width: 100%;
+  max-width: 660px;
+  margin-bottom: 48px;
+}
+
+/* Action Area */
+.role-selection-actions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  text-align: center;
+}
+
+.role-selection-btn {
+  width: 300px;
+  max-width: 100%;
+  height: 52px;
+  border-radius: 26px;
+  background-color: #0f6b4f;
+  color: #ffffff;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.15rem;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(15, 107, 79, 0.2);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+}
+
+.role-selection-btn:hover:not(:disabled) {
+  background-color: #0b543e;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(15, 107, 79, 0.28);
+}
+
+.role-selection-btn:active:not(:disabled) {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(15, 107, 79, 0.2);
+}
+
+.role-selection-btn:focus-visible {
+  box-shadow: 0 0 0 3px rgba(15, 107, 79, 0.35);
+}
+
+.role-selection-btn:disabled {
+  background-color: #a0d8c6;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.role-selection-footer-text {
+  margin-top: 20px;
+  font-size: 1.05rem;
+  color: #000000;
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.role-selection-login-link {
+  color: #0f6b4f;
+  font-weight: 700;
+  text-decoration: none;
+  transition: color 0.2s ease, text-decoration 0.2s ease;
+}
+
+.role-selection-login-link:hover {
+  text-decoration: underline;
+  color: #094734;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 768px) {
+  .role-selection-header {
+    padding: 24px 24px 12px 24px;
+  }
+
+  .role-selection-hero__title {
+    font-size: 1.95rem;
+  }
+
+  .role-selection-hero__subtitle {
+    font-size: 1.05rem;
+  }
+
+  .role-selection-cards {
+    gap: 18px;
+    margin-bottom: 36px;
+  }
+}
+
+@media (max-width: 600px) {
+  .role-selection-header {
+    padding: 20px 20px 8px 20px;
+  }
+
+  .role-selection-header__container {
+    justify-content: center;
+  }
+
+  .role-selection-main {
+    padding: 16px 20px 36px 20px;
+  }
+
+  .role-selection-hero {
+    margin-bottom: 28px;
+  }
+
+  .role-selection-hero__title {
+    font-size: 1.7rem;
+  }
+
+  .role-selection-cards {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .role-selection-btn {
+    width: 100%;
+    max-width: 320px;
+    height: 48px;
+    font-size: 1.05rem;
+  }
+
+  .role-selection-footer-text {
+    font-size: 0.95rem;
+  }
+}

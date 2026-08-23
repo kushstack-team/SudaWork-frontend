@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ServicesGrid.css';
 import Button from '../../components/Button';
 import programmingIcon from '../../assets/services_section/programming.svg';
@@ -42,6 +43,8 @@ const services = [
 ];
 
 const ServicesGrid = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="services-section">
       <div className="services-container">
@@ -60,7 +63,13 @@ const ServicesGrid = () => {
         <div className="services-cta">
           <h2 className="why-us-heading">حقق اهدافك بمساعدة المستقلين</h2>
           <div className="services-cta-wrapper">
-            <Button variant="primary" className="btn-services-join">انضم الان</Button>
+            <Button
+              variant="primary"
+              className="btn-services-join"
+              onClick={() => navigate('/role-selection')}
+            >
+              انضم الان
+            </Button>
           </div>
         </div>
         <hr />

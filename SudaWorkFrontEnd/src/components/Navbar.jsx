@@ -1,23 +1,29 @@
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import './Navbar.css';
 import Button from './Button';
 import logo from '../assets/logo.svg';
 import downarrow from '../assets/downarrow.png';
+
 const Navbar = () => {
+  const navigate = useNavigate();
+
   return (
     <nav className="navbar">
       <div className="navbar-container">
-        {/* Left side (logo with a small icon) */}
-        <div className="navbar-logo">
-          <img src={logo} alt="Logo" className="logo-icon" />
-        </div>
+        {/* Left side (logo) */}
+        <Link to="/" className="navbar-logo" aria-label="Sudawork Home">
+          <img src={logo} alt="Sudawork Logo" className="logo-icon" />
+        </Link>
 
         {/* Right side (nav links & dropdowns & action buttons) */}
         <div className="navbar-nav-group">
           <ul className="navbar-links">
             <li className="nav-item-dropdown">
               <a href="#why-sudawork" className="nav-link">
-                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                <span className="dropdown-arrow">
+                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                </span>
                 لماذا سوداوورك 
               </a>
             </li>
@@ -33,13 +39,17 @@ const Navbar = () => {
             </li>
             <li className="nav-item-dropdown">
               <a href="#hire-talent" className="nav-link">
-                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                <span className="dropdown-arrow">
+                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                </span>
                 وظف موهبة 
               </a>
             </li>
             <li className="nav-item-dropdown">
               <a href="#find-work" className="nav-link">
-                <span className="dropdown-arrow"><img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{marginTop:"6px"}}/></span>
+                <span className="dropdown-arrow">
+                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                </span>
                 ابحث عن عمل 
               </a>
             </li>
@@ -50,7 +60,13 @@ const Navbar = () => {
           </ul>
 
           <div className="navbar-actions">
-            <Button variant="primary" className="btn-register-filled">انشاء حساب</Button>
+            <Button
+              variant="primary"
+              className="btn-register-filled"
+              onClick={() => navigate('/role-selection')}
+            >
+              انشاء حساب
+            </Button>
           </div>
         </div>
       </div>
