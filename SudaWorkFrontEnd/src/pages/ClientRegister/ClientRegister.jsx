@@ -92,6 +92,7 @@ const ClientRegister = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Client registration submitted:', formData);
+    navigate('/dashboard');
   };
 
   return (

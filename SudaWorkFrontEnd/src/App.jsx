@@ -9,6 +9,8 @@ import RoleSelection from './pages/RoleSelection/RoleSelection';
 import ClientRegister from './pages/ClientRegister/ClientRegister';
 import FreelancerRegister from './pages/FreelancerRegister/FreelancerRegister';
 
+import ClientDashboard from './pages/Dashboard/ClientDashboard';
+
 // Layout wrapper for pages with standard Navbar & Footer
 const MainLayout = ({ children }) => {
   return (
@@ -25,7 +27,7 @@ const MainLayout = ({ children }) => {
 function App() {
   return (
     <Routes>
-      {/* Home Route */}
+      {/* Landing Page Routes */}
       <Route
         path="/"
         element={
@@ -33,6 +35,20 @@ function App() {
             <Home />
           </MainLayout>
         }
+      />
+      <Route
+        path="/landing"
+        element={
+          <MainLayout>
+            <Home />
+          </MainLayout>
+        }
+      />
+
+      {/* Dashboard Routes (RTL Freelance Marketplace Dashboard) */}
+      <Route
+        path="/client-dashboard"
+        element={<ClientDashboard />}
       />
 
       {/* Role Selection Page */}
@@ -61,7 +77,7 @@ function App() {
         element={<FreelancerRegister />}
       />
 
-      {/* Fallback to Home */}
+      {/* Fallback to Landing Page */}
       <Route
         path="*"
         element={

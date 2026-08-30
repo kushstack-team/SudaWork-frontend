@@ -1,0 +1,336 @@
+/* ==========================================================================
+   Explore Categories Section Styles
+   ========================================================================== */
+
+.explore-categories-section {
+  width: 100%;
+  margin-bottom: 48px;
+}
+
+/* Header */
+.explore-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+
+.explore-title {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0;
+}
+
+.explore-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.explore-view-all {
+  color: #00897B;
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.nav-arrow-btn {
+  background: none;
+  border: none;
+  color: #64748b;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  padding: 4px;
+}
+
+.nav-arrow-btn:hover {
+  color: #334155;
+}
+
+/* Main Layout: Grid + Sidebar */
+.explore-content-layout {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+/* Services Grid Container */
+.services-grid-container {
+  flex: 1;
+}
+
+.services-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+/* Single Service Card */
+.explore-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.explore-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px -3px rgba(0, 0, 0, 0.08);
+  border-color: #cbd5e1;
+}
+
+/* Thumbnail */
+.explore-thumbnail-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #f1f5f9;
+  overflow: hidden;
+}
+
+.explore-thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.explore-card:hover .explore-thumbnail-img {
+  transform: scale(1.03);
+}
+
+/* Card Body */
+.explore-card-content {
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.explore-card-header-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.author-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.author-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.author-name {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 0.95rem;
+}
+
+.recommended-badge {
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.badge-recommended {
+  background-color: #fff7ed;
+  color: #c2410c;
+}
+
+.badge-top-rated {
+  background-color: #FEF3C7;
+  color: #B45309;
+}
+
+/* Title */
+.explore-card-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
+  text-align: right;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.explore-card-rating {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 0;
+}
+
+.star-icon {
+  color: #f59e0b;
+  fill: #f59e0b;
+  font-size: 1.15rem;
+}
+
+.rating-score {
+  font-weight: 800;
+  color: #0f172a;
+  font-size: 1rem;
+}
+
+.reviews-count {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+/* Card Footer */
+.explore-card-footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+}
+
+.footer-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hide-icon {
+  color: #94a3b8;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.hide-icon:hover {
+  color: #475569;
+}
+
+.footer-price-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.price-label {
+  color: #64748b;
+  font-size: 0.85rem;
+}
+
+.price-value {
+  color: #1e293b;
+  font-weight: 800;
+  font-size: 1.15rem;
+}
+
+/* Right Sidebar */
+.explore-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+}
+
+.sidebar-categories-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sidebar-category-item {
+  width: 100%;
+}
+
+.sidebar-category-btn {
+  width: 100%;
+  text-align: center;
+  padding: 12px 14px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.35;
+}
+
+.sidebar-category-btn:hover {
+  border-color: #00DCAC;
+  color: #004D40;
+}
+
+.sidebar-category-btn.highlight-btn {
+  background-color: #E8F8F5;
+  border-color: #00897B;
+  color: #004D40;
+}
+
+.sidebar-category-btn.highlight-btn.active {
+  box-shadow: 0 0 0 2px rgba(0, 137, 123, 0.3);
+}
+
+.sidebar-category-btn.active:not(.highlight-btn) {
+  background-color: #f8fafc;
+  border-color: #00897B;
+  color: #004D40;
+}
+
+/* Responsive adjustments */
+@media (max-width: 1200px) {
+  .services-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 860px) {
+  .explore-content-layout {
+    flex-direction: column;
+  }
+
+  .explore-sidebar {
+    width: 100%;
+    order: -1;
+  }
+
+  .sidebar-categories-list {
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+
+  .sidebar-category-btn {
+    white-space: nowrap;
+    padding: 8px 16px;
+  }
+}
+
+@media (max-width: 580px) {
+  .services-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
