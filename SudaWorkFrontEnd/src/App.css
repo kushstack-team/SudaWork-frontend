@@ -7,3 +7,35 @@
 .main-content {
   flex: 1;
 }
+
+/* Mobile Touch & Layout Optimizations */
+@media (max-width: 768px) {
+  body {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  /* Reserve space for fixed MobileBottomNav */
+  .app-container,
+  .main-content,
+  .dashboard-main-content,
+  .client-payments-container,
+  .freelancer-wallet-container,
+  .disputes-page-container,
+  .projects-browse-container,
+  .freelancers-browse-container,
+  .explore-categories-container,
+  .post-project-page,
+  .contract-details-page,
+  .contracts-list-page,
+  .messages-page,
+  .notifications-page,
+  .admin-dashboard-container {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  /* Ensure inputs don't cause unwanted auto-zoom on iOS */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+}

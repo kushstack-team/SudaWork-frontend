@@ -1,0 +1,58 @@
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 3.5rem 1.5rem;
+  background-color: #ffffff;
+  border: 1px dashed #cbd5e1;
+  border-radius: 1rem;
+  margin: 1rem 0;
+  width: 100%;
+}
+
+.empty-state-icon {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #94a3b8;
+  margin-bottom: 1rem;
+}
+
+.empty-state-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.empty-state-description {
+  margin: 0.5rem 0 1.25rem;
+  font-size: 0.925rem;
+  color: #64748b;
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.empty-state-btn {
+  background-color: #0b6e4f;
+  color: #ffffff;
+  border: none;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-family: inherit;
+}
+
+.empty-state-btn:hover {
+  background-color: #00543b;
+}

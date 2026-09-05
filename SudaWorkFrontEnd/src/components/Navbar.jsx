@@ -38,24 +38,24 @@ const Navbar = () => {
               </a>
             </li>
             <li className="nav-item-dropdown">
-              <a href="#hire-talent" className="nav-link">
+              <Link to="/freelancers" className="nav-link">
                 <span className="dropdown-arrow">
                   <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
                 </span>
                 وظف موهبة 
-              </a>
+              </Link>
             </li>
             <li className="nav-item-dropdown">
-              <a href="#find-work" className="nav-link">
+              <Link to="/projects" className="nav-link">
                 <span className="dropdown-arrow">
                   <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
                 </span>
                 ابحث عن عمل 
-              </a>
+              </Link>
             </li>
             <hr />
             <li>
-              <a href="#login" className="nav-link nav-link-login">تسجيل الدخول</a>
+              <Link to="/login" className="nav-link nav-link-login">تسجيل الدخول</Link>
             </li>
           </ul>
 

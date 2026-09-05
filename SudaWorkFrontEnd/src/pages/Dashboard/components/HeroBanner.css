@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Hero Banner Styles
+   Hero Banner Styles (Client Dashboard)
    ========================================================================== */
 
 .dashboard-hero-banner {
@@ -9,26 +9,45 @@
 
 .hero-banner-card {
   position: relative;
-  background: #00543B;
-  border-radius: 12px;
+  background: linear-gradient(135deg, #00543B 0%, #033d2c 100%);
+  border-radius: 16px;
   padding: 38px 48px;
   color: #ffffff;
   overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(0, 77, 64, 0.2), 0 8px 10px -6px rgba(0, 77, 64, 0.15);
+  box-shadow: 0 10px 25px -5px rgba(0, 77, 64, 0.25), 0 8px 10px -6px rgba(0, 77, 64, 0.15);
   display: flex;
   align-items: center;
   justify-content: flex-start;
-  text-align: flex-start;
+  text-align: right;
 }
 
 .hero-banner-content {
   position: relative;
   z-index: 2;
   max-width: 820px;
+  width: 100%;
+}
+
+.hero-client-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 220, 172, 0.15);
+  border: 1px solid rgba(0, 220, 172, 0.35);
+  color: #00DCAC;
+  padding: 5px 14px;
+  border-radius: 20px;
+  font-size: 0.84rem;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.badge-check-icon {
+  font-size: 1rem;
 }
 
 .hero-banner-title {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 800;
   color: #ffffff;
   margin: 0 0 10px 0;
@@ -39,10 +58,124 @@
 .hero-banner-subtitle {
   font-size: 1.05rem;
   color: #d1fae5;
-  margin: 0;
+  margin: 0 0 24px 0;
   font-weight: 400;
   line-height: 1.6;
   opacity: 0.95;
+  max-width: 700px;
+}
+
+/* Quick Talent Search */
+.hero-talent-search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background-color: #ffffff;
+  padding: 6px 8px 6px 14px;
+  border-radius: 30px;
+  max-width: 680px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  margin-bottom: 24px;
+}
+
+.search-input-field {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.search-field-icon {
+  color: #94a3b8;
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.search-input-field input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 0.95rem;
+  color: #1e293b;
+}
+
+.search-input-field input::placeholder {
+  color: #94a3b8;
+}
+
+.hero-search-submit {
+  background-color: var(--color-accent, #00DCAC);
+  color: #004D40;
+  border: none;
+  border-radius: 24px;
+  padding: 9px 22px;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.hero-search-submit:hover {
+  background-color: #00c79b;
+  transform: translateY(-1px);
+}
+
+/* Hero Action CTAs */
+.hero-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.btn-hero-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-accent, #00DCAC);
+  color: #004D40;
+  padding: 11px 24px;
+  border-radius: 24px;
+  font-weight: 800;
+  font-size: 0.98rem;
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(0, 220, 172, 0.3);
+  transition: all 0.2s ease;
+}
+
+.btn-hero-primary:hover {
+  background-color: #00c79b;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 220, 172, 0.4);
+}
+
+.btn-hero-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 10px 22px;
+  border-radius: 24px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.btn-hero-secondary:hover {
+  background-color: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.btn-icon {
+  font-size: 1.15rem;
 }
 
 /* Background subtle ambient glows */
@@ -59,20 +192,20 @@
 
 .decor-circle-1 {
   position: absolute;
-  width: 320px;
-  height: 320px;
+  width: 340px;
+  height: 340px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(0, 220, 172, 0.15) 0%, rgba(0, 220, 172, 0) 70%);
+  background: radial-gradient(circle, rgba(0, 220, 172, 0.18) 0%, rgba(0, 220, 172, 0) 70%);
   top: -100px;
   right: -50px;
 }
 
 .decor-circle-2 {
   position: absolute;
-  width: 260px;
-  height: 260px;
+  width: 280px;
+  height: 280px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.09) 0%, rgba(255, 255, 255, 0) 70%);
   bottom: -90px;
   left: 40px;
 }
@@ -80,14 +213,41 @@
 @media (max-width: 768px) {
   .hero-banner-card {
     padding: 28px 20px;
-    border-radius: 12px;
+    border-radius: 14px;
   }
 
   .hero-banner-title {
-    font-size: 1.5rem;
+    font-size: 1.6rem;
   }
 
   .hero-banner-subtitle {
     font-size: 0.92rem;
+  }
+
+  .hero-talent-search {
+    flex-direction: column;
+    border-radius: 16px;
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .search-input-field {
+    width: 100%;
+  }
+
+  .hero-search-submit {
+    width: 100%;
+    border-radius: 12px;
+  }
+
+  .hero-banner-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
   }
 }

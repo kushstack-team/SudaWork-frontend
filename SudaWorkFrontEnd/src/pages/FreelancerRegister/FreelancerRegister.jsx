@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './FreelancerRegister.css';
 import logo from '../../assets/logo.svg';
+import { useAuth } from '../../context/AuthContext';
+import { validateRegisterForm } from '../../utils/validators';
 
 /**
  * GoogleIcon - Google G logo with white circular background
@@ -70,6 +72,7 @@ const EyeIcon = ({ visible }) => (
 
 const FreelancerRegister = () => {
   const navigate = useNavigate();
+  const { register } = useAuth();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -79,6 +82,9 @@ const FreelancerRegister = () => {
     agreeTerms: true,
   });
 
+  const [errors, setErrors] = useState({});
+  const [submitError, setSubmitError] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
@@ -87,11 +93,32 @@ const FreelancerRegister = () => {
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
     }));
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: null }));
+    }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Freelancer registration submitted:', formData);
+    const { isValid, errors: validationErrors } = validateRegisterForm(formData);
+    if (!isValid) {
+      setErrors(validationErrors);
+      return;
+    }
+
+    setSubmitError('');
+    setIsSubmitting(true);
+    try {
+      await register({
+        ...formData,
+        role: 'freelancer',
+      });
+      navigate('/freelancer-dashboard');
+    } catch (err) {
+      setSubmitError(err.message || 'حدث خطأ أثناء التسجيل، يرجى المحاولة لاحقاً');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -139,7 +166,13 @@ const FreelancerRegister = () => {
         </div>
 
         {/* Registration Form */}
-        <form className="freelancer-register-form" onSubmit={handleSubmit}>
+        <form className="freelancer-register-form" onSubmit={handleSubmit} noValidate>
+          {submitError && (
+            <div className="form-general-error" role="alert">
+              {submitError}
+            </div>
+          )}
+
           {/* Row 1: First Name & Last Name */}
           <div className="form-row form-row--two-col">
             <div className="form-group">
@@ -150,11 +183,13 @@ const FreelancerRegister = () => {
                 type="text"
                 id="firstName"
                 name="firstName"
-                className="form-input"
+                className={`form-input ${errors.firstName ? 'has-error' : ''}`}
                 value={formData.firstName}
                 onChange={handleChange}
-                required
               />
+              {errors.firstName && (
+                <span className="form-field-error">{errors.firstName}</span>
+              )}
             </div>
 
             <div className="form-group">
@@ -165,11 +200,13 @@ const FreelancerRegister = () => {
                 type="text"
                 id="lastName"
                 name="lastName"
-                className="form-input"
+                className={`form-input ${errors.lastName ? 'has-error' : ''}`}
                 value={formData.lastName}
                 onChange={handleChange}
-                required
               />
+              {errors.lastName && (
+                <span className="form-field-error">{errors.lastName}</span>
+              )}
             </div>
           </div>
 
@@ -182,11 +219,13 @@ const FreelancerRegister = () => {
               type="email"
               id="email"
               name="email"
-              className="form-input"
+              className={`form-input ${errors.email ? 'has-error' : ''}`}
               value={formData.email}
               onChange={handleChange}
-              required
             />
+            {errors.email && (
+              <span className="form-field-error">{errors.email}</span>
+            )}
           </div>
 
           {/* Row 3: Password */}
@@ -199,10 +238,9 @@ const FreelancerRegister = () => {
                 type={showPassword ? 'text' : 'password'}
                 id="password"
                 name="password"
-                className="form-input form-input--password"
+                className={`form-input form-input--password ${errors.password ? 'has-error' : ''}`}
                 value={formData.password}
                 onChange={handleChange}
-                required
               />
               <button
                 type="button"
@@ -213,6 +251,9 @@ const FreelancerRegister = () => {
                 <EyeIcon visible={showPassword} />
               </button>
             </div>
+            {errors.password && (
+              <span className="form-field-error">{errors.password}</span>
+            )}
           </div>
 
           {/* Agreement Checkbox */}
@@ -223,7 +264,6 @@ const FreelancerRegister = () => {
                 name="agreeTerms"
                 checked={formData.agreeTerms}
                 onChange={handleChange}
-                required
               />
               <span className="custom-checkbox">
                 <svg className="checkmark-icon" viewBox="0 0 24 24">
@@ -241,6 +281,9 @@ const FreelancerRegister = () => {
                 نعم , اتفهم و اوافق علي احكام و خدمات سوداوورك.
               </span>
             </label>
+            {errors.agreeTerms && (
+              <span className="form-field-error checkbox-error">{errors.agreeTerms}</span>
+            )}
           </div>
 
           {/* Submit Action Area */}
@@ -249,8 +292,9 @@ const FreelancerRegister = () => {
               type="submit"
               id="submit-freelancer-register"
               className="freelancer-register-submit-btn"
+              disabled={isSubmitting}
             >
-              انشاء حساب
+              {isSubmitting ? 'جارٍ إنشاء الحساب...' : 'انشاء حساب'}
             </button>
 
             <p className="freelancer-register-footer-text">

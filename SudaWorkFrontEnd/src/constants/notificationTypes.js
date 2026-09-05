@@ -1,0 +1,15 @@
+export const NOTIFICATION_TYPES = Object.freeze({
+  PROPOSAL_RECEIVED: 'proposal_received',
+  PROPOSAL_VIEWED: 'proposal_viewed',
+  PROPOSAL_ACCEPTED: 'proposal_accepted',
+  WORK_SUBMITTED: 'work_submitted',
+  DELIVERABLE_APPROVED: 'deliverable_approved',
+  REVISION_REQUESTED: 'revision_requested',
+  ESCROW_FUNDED: 'escrow_funded',
+  ESCROW_RELEASED: 'escrow_released',
+  WITHDRAWAL_REQUESTED: 'withdrawal_requested',
+  WITHDRAWAL_COMPLETED: 'withdrawal_completed',
+  DISPUTE_OPENED: 'dispute_opened',
+  REVIEW_RECEIVED: 'review_received',
+  WELCOME: 'welcome',
+});

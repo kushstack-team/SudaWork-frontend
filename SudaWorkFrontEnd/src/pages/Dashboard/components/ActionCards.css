@@ -1,5 +1,5 @@
 /* ==========================================================================
-   Action Cards Styles
+   Action Cards Styles (Client Dashboard)
    ========================================================================== */
 
 .dashboard-action-cards {
@@ -15,21 +15,22 @@
 
 .action-card {
   background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px 22px;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 22px 24px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
-  min-height: 170px;
+  min-height: 180px;
+  text-align: right;
 }
 
 .action-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.06);
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px -4px rgba(0, 0, 0, 0.08);
   border-color: #cbd5e1;
 }
 
@@ -37,34 +38,62 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .action-icon-box {
-  width: 38px;
-  height: 38px;
-  background-color: #e6f7f2;
-  border-radius: 8px;
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00897B;
-  transition: background-color 0.2s ease;
+  font-size: 1.3rem;
+  transition: all 0.2s ease;
+}
+
+.action-icon-box.projects {
+  background-color: #ecfdf5;
+  color: #0B6E4F;
+}
+
+.action-icon-box.contracts {
+  background-color: #eff6ff;
+  color: #2563eb;
+}
+
+.action-icon-box.payments {
+  background-color: #fefce8;
+  color: #ca8a04;
 }
 
 .action-card:hover .action-icon-box {
-  background-color: #d1fae5;
-}
-
-.action-card-icon {
-  font-size: 1.25rem;
-  stroke-width: 2.2;
+  transform: scale(1.05);
 }
 
 .action-card-tag {
   font-size: 0.78rem;
-  font-weight: 500;
-  color: #94a3b8;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.action-card-tag.success {
+  background-color: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.action-card-tag.info {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.action-card-tag.warning {
+  background-color: #fffbeb;
+  color: #b45309;
+  border: 1px solid #fde68a;
 }
 
 .action-card-body {
@@ -74,47 +103,77 @@
 }
 
 .action-card-title {
-  font-size: 1.02rem;
-  font-weight: 700;
+  font-size: 1.08rem;
+  font-weight: 800;
   color: #1e293b;
-  margin: 0 0 6px 0;
-  line-height: 1.4;
+  margin: 0 0 12px 0;
+  line-height: 1.35;
 }
 
-.action-card-desc {
-  font-size: 0.84rem;
+.card-metrics-row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+  background-color: #f8fafc;
+  padding: 10px 14px;
+  border-radius: 8px;
+  border: 1px solid #f1f5f9;
+}
+
+.metric-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.88rem;
+}
+
+.stat-label {
   color: #64748b;
-  margin: 0;
-  line-height: 1.5;
+  font-weight: 500;
 }
 
-/* Progress Bar Component in Progress Card */
-.action-progress-container {
-  margin-top: 14px;
+.stat-value {
+  color: #0f172a;
+  font-weight: 800;
 }
 
-.progress-percent-label {
-  display: block;
-  font-size: 0.78rem;
+.stat-value.text-highlight {
+  color: #0B6E4F;
+  background-color: #d1fae5;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.stat-value.text-bank {
+  color: #0284c7;
+  font-size: 0.82rem;
+}
+
+.action-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px;
+  color: var(--color-primary, #0B6E4F);
+  font-size: 0.86rem;
   font-weight: 700;
-  color: #00897B;
-  margin-bottom: 5px;
-  text-align: right;
+  transition: color 0.15s ease;
 }
 
-.progress-bar-track {
-  width: 100%;
-  height: 6px;
-  background-color: #f1f5f9;
-  border-radius: 999px;
-  overflow: hidden;
+.card-footer-arrow {
+  font-size: 1rem;
+  transition: transform 0.2s ease;
 }
 
-.progress-bar-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #00DCAC, #00B074);
-  border-radius: 999px;
-  transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+.action-card:hover .action-card-footer {
+  color: var(--color-primary-dark, #00543B);
+}
+
+.action-card:hover .card-footer-arrow {
+  transform: translateX(-4px);
 }
 
 @media (max-width: 992px) {

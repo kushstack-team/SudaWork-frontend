@@ -1,13 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './SearchBar.css';
 
 const SearchBar = ({ onSearch, placeholder = 'بحث...', className = '' }) => {
   const [query, setQuery] = React.useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (onSearch) {
       onSearch(query);
+    } else if (query.trim()) {
+      navigate(`/projects?search=${encodeURIComponent(query.trim())}`);
     }
   };
 

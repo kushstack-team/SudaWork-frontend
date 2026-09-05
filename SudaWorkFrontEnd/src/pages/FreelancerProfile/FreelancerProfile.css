@@ -1,0 +1,501 @@
+.freelancer-profile-page {
+  min-height: 100vh;
+  background-color: #f8fafc;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  direction: rtl;
+  text-align: right;
+}
+
+.freelancer-profile-main {
+  flex: 1;
+  padding: 40px 24px;
+}
+
+.freelancer-profile-container {
+  max-width: 1060px;
+  margin: 0 auto;
+}
+
+/* Hero Card */
+.profile-hero-card {
+  background-color: #ffffff;
+  border-radius: 20px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  margin-bottom: 28px;
+}
+
+.profile-hero-content {
+  padding: 36px 36px 28px 36px;
+  display: flex;
+  align-items: center;
+  gap: 28px;
+  flex-wrap: wrap;
+}
+
+.profile-avatar-block {
+  position: relative;
+  width: 110px;
+  height: 110px;
+  flex-shrink: 0;
+}
+
+.freelancer-large-avatar {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.status-badge-dot {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+}
+
+.status-badge-dot.online {
+  background-color: #10b981;
+}
+
+.status-badge-dot.busy {
+  background-color: #f59e0b;
+}
+
+.profile-identity-info {
+  flex: 1;
+  min-width: 260px;
+}
+
+.identity-title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 4px;
+}
+
+.freelancer-name {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.verified-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background-color: #ecfdf5;
+  color: #059669;
+  border: 1px solid #a7f3d0;
+  border-radius: 12px;
+  padding: 3px 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.freelancer-job-title {
+  font-size: 1.1rem;
+  color: #475569;
+  margin: 0 0 12px 0;
+  font-weight: 500;
+}
+
+.profile-meta-tags {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.meta-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.meta-icon {
+  color: #94a3b8;
+}
+
+.availability-pill {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.avail-pill {
+  background-color: #ecfdf5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.busy-pill {
+  background-color: #fefce8;
+  color: #854d0e;
+  border: 1px solid #fde047;
+}
+
+/* Hero Action Buttons */
+.profile-hero-actions {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.hire-me-cta-btn {
+  height: 48px;
+  padding: 0 24px;
+  background-color: var(--color-primary-dark, #00543B);
+  color: #ffffff;
+  border: none;
+  border-radius: 24px;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 12px rgba(0, 84, 59, 0.25);
+  transition: all 0.2s ease;
+}
+
+.hire-me-cta-btn:hover {
+  background-color: var(--color-primary, #0B6E4F);
+  transform: translateY(-1px);
+}
+
+.contact-me-btn {
+  height: 48px;
+  padding: 0 20px;
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 24px;
+  color: #334155;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.contact-me-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+
+.edit-my-profile-btn {
+  height: 48px;
+  padding: 0 24px;
+  background-color: #ffffff;
+  border: 1.5px solid var(--color-primary, #0B6E4F);
+  border-radius: 24px;
+  color: var(--color-primary, #0B6E4F);
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.edit-my-profile-btn:hover {
+  background-color: var(--color-primary, #0B6E4F);
+  color: #ffffff;
+}
+
+/* Stats Strip */
+.profile-stats-strip {
+  border-top: 1px solid #f1f5f9;
+  background-color: #fafbfc;
+  padding: 16px 36px;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.stat-rating-value {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.star-icon {
+  color: #eab308;
+  fill: #eab308;
+}
+
+.stat-number {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: #64748b;
+}
+
+.stat-divider {
+  width: 1px;
+  height: 36px;
+  background-color: #e2e8f0;
+}
+
+/* Two Column Layout */
+.profile-two-columns {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 28px;
+}
+
+.column-main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.column-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.profile-section-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  border: 1px solid #e2e8f0;
+  padding: 28px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.card-heading {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 16px 0;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.freelancer-bio-text {
+  font-size: 1rem;
+  color: #334155;
+  line-height: 1.8;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* Portfolio Items */
+.portfolio-items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+}
+
+.portfolio-gallery-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 20px;
+  background: #f8fafc;
+  transition: all 0.2s ease;
+}
+
+.portfolio-gallery-item:hover {
+  border-color: var(--color-primary, #0B6E4F);
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.portfolio-item-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 10px 0;
+}
+
+.portfolio-external-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--color-primary, #0B6E4F);
+  text-decoration: none;
+}
+
+.portfolio-external-link:hover {
+  text-decoration: underline;
+}
+
+/* Reviews List */
+.reviews-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.review-item-card {
+  padding: 16px;
+  background-color: #fafbfc;
+  border-radius: 12px;
+  border: 1px solid #f1f5f9;
+}
+
+.review-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.review-stars {
+  display: flex;
+  gap: 3px;
+  font-size: 0.95rem;
+}
+
+.star-filled {
+  color: #eab308;
+  fill: #eab308;
+}
+
+.star-empty {
+  color: #cbd5e1;
+}
+
+.review-date {
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+.review-comment {
+  font-size: 0.95rem;
+  color: #334155;
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* Sidebar Badges */
+.skills-badge-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.profile-skill-badge {
+  background-color: #f1f5f9;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 6px 14px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #334155;
+}
+
+/* Trust Card */
+.trust-card {
+  background-color: #f0fdf4;
+  border-color: #bbf7d0;
+}
+
+.trust-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #166534;
+  margin: 0 0 8px 0;
+}
+
+.trust-desc {
+  font-size: 0.9rem;
+  color: #15803d;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.empty-section-text {
+  font-size: 0.95rem;
+  color: #94a3b8;
+  font-style: italic;
+  margin: 0;
+}
+
+/* Loading & Not Found */
+.freelancer-view-loading {
+  min-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.freelancer-not-found {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.not-found-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  text-align: center;
+}
+
+.warning-icon {
+  font-size: 3rem;
+  color: #f59e0b;
+  margin-bottom: 16px;
+}
+
+.back-home-btn {
+  margin-top: 16px;
+  padding: 10px 24px;
+  background-color: var(--color-primary, #0B6E4F);
+  color: #ffffff;
+  border-radius: 20px;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+@media (max-width: 860px) {
+  .profile-two-columns {
+    grid-template-columns: 1fr;
+  }
+  .profile-hero-content {
+    padding: 24px;
+  }
+}

@@ -88,7 +88,25 @@ const initialServices = [
 ];
 
 const ExploreCategories = () => {
-  const [selectedCategory, setSelectedCategory] = useState('ugc');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [services, setServices] = useState(initialServices);
+  const [hiddenIds, setHiddenIds] = useState([]);
+
+  const handleHideService = (id, e) => {
+    e.stopPropagation();
+    setHiddenIds((prev) => [...prev, id]);
+  };
+
+  const filteredServices = services.filter((s) => {
+    if (hiddenIds.includes(s.id)) return false;
+    if (selectedCategory === 'all') return true;
+    if (selectedCategory === 'ugc') return s.category === 'ugc';
+    if (selectedCategory === 'web') return s.category === 'web';
+    if (selectedCategory === 'identity') return s.category === 'identity' || s.category === 'logo';
+    if (selectedCategory === 'video') return s.category === 'video' || s.category === 'ugc';
+    if (selectedCategory === 'other') return s.category === 'other' || s.category === 'social';
+    return true;
+  });
 
   return (
     <section className="explore-categories-section" dir="rtl">
@@ -98,9 +116,13 @@ const ExploreCategories = () => {
           استكشف التصنيفات الشائعة على سوداوورك
         </h2>
         <div className="explore-nav-actions">
-          <span className="explore-view-all">عرض الكل</span>
-          <button className="nav-arrow-btn"><FiArrowRight /></button>
-          <button className="nav-arrow-btn"><FiArrowLeft /></button>
+          <button 
+            type="button" 
+            className={`explore-view-all-btn ${selectedCategory === 'all' ? 'active-view-all' : ''}`}
+            onClick={() => setSelectedCategory('all')}
+          >
+            عرض الكل
+          </button>
         </div>
       </div>
 
@@ -113,8 +135,7 @@ const ExploreCategories = () => {
             <li className="sidebar-category-item">
               <button
                 type="button"
-                className={`sidebar-category-btn highlight-btn ${selectedCategory === 'ugc' ? 'active' : ''
-                  }`}
+                className={`sidebar-category-btn highlight-btn ${selectedCategory === 'ugc' ? 'active' : ''}`}
                 onClick={() => setSelectedCategory('ugc')}
               >
                 المحتوى من إنشاء المستخدمين (UGC)
@@ -124,8 +145,7 @@ const ExploreCategories = () => {
               <li key={cat.id} className="sidebar-category-item">
                 <button
                   type="button"
-                  className={`sidebar-category-btn ${selectedCategory === cat.id ? 'active' : ''
-                    }`}
+                  className={`sidebar-category-btn ${selectedCategory === cat.id ? 'active' : ''}`}
                   onClick={() => setSelectedCategory(cat.id)}
                 >
                   {cat.title}
@@ -137,65 +157,84 @@ const ExploreCategories = () => {
 
         {/* Services Cards Grid (4 Columns) */}
         <div className="services-grid-container">
-          <div className="services-cards-grid">
-            {initialServices.map((service) => (
-              <article key={service.id} className="explore-card">
-                {/* Thumbnail */}
-                <div className="explore-thumbnail-wrapper">
-                  <img
-                    src={service.image}
-                    alt={service.title}
-                    className="explore-thumbnail-img"
-                    loading="lazy"
-                  />
-                </div>
+          {filteredServices.length === 0 ? (
+            <div className="empty-category-notice">
+              <p>لا توجد خدمات متاحة حالياً في هذا التصنيف.</p>
+              <button 
+                type="button" 
+                className="reset-filter-btn"
+                onClick={() => { setSelectedCategory('all'); setHiddenIds([]); }}
+              >
+                إعادة ضبط التصنيفات
+              </button>
+            </div>
+          ) : (
+            <div className="services-cards-grid">
+              {filteredServices.map((service) => (
+                <article key={service.id} className="explore-card">
+                  {/* Thumbnail */}
+                  <div className="explore-thumbnail-wrapper">
+                    <img
+                      src={service.image}
+                      alt={service.title}
+                      className="explore-thumbnail-img"
+                      loading="lazy"
+                    />
+                  </div>
 
-                {/* Card Content */}
-                <div className="explore-card-content">
-                  {/* Header Row */}
-                  <div className="explore-card-header-row">
-                    <div className="author-info">
-                      <img
-                        src={service.freelancer.avatar}
-                        alt={service.freelancer.name}
-                        className="author-avatar"
-                      />
-                      <span className="author-name">{service.freelancer.name}</span>
+                  {/* Card Content */}
+                  <div className="explore-card-content">
+                    {/* Header Row */}
+                    <div className="explore-card-header-row">
+                      <div className="author-info">
+                        <img
+                          src={service.freelancer.avatar}
+                          alt={service.freelancer.name}
+                          className="author-avatar"
+                        />
+                        <span className="author-name">{service.freelancer.name}</span>
+                      </div>
+                      {service.badge && (
+                        <span className={`recommended-badge badge-${service.badgeType}`}>
+                          {service.badge}
+                        </span>
+                      )}
                     </div>
-                    {service.badge && (
-                      <span className={`recommended-badge badge-${service.badgeType}`}>
-                        {service.badge}
-                      </span>
-                    )}
+
+                    {/* Service Title */}
+                    <h3 className="explore-card-title" title={service.title}>
+                      {service.title}
+                    </h3>
+
+                    {/* Rating */}
+                    <div className="explore-card-rating">
+                      <FiStar className="star-icon" />
+                      <span className="rating-score">{service.rating}</span>
+                      <span className="reviews-count">({service.reviewsCount})</span>
+                    </div>
                   </div>
 
-                  {/* Service Title */}
-                  <h3 className="explore-card-title" title={service.title}>
-                    {service.title}
-                  </h3>
-
-                  {/* Rating */}
-                  <div className="explore-card-rating">
-                    <FiStar className="star-icon" />
-                    <span className="rating-score">{service.rating}</span>
-                    <span className="reviews-count">({service.reviewsCount})</span>
+                  {/* Card Footer */}
+                  <div className="explore-card-footer">
+                    <div className="footer-price-wrapper">
+                      <span className="price-value">{service.price} ج.س</span>
+                      <span className="price-label">تبدأ من</span>
+                    </div>
+                    <button 
+                      type="button" 
+                      className="footer-icon-wrapper"
+                      onClick={(e) => handleHideService(service.id, e)}
+                      title="إخفاء هذه الخدمة"
+                    >
+                      <FiEyeOff className="hide-icon" />
+                    </button>
                   </div>
-                </div>
-
-                {/* Card Footer */}
-                <div className="explore-card-footer">
-                  <div className="footer-price-wrapper">
-                    <span className="price-value">{service.price} ج.س</span>
-                    <span className="price-label">تبدأ من</span>
-                  </div>
-                  <div className="footer-icon-wrapper">
-                    <FiEyeOff className="hide-icon" />
-                  </div>
-                </div>
-              </article>
-            ))}
-          </div>
+                </article>
+              ))}
+            </div>
+          )}
         </div>
+
 
       </div>
     </section>
