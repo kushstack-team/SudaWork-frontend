@@ -15,7 +15,17 @@ const Footer = () => {
           <div className="footer-col">
             <h3>الشركة</h3>
             <ul>
-              <li><a href="#about">عن سوداوورك</a></li>
+              <li>
+                <a 
+                  href="#about" 
+                  onClick={(e) => { 
+                    e.preventDefault(); 
+                    window.dispatchEvent(new CustomEvent('sudawork:open-why')); 
+                  }}
+                >
+                  عن سوداوورك
+                </a>
+              </li>
               <li><a href="#help">مركز المساعدة</a></li>
               <li><a href="#trust">الثقة والأمان</a></li>
               <li><a href="#social-impact">التأثير الاجتماعي</a></li>
@@ -93,11 +103,24 @@ const Footer = () => {
 
           <div className="footer-socials">
             <div className="footer-bottom-selectors">
-              <span className="selector-item">العربية <svg className="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <span 
+                className="selector-item" 
+                role="button" 
+                tabIndex={0} 
+                style={{ cursor: 'pointer' }}
+                onClick={() => window.dispatchEvent(new CustomEvent('sudawork:open-language'))}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    window.dispatchEvent(new CustomEvent('sudawork:open-language'));
+                  }
+                }}
+              >
+                العربية <svg className="globe-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <circle cx="12" cy="12" r="10"></circle>
                   <line x1="2" y1="12" x2="22" y2="12"></line>
                   <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg></span>
+                </svg>
+              </span>
               <span className="selector-item">SAR ريال</span>
             </div>
             <a href="#x" aria-label="X"><FaX /></a>

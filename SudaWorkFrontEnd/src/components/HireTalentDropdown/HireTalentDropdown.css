@@ -1,0 +1,195 @@
+/* Upwork-style Navigation Dropdown */
+
+.upwork-nav-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 330px;
+  background: #ffffff;
+  border: 1px solid #e3ebe6;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px -4px rgba(0, 40, 25, 0.14), 0 4px 10px rgba(0, 0, 0, 0.04);
+  z-index: 1050;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  text-align: right;
+  animation: upworkDropIn 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-primary), 'Tajawal', sans-serif;
+}
+
+/* Hover bridge so mouse moving from button to popover doesn't trigger mouseLeave */
+.upwork-nav-dropdown::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
+[dir="ltr"] .upwork-nav-dropdown {
+  right: auto;
+  left: 0;
+  text-align: left;
+}
+
+@keyframes upworkDropIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Caret Arrow */
+.upwork-nav-dropdown .popover-caret {
+  position: absolute;
+  top: -6px;
+  right: 28px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-top: 1px solid #e3ebe6;
+  border-right: 1px solid #e3ebe6;
+  transform: rotate(-45deg);
+}
+
+[dir="ltr"] .upwork-nav-dropdown .popover-caret {
+  right: auto;
+  left: 28px;
+  border-right: none;
+  border-left: 1px solid #e3ebe6;
+  transform: rotate(45deg);
+}
+
+.upwork-dropdown-header {
+  border-bottom: 1px solid #edf2ef;
+  padding-bottom: 8px;
+}
+
+.upwork-dropdown-heading {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #7b8e84;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.upwork-dropdown-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.upwork-dropdown-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  transition: all 0.15s ease;
+}
+
+.upwork-dropdown-item:hover {
+  background: #f4f8f6;
+}
+
+.upwork-item-icon {
+  width: 30px;
+  height: 30px;
+  min-width: 30px;
+  border-radius: 6px;
+  background: rgba(0, 84, 59, 0.08);
+  color: var(--color-primary, #0B6E4F);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  margin-top: 2px;
+  transition: all 0.2s ease;
+}
+
+.upwork-dropdown-item:hover .upwork-item-icon {
+  background: var(--color-primary, #0B6E4F);
+  color: #ffffff;
+}
+
+.upwork-item-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.upwork-item-title {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: #1a2a22;
+  line-height: 1.35;
+  transition: color 0.15s ease;
+}
+
+.upwork-dropdown-item:hover .upwork-item-title {
+  color: var(--color-primary-dark, #00543B);
+}
+
+.upwork-item-desc {
+  font-size: 11.5px;
+  color: #6b7c73;
+  line-height: 1.4;
+}
+
+.upwork-dropdown-footer {
+  border-top: 1px solid #edf2ef;
+  padding-top: 10px;
+  margin-top: 2px;
+}
+
+.upwork-dropdown-all-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--color-primary, #0B6E4F);
+  text-decoration: none;
+  padding: 4px 6px;
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.upwork-dropdown-all-link:hover {
+  color: var(--color-primary-dark, #00543B);
+  background: #f4f8f6;
+}
+
+.footer-link-arrow {
+  font-size: 13px;
+  transition: transform 0.2s ease;
+}
+
+.upwork-dropdown-all-link:hover .footer-link-arrow {
+  transform: translateX(-3px);
+}
+
+[dir="ltr"] .upwork-dropdown-all-link:hover .footer-link-arrow {
+  transform: translateX(3px);
+}
+
+@media (max-width: 576px) {
+  .upwork-nav-dropdown {
+    width: calc(100vw - 32px);
+    right: -16px;
+  }
+
+  [dir="ltr"] .upwork-nav-dropdown {
+    right: auto;
+    left: -16px;
+  }
+}

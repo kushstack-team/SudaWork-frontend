@@ -72,21 +72,25 @@
 /* Social Buttons */
 .freelancer-register-socials {
   display: flex;
-  gap: 18px;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   margin-bottom: 28px;
 }
 
 .social-btn {
-  flex: 1;
-  height: 50px;
-  border-radius: 25px;
-  display: flex;
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 220px;
+  height: 46px;
+  border-radius: 23px;
+  padding: 0 28px;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
   font-family: var(--font-primary, 'Tajawal', sans-serif);
-  font-size: 1.05rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
   outline: none;
@@ -96,47 +100,36 @@
 
 /* Google Button */
 .social-btn--google {
-  background-color: #5c9dff;
+  background-color: #4285F4;
   color: #ffffff;
   border: none;
-  box-shadow: 0 2px 10px rgba(92, 157, 255, 0.24);
+  box-shadow: 0 2px 8px rgba(66, 133, 244, 0.25);
+  direction: ltr;
 }
 
 .social-btn--google:hover {
-  background-color: #488ff9;
+  background-color: #3367d6;
+  color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 4px 14px rgba(92, 157, 255, 0.32);
+  box-shadow: 0 4px 12px rgba(66, 133, 244, 0.35);
 }
 
 .social-icon-wrapper--google {
-  width: 28px;
-  height: 28px;
+  background: #ffffff;
   border-radius: 50%;
-  background-color: #ffffff;
+  width: 26px;
+  height: 26px;
+  padding: 3px;
+  box-sizing: border-box;
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
+  left: -8px;
 }
 
-/* Apple Button */
-.social-btn--apple {
-  background-color: #ffffff;
-  color: #000000;
-  border: 1.5px solid #d5dbdb;
-}
-
-.social-btn--apple:hover {
-  border-color: #1a1a1a;
-  background-color: #fcfcfc;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
-}
-
-.social-icon-wrapper--apple {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #000000;
+.social-icon-wrapper--google svg {
+  display: block;
 }
 
 /* Divider with "او" */

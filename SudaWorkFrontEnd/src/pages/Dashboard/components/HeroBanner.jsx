@@ -35,18 +35,16 @@ const HeroBanner = ({ userName = 'طارق' }) => {
 
           {/* Quick Talent Search */}
           <form className="hero-talent-search" onSubmit={handleSearch}>
-            <div className="search-input-field">
+            <button type="submit" className="hero-search-submit" aria-label="بحث">
               <FiSearch className="search-field-icon" />
-              <input
-                type="text"
-                placeholder="ابحث عن مهارة أو تخصص (مثال: مصمم شعارات، مطور React، مونتير...)"
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-            <button type="submit" className="hero-search-submit">
-              بحث عن مستقل
             </button>
+            <input
+              type="text"
+              className="hero-talent-search-input"
+              placeholder="ابحث عن مهارة أو تخصص (مثال: مصمم شعارات، مطور React، مونتير...)"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
           </form>
 
           {/* Action CTAs */}

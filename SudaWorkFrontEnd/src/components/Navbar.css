@@ -5,7 +5,7 @@
   top: 0;
   z-index: 1000;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-  direction: rtl; /* Set default RTL layout for the Arabic pages */
+  direction: inherit;
 }
 
 .navbar-container {
@@ -80,6 +80,24 @@
   color: var(--color-primary);
 }
 
+.nav-btn-link {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  padding: 8px 4px;
+}
+
+.nav-btn-link:focus-visible {
+  outline: 2px solid var(--color-primary);
+  border-radius: 4px;
+}
+
+
 .lang-link {
   display: flex;
   align-items: center;
@@ -94,9 +112,27 @@
   color: var(--color-primary);
 }
 
+.nav-item-dropdown {
+  position: relative;
+}
+
 .dropdown-arrow {
   font-size: 10px;
   opacity: 0.7;
+  display: inline-flex;
+  align-items: center;
+}
+
+.dropdown-arrow-icon {
+  transition: transform 0.2s ease;
+}
+
+.dropdown-arrow.rotated .dropdown-arrow-icon {
+  transform: rotate(180deg) !important;
+}
+
+.nav-btn-link.active {
+  color: var(--color-primary);
 }
 
 .nav-link-login {
@@ -117,7 +153,7 @@
   color: var(--color-white) !important;
   border-radius: 8px !important;
   font-weight: 700 !important;
-  padding: 2px 8px !important;
+  padding: 10px 24px !important;
 }
 
 .btn-register-filled:hover {

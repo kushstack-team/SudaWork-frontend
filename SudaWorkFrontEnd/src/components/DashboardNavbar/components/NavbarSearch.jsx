@@ -10,6 +10,9 @@ export default function NavbarSearch({
   return (
     <div className="topbar-center">
       <form className="dashboard-search-form" onSubmit={onSubmit}>
+        <button type="submit" className="dashboard-search-btn" aria-label="Search button">
+          <FiSearch className="search-icon" />
+        </button>
         <input
           type="text"
           className="dashboard-search-input"
@@ -18,9 +21,6 @@ export default function NavbarSearch({
           onChange={(e) => setSearchQuery(e.target.value)}
           aria-label="Search"
         />
-        <button type="submit" className="dashboard-search-btn" aria-label="Search button">
-          <FiSearch className="search-icon" />
-        </button>
       </form>
     </div>
   );

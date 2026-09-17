@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FiHeart, FiMail } from 'react-icons/fi';
+import { FiMail } from 'react-icons/fi';
 import './DashboardNavbar.css';
 import logo from '../../assets/logo.svg';
 import { useAuth } from '../../context/AuthContext';
@@ -160,15 +160,6 @@ const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
                 menuRef={menuRef}
               />
 
-              {/* Heart / Favorites Icon */}
-              <button 
-                type="button" 
-                className="control-icon-btn" 
-                title="المفضلة"
-                aria-label="Favorites"
-              >
-                <FiHeart className="control-icon" />
-              </button>
 
               {/* Messages Icon */}
               <Link 

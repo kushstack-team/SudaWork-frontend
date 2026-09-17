@@ -1,25 +1,40 @@
 .hero {
   background-color: var(--color-primary-dark);
-  padding: 100px 50px;
+  min-height: calc(100vh - 74px);
+  min-height: calc(100dvh - 74px);
+  display: flex;
+  align-items: center;
+  padding: 60px 50px;
   text-align: right;
-  direction: rtl;
+  direction: inherit;
+  box-sizing: border-box;
+}
+
+[dir="ltr"] .hero {
+  text-align: left;
 }
 
 .hero-container {
-  max-width: 800px;
+  max-width: 920px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   margin-right: 0 !important;
-  gap: 32px;
+  gap: 36px;
+}
+
+[dir="ltr"] .hero-container {
+  margin-right: auto !important;
+  margin-left: 0 !important;
 }
 
 .hero-headline {
   font-family: var(--font-primary);
-  font-size: 48px;
+  font-size: 52px;
   font-weight: 800;
   color: var(--color-white);
-  line-height: 1.4;
+  line-height: 1.35;
   margin: 0;
 }
 
@@ -29,16 +44,28 @@
 
 .hero-search-wrapper {
   width: 100%;
-  max-width: 600px;
+  max-width: 760px;
 }
 
-/* Override SearchBar for Hero styles if needed */
+/* Override SearchBar for Hero styles */
 .hero-search {
   max-width: 100% !important;
   background-color: var(--color-white) !important;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.18) !important;
   padding: 8px 16px !important;
   margin: 0;
+  border-radius: 50px !important;
+}
+
+.hero-search .search-input {
+  font-size: 17px !important;
+  padding: 10px 14px !important;
+}
+
+.hero-search .search-button {
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: 50% !important;
 }
 
 .hero-tags {
@@ -46,7 +73,7 @@
   flex-wrap: wrap;
   justify-content: flex-start;
   gap: 12px;
-  margin-top: 12px;
+  margin-top: 4px;
 }
 
 .hero-tag-btn {
@@ -70,16 +97,45 @@
   transition: transform 0.3s ease;
 }
 
+[dir="ltr"] .arrow-icon {
+  margin-right: 0;
+  margin-left: 8px;
+  transform: rotate(180deg);
+}
+
 .hero-tag-btn:hover .arrow-icon {
   transform: translateX(-4px);
 }
 
+[dir="ltr"] .hero-tag-btn:hover .arrow-icon {
+  transform: rotate(180deg) translateX(-4px);
+}
+
+@media (max-width: 992px) {
+  .hero {
+    padding: 60px 30px;
+  }
+
+  .hero-headline {
+    font-size: 40px;
+  }
+
+  .hero-search-wrapper {
+    max-width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .hero {
-    padding: 60px 16px;
+    min-height: auto;
+    padding: 50px 16px;
   }
   
   .hero-headline {
     font-size: 32px;
+  }
+
+  .hero-container {
+    gap: 24px;
   }
 }
