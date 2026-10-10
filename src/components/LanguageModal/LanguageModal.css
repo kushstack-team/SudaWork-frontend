@@ -1,0 +1,118 @@
+/* Fiverr-style Compact Popover for Language Selection */
+
+.lang-fiverr-popover {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  width: 190px;
+  background: #ffffff;
+  border: 1px solid #e3ebe6;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px -4px rgba(0, 40, 25, 0.14), 0 4px 10px rgba(0, 0, 0, 0.04);
+  z-index: 1050;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  animation: fiverrPopIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  font-family: var(--font-primary), 'Tajawal', sans-serif;
+}
+
+.lang-fiverr-popover::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
+[dir="ltr"] .lang-fiverr-popover {
+  right: auto;
+  left: 0;
+}
+
+/* Caret Arrow */
+.lang-fiverr-popover .popover-caret {
+  position: absolute;
+  top: -6px;
+  right: 24px;
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-top: 1px solid #e3ebe6;
+  border-right: 1px solid #e3ebe6;
+  transform: rotate(-45deg);
+}
+
+[dir="ltr"] .lang-fiverr-popover .popover-caret {
+  right: auto;
+  left: 24px;
+  border-right: none;
+  border-left: 1px solid #e3ebe6;
+  transform: rotate(45deg);
+}
+
+.lang-popover-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #7b8e84;
+  padding: 4px 8px 6px 8px;
+  border-bottom: 1px solid #edf2ef;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.lang-popover-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.lang-popover-item {
+  width: 100%;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.15s ease;
+  color: #1a2a22;
+}
+
+.lang-popover-item:hover {
+  background: #f4f8f6;
+  color: var(--color-primary-dark);
+}
+
+.lang-popover-item.active {
+  background: rgba(0, 84, 59, 0.07);
+  color: var(--color-primary-dark);
+  font-weight: 700;
+}
+
+.lang-item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.lang-item-flag {
+  font-size: 16px;
+  line-height: 1;
+}
+
+.lang-item-name {
+  font-size: 13.5px;
+}
+
+.lang-item-check {
+  color: var(--color-primary);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+}

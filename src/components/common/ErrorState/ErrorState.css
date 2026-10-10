@@ -1,0 +1,8 @@
+.error-state-container {
+  border-color: #fecaca;
+}
+
+.error-state-icon {
+  background-color: #fef2f2;
+  color: #dc2626;
+}

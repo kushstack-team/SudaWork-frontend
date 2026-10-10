@@ -1,0 +1,57 @@
+.report-modal-box {
+  width: min(480px, calc(100vw - 32px));
+}
+
+.report-modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: right;
+}
+
+.report-modal-label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1e293b;
+  margin-top: 6px;
+}
+
+.report-modal-input {
+  width: 100%;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.95rem;
+  background-color: #ffffff;
+  resize: vertical;
+}
+
+.report-modal-input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0b6e4f);
+}
+
+.report-modal-error {
+  margin: 4px 0 0;
+  color: #b91c1c;
+  font-size: 0.875rem;
+}
+
+/* Small text button used to open the dialog from profile and project pages */
+.report-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: none;
+  border: none;
+  color: #64748b;
+  font-family: inherit;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 6px 0;
+}
+
+.report-link-btn:hover {
+  color: #b91c1c;
+}

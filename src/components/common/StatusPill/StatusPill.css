@@ -1,0 +1,35 @@
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: nowrap;
+}
+
+.status-pill.success {
+  background-color: #d1fae5;
+  color: #065f46;
+}
+
+.status-pill.warning {
+  background-color: #fef3c7;
+  color: #92400e;
+}
+
+.status-pill.danger {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.status-pill.info {
+  background-color: #e0f2fe;
+  color: #075985;
+}
+
+.status-pill.neutral {
+  background-color: #f1f5f9;
+  color: #475569;
+}

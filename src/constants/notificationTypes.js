@@ -1,0 +1,23 @@
+// Mirrors NOTIFICATION_TYPES in the backend (src/core/services/notify.service.js).
+export const NOTIFICATION_TYPES = Object.freeze({
+  PROPOSAL_RECEIVED: 'proposal_received',
+  PROPOSAL_ACCEPTED: 'proposal_accepted',
+  PROPOSAL_REJECTED: 'proposal_rejected',
+  PAYMENT_SUBMITTED: 'payment_submitted',
+  ESCROW_FUNDED: 'escrow_funded',
+  PAYMENT_REJECTED: 'payment_rejected',
+  WORK_SUBMITTED: 'work_submitted',
+  REVISION_REQUESTED: 'revision_requested',
+  ESCROW_RELEASED: 'escrow_released',
+  CONTRACT_CANCELLED: 'contract_cancelled',
+  WITHDRAWAL_REQUESTED: 'withdrawal_requested',
+  WITHDRAWAL_APPROVED: 'withdrawal_approved',
+  WITHDRAWAL_REJECTED: 'withdrawal_rejected',
+  WITHDRAWAL_COMPLETED: 'withdrawal_completed',
+  REVIEW_RECEIVED: 'review_received',
+  DISPUTE_OPENED: 'dispute_opened',
+  DISPUTE_RESOLVED: 'dispute_resolved',
+  NEW_MESSAGE: 'new_message',
+  ACCOUNT_STATUS: 'account_status',
+  WELCOME: 'welcome',
+});

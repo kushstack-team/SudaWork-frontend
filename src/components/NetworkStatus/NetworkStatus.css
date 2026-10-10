@@ -1,0 +1,67 @@
+.network-status-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 9999;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  animation: slideDown 0.3s ease-out;
+}
+
+.network-banner {
+  padding: 10px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.9rem;
+  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.network-banner.offline {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+
+.network-banner.online {
+  background-color: #059669;
+  color: #ffffff;
+}
+
+.network-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 960px;
+  text-align: center;
+  line-height: 1.4;
+}
+
+.network-icon {
+  font-size: 1.25rem;
+  flex-shrink: 0;
+}
+
+.network-icon.pulse {
+  animation: netPulse 1.5s infinite ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes netPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: scale(1.15);
+  }
+}

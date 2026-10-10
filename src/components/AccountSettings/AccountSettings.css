@@ -1,0 +1,94 @@
+.account-settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-settings-hint {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.account-settings-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.account-settings-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #1e293b;
+}
+
+.account-settings-field input {
+  height: 44px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.account-settings-field input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0b6e4f);
+}
+
+.account-settings-error {
+  margin: 0;
+  color: #b91c1c;
+  font-size: 0.9rem;
+}
+
+.account-settings-success {
+  margin: 0;
+  color: #15803d;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.account-settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.account-settings-primary,
+.account-settings-danger {
+  height: 42px;
+  padding: 0 20px;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.account-settings-primary {
+  background-color: var(--color-primary, #0b6e4f);
+  color: #ffffff;
+  border: none;
+}
+
+.account-settings-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-settings-danger {
+  background-color: #ffffff;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+}
+
+.account-settings-danger:hover {
+  background-color: #fef2f2;
+}

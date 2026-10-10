@@ -1,0 +1,84 @@
+.google-complete-identity {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 12px 18px;
+  margin-bottom: 28px;
+  max-width: 100%;
+}
+
+.google-complete-avatar {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.google-complete-identity > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.google-complete-name {
+  font-size: 1rem;
+  color: #1e293b;
+}
+
+.google-complete-email {
+  font-size: 0.9rem;
+  color: #64748b;
+  direction: ltr;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.google-complete-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.google-complete-field {
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.google-complete-field label {
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.google-complete-field input {
+  height: 46px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  padding: 0 14px;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.google-complete-field input:focus {
+  outline: none;
+  border-color: var(--color-primary, #0b6e4f);
+}
+
+.google-complete-error {
+  width: 100%;
+  max-width: 420px;
+  background-color: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #b91c1c;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  text-align: center;
+}

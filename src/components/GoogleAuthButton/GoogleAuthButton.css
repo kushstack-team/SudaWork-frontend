@@ -1,0 +1,55 @@
+.google-auth-slot {
+  min-height: 46px;
+  min-width: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.google-auth-slot--loading {
+  border-radius: 23px;
+  background-color: #eef2f7;
+}
+
+.google-auth-slot--busy {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.google-auth-button-host {
+  width: 100%;
+  max-width: 320px;
+  display: flex;
+  justify-content: center;
+}
+
+.google-auth-unavailable {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.google-auth-unavailable .social-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.google-auth-hint {
+  font-size: 0.85rem;
+  color: #64748b;
+  text-align: center;
+  max-width: 320px;
+}
+
+.google-g-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #ffffff;
+}
