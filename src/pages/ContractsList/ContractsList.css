@@ -338,3 +338,52 @@
   background-color: var(--color-primary, #0B6E4F);
   color: #ffffff;
 }
+
+@media (max-width: 640px) {
+  .contracts-list-main {
+    padding: 20px 14px;
+  }
+
+  .contracts-page-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .header-action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contracts-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .contract-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .card-metrics-grid {
+    gap: 6px;
+    padding: 10px 8px;
+  }
+
+  .metric-label {
+    font-size: 0.7rem;
+  }
+
+  .metric-val {
+    font-size: 0.82rem;
+  }
+
+  .contracts-empty-card {
+    padding: 36px 16px;
+  }
+}
+

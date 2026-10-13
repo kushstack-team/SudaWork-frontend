@@ -556,8 +556,17 @@
 
 @media (max-width: 480px) {
   .notifications-dropdown {
-    width: 320px;
-    left: -60px;
+    position: fixed;
+    top: 64px;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    max-width: calc(100vw - 24px);
+    border-radius: 16px;
+  }
+
+  .notif-dropdown-body {
+    max-height: 60vh;
   }
 }
 
@@ -650,5 +659,20 @@
   }
   .dashboard-topbar {
     padding: 10px 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .dashboard-topbar-container {
+    padding: 0 16px;
+  }
+  .dashboard-category-container {
+    padding: 0 16px;
+  }
+  .dashboard-logo-img {
+    height: 36px;
+  }
+  .user-controls-group {
+    gap: 10px;
   }
 }

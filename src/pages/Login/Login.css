@@ -458,6 +458,9 @@
   .login-header {
     padding: 20px 20px 8px 20px;
   }
+  .login-header__container {
+    justify-content: center;
+  }
   .login-main {
     padding: 16px 20px 36px 20px;
   }
@@ -467,5 +470,10 @@
   .login-socials {
     flex-direction: column;
     gap: 10px;
+    width: 100%;
+  }
+  .social-btn {
+    width: 100%;
+    min-width: auto;
   }
 }

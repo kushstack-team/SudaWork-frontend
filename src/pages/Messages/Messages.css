@@ -615,3 +615,31 @@
     display: inline-flex;
   }
 }
+
+@media (max-width: 640px) {
+  .messages-main {
+    padding: 10px 8px;
+  }
+
+  .messages-feed {
+    padding: 14px 10px;
+  }
+
+  .message-bubble {
+    max-width: 85%;
+    padding: 10px 14px;
+  }
+
+  .chat-header {
+    padding: 12px 14px;
+  }
+
+  .chat-input-bar {
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .chat-contract-pill {
+    display: none; /* Hide contract pill in chat header on tiny screens so sender name doesn't clip */
+  }
+}

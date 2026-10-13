@@ -1481,3 +1481,112 @@
   background-color: #c2410c !important;
 }
 
+@media (max-width: 640px) {
+  .contract-details-main {
+    padding: 20px 14px;
+  }
+
+  .contract-hero-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .contract-hero-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .contract-project-title {
+    font-size: 1.35rem;
+  }
+
+  .contract-header-actions-box {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .lifecycle-stepper-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 16px 12px;
+  }
+
+  .stepper-track {
+    min-width: 460px;
+    padding: 0 8px;
+  }
+
+  .contract-terms-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .term-card {
+    padding: 12px 14px;
+  }
+
+  .term-val.price {
+    font-size: 1.05rem;
+  }
+
+  .escrow-action-banner {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 14px;
+  }
+
+  .fund-escrow-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .deliverables-section-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .section-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .open-deliver-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .deliverable-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .deliverable-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .deliv-client-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .accept-deliv-btn,
+  .request-revision-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .contract-modal-dialog {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+}
+
+

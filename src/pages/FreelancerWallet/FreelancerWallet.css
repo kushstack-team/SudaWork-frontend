@@ -539,3 +539,58 @@
   background-color: #f0fdf4;
   color: var(--color-primary-dark, #00543B);
 }
+
+@media (max-width: 640px) {
+  .freelancer-wallet-main {
+    padding: 20px 14px;
+  }
+
+  .wallet-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .wallet-title {
+    font-size: 1.5rem;
+  }
+
+  .withdraw-funds-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .wallet-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .balance-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .balance-amount {
+    font-size: 1.45rem;
+  }
+
+  .balance-val {
+    font-size: 1.25rem;
+  }
+
+  .payout-rails-banner {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .wallet-history-card {
+    padding: 18px 14px;
+    border-radius: 16px;
+  }
+
+  .wallet-modal-dialog {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+}
+

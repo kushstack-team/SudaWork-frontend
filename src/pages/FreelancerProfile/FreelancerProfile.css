@@ -499,3 +499,61 @@
     padding: 24px;
   }
 }
+
+@media (max-width: 640px) {
+  .freelancer-profile-main {
+    padding: 20px 14px;
+  }
+
+  .profile-hero-content {
+    padding: 20px 16px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .profile-identity-info {
+    min-width: 0;
+    width: 100%;
+  }
+
+  .freelancer-name {
+    font-size: 1.4rem;
+  }
+
+  .profile-hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .hire-me-cta-btn,
+  .contact-me-btn,
+  .edit-my-profile-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-stats-strip {
+    padding: 14px 16px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+
+  .stat-divider {
+    display: none;
+  }
+
+  .profile-section-card {
+    padding: 20px 16px;
+  }
+
+  .card-heading {
+    font-size: 1.1rem;
+  }
+
+  .portfolio-items-grid {
+    grid-template-columns: 1fr;
+  }
+}

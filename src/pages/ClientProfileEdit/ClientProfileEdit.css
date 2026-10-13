@@ -178,3 +178,36 @@
     align-items: flex-start;
   }
 }
+
+@media (max-width: 640px) {
+  .client-profile-edit-main {
+    padding: 20px 14px;
+  }
+
+  .client-edit-title {
+    font-size: 1.4rem;
+  }
+
+  .client-edit-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .view-public-client-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .client-form-section {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .client-submit-row {
+    width: 100%;
+  }
+
+  .save-client-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}

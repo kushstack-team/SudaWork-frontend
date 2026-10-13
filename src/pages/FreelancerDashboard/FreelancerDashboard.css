@@ -601,3 +601,43 @@
   color: #64748b;
   margin: 0;
 }
+
+@media (max-width: 768px) {
+  .freelancer-hero-card {
+    padding: 24px 20px;
+    border-radius: 16px;
+  }
+
+  .freelancer-hero-title {
+    font-size: 1.55rem;
+  }
+
+  .freelancer-hero-desc {
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+  }
+
+  .freelancer-hero-actions {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .btn-hero-primary,
+  .btn-hero-secondary {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .section-header-flex {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .btn-view-all-projects {
+    width: 100%;
+    justify-content: center;
+  }
+}
+

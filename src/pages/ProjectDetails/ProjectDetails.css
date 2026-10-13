@@ -1033,3 +1033,117 @@
   color: #0f172a;
 }
 
+@media (max-width: 640px) {
+  .project-details-main {
+    padding: 20px 14px;
+  }
+
+  .project-main-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+  }
+
+  .project-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .project-title {
+    font-size: 1.4rem;
+  }
+
+  .budget-box {
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 10px 16px;
+  }
+
+  .project-meta-strip {
+    gap: 10px 14px;
+    padding: 10px 0;
+  }
+
+  .freelancer-proposal-cta-box {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .open-proposal-modal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .proposal-item-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .proposal-fl-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .fl-user-info {
+    width: 100%;
+  }
+
+  .proposal-terms-box {
+    width: 100%;
+    justify-content: space-around;
+    gap: 8px;
+    box-sizing: border-box;
+    padding: 8px 12px;
+  }
+
+  .proposal-actions-strip {
+    flex-direction: column;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .accept-proposal-btn,
+  .reject-proposal-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .already-applied-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .applied-details-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .proposal-modal-dialog {
+    padding: 20px 16px;
+    border-radius: 18px;
+  }
+
+  .modal-project-meta-box {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .modal-actions-footer {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .modal-submit-btn,
+  .modal-cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+

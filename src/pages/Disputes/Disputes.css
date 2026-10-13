@@ -843,3 +843,68 @@
     justify-content: flex-end;
   }
 }
+
+@media (max-width: 640px) {
+  .disputes-main {
+    padding: 20px 0 40px;
+  }
+
+  .disputes-container {
+    padding: 0 14px;
+  }
+
+  .disputes-hero-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+
+  .hero-title {
+    font-size: 1.4rem;
+  }
+
+  .hero-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .arbitration-guarantee-box {
+    padding: 16px 14px;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .dispute-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .dispute-card-actions {
+    justify-content: stretch;
+  }
+
+  .dispute-action-link {
+    flex: 1;
+    justify-content: center;
+  }
+
+  .disputes-modal-dialog {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-submit-btn,
+  .modal-cancel-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .disputes-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}

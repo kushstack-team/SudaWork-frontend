@@ -15,23 +15,16 @@
     touch-action: manipulation;
   }
 
-  /* Reserve space for fixed MobileBottomNav */
+  /* Reserve space for fixed MobileBottomNav on layout roots only (prevents stacking) */
   .app-container,
-  .main-content,
-  .dashboard-main-content,
-  .client-payments-container,
-  .freelancer-wallet-container,
-  .disputes-page-container,
-  .projects-browse-container,
-  .freelancers-browse-container,
-  .explore-categories-container,
-  .post-project-page,
-  .contract-details-page,
-  .contracts-list-page,
-  .messages-page,
-  .notifications-page,
-  .admin-dashboard-container {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+  .dashboard-layout-container,
+  .login-page,
+  .role-selection-page,
+  .client-register-page,
+  .freelancer-register-page,
+  .forgot-pwd-page,
+  .reset-pwd-page {
+    padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
 
   /* Ensure inputs don't cause unwanted auto-zoom on iOS */

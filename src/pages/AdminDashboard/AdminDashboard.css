@@ -1201,6 +1201,80 @@
   }
 }
 
+@media (max-width: 640px) {
+  .admin-main {
+    padding: 20px 0 40px;
+  }
+
+  .admin-container {
+    padding: 0 14px;
+  }
+
+  .admin-hero-card {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .admin-title {
+    font-size: 1.4rem;
+  }
+
+  .admin-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .admin-user-tag {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .admin-card-section {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .users-filter-controls {
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .search-input-box {
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .search-input-box input {
+    width: 100%;
+  }
+
+  .role-filter-select {
+    width: 100%;
+  }
+
+  .admin-modal-dialog {
+    padding: 20px 16px;
+    border-radius: 16px;
+  }
+
+  .modal-actions {
+    flex-direction: column;
+  }
+
+  .modal-primary-btn,
+  .modal-danger-btn,
+  .modal-secondary-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-metrics-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Feature availability switches */
 .feature-switch {
   display: inline-flex;

@@ -69,7 +69,7 @@ export const tokens = {
 try { remember = !window.sessionStorage.getItem(ACCESS_KEY); } catch { /* ignore */ }
 
 // AuthContext subscribes so an expired session logs the user out everywhere.
-let onSessionExpired = () => {};
+let onSessionExpired = () => { };
 export const setSessionExpiredHandler = (fn) => { onSessionExpired = fn; };
 
 // ---------- helpers ----------

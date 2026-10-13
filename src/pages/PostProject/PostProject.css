@@ -427,10 +427,104 @@
 }
 
 @media (max-width: 640px) {
-  .wizard-card {
-    padding: 24px 20px;
+  .post-project-main {
+    padding: 20px 14px;
   }
+
+  .wizard-stepper {
+    margin-bottom: 24px;
+  }
+
+  .step-circle {
+    width: 36px;
+    height: 36px;
+    font-size: 0.95rem;
+  }
+
+  .step-label {
+    font-size: 0.78rem;
+    text-align: center;
+    max-width: 70px;
+    line-height: 1.2;
+  }
+
+  .step-connector {
+    margin: 0 6px;
+    top: -12px;
+  }
+
+  .wizard-card {
+    padding: 24px 16px;
+    border-radius: 16px;
+  }
+
   .wizard-heading {
-    font-size: 1.4rem;
+    font-size: 1.35rem;
+  }
+
+  .wizard-subheading {
+    font-size: 0.88rem;
+    margin-bottom: 20px;
+  }
+
+  .categories-selection-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 8px;
+  }
+
+  .category-select-pill {
+    padding: 10px 12px;
+    font-size: 0.85rem;
+  }
+
+  .review-summary-card {
+    padding: 16px;
+    gap: 12px;
+  }
+
+  .review-row {
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-start;
+  }
+
+  .review-lbl {
+    min-width: auto;
+    font-size: 0.85rem;
+  }
+
+  .review-val {
+    font-size: 0.92rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .wizard-actions-between {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .wizard-actions-between .wizard-next-btn,
+  .wizard-actions-between .wizard-publish-btn,
+  .wizard-actions-between .wizard-back-btn,
+  .wizard-actions .wizard-next-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .step-circle {
+    width: 32px;
+    height: 32px;
+    font-size: 0.88rem;
+  }
+
+  .step-label {
+    font-size: 0.72rem;
+    max-width: 56px;
+  }
+
+  .step-connector {
+    margin: 0 4px;
+    top: -10px;
   }
 }

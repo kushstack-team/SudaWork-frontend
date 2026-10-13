@@ -357,3 +357,52 @@
   border-color: #fecaca;
   color: #b91c1c;
 }
+
+@media (max-width: 640px) {
+  .client-projects-main {
+    padding: 20px 14px;
+  }
+
+  .client-projects-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+
+  .new-project-cta-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .project-manage-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .card-top-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .card-actions-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .view-proposals-cta {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .open-actions-group {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+

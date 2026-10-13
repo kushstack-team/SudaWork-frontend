@@ -529,6 +529,49 @@
   }
 }
 
+@media (max-width: 640px) {
+  .profile-edit-main {
+    padding: 20px 14px;
+  }
+
+  .profile-edit-title {
+    font-size: 1.4rem;
+  }
+
+  .profile-edit-subtitle {
+    font-size: 0.88rem;
+  }
+
+  .view-public-profile-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .profile-form-section {
+    padding: 20px 16px;
+    border-radius: 14px;
+  }
+
+  .profile-submit-row {
+    width: 100%;
+  }
+
+  .save-profile-btn {
+    width: 100%;
+    min-width: auto;
+  }
+
+  .portfolio-grid-preview {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .availability-toggle-group {
+    flex-direction: column;
+  }
+}
+
 .profile-success-banner.error {
   background-color: #fef2f2;
   border-color: #fecaca;

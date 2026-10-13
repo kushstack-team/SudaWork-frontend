@@ -666,3 +666,50 @@
     position: static;
   }
 }
+
+@media (max-width: 640px) {
+  .freelancers-browse-main {
+    padding: 20px 14px;
+  }
+
+  .freelancers-header-banner {
+    padding: 24px 18px;
+    border-radius: 16px;
+  }
+
+  .browse-title {
+    font-size: 1.6rem;
+  }
+
+  .browse-subtitle {
+    font-size: 0.95rem;
+  }
+
+  .search-input-wrapper {
+    min-width: 100%;
+  }
+
+  .browse-search-submit-btn {
+    width: 100%;
+  }
+
+  .freelancers-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .freelancer-card {
+    padding: 18px 16px;
+    border-radius: 14px;
+  }
+
+  .avatar-wrapper {
+    width: 52px;
+    height: 52px;
+  }
+
+  .freelancer-name {
+    font-size: 1.05rem;
+  }
+}
+
