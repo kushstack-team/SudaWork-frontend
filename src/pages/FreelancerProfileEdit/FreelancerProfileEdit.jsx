@@ -137,6 +137,16 @@ const FreelancerProfileEdit = () => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
+    const MAX_AVATAR_BYTES = 10 * 1024 * 1024; // 10MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setErrorMessage('صيغة الصورة غير مدعومة. يرجى اختيار ملف PNG أو JPG أو WEBP.');
+      return;
+    }
+    if (file.size > MAX_AVATAR_BYTES) {
+      setErrorMessage('حجم الصورة يتجاوز الحد المسموح (10 ميجابايت).');
+      return;
+    }
     setUploadingPhoto(true);
     setErrorMessage('');
     try {

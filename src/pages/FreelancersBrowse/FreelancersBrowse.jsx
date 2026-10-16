@@ -17,7 +17,8 @@ import {
   FiArrowLeft,
   FiUserCheck,
   FiX,
-  FiBriefcase
+  FiBriefcase,
+  FiCheckCircle
 } from 'react-icons/fi';
 
 const sudanLocations = [
@@ -184,7 +185,7 @@ const FreelancersBrowse = () => {
                 )}
                 {minRating !== 'all' && (
                   <span className="filter-tag">
-                    التقييم: ⭐ {minRating}+ نجوم
+                    التقييم: <FiStar style={{ color: '#f59e0b', fill: '#f59e0b', display: 'inline', verticalAlign: 'middle', margin: '0 4px' }} /> {minRating}+ نجوم
                     <button type="button" onClick={() => updateUrlParams({ minRating: 'all' })}><FiX /></button>
                   </span>
                 )}
@@ -280,7 +281,9 @@ const FreelancersBrowse = () => {
                         checked={minRating === '4.8'}
                         onChange={() => handleRatingSelect('4.8')}
                       />
-                      <span className="rating-span">⭐ 4.8 وأعلى</span>
+                      <span className="rating-span" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <FiStar style={{ color: '#f59e0b', fill: '#f59e0b' }} /> 4.8 وأعلى
+                      </span>
                     </label>
                     <label className="radio-option">
                       <input
@@ -289,7 +292,9 @@ const FreelancersBrowse = () => {
                         checked={minRating === '4.5'}
                         onChange={() => handleRatingSelect('4.5')}
                       />
-                      <span className="rating-span">⭐ 4.5 وأعلى</span>
+                      <span className="rating-span" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <FiStar style={{ color: '#f59e0b', fill: '#f59e0b' }} /> 4.5 وأعلى
+                      </span>
                     </label>
                     <label className="radio-option">
                       <input
@@ -298,7 +303,9 @@ const FreelancersBrowse = () => {
                         checked={minRating === '4.0'}
                         onChange={() => handleRatingSelect('4.0')}
                       />
-                      <span className="rating-span">⭐ 4.0 وأعلى</span>
+                      <span className="rating-span" style={{ display: 'inline-flex', alignItems: 'center', gap: '4px' }}>
+                        <FiStar style={{ color: '#f59e0b', fill: '#f59e0b' }} /> 4.0 وأعلى
+                      </span>
                     </label>
                   </div>
                 </div>
@@ -323,7 +330,9 @@ const FreelancersBrowse = () => {
                         checked={availability === 'available'}
                         onChange={() => handleAvailabilitySelect('available')}
                       />
-                      <span className="text-success font-bold">🟢 متاح للعمل فوراً</span>
+                      <span className="text-success font-bold" style={{ display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                        <FiCheckCircle /> متاح للعمل فوراً
+                      </span>
                     </label>
                     <label className="radio-option">
                       <input

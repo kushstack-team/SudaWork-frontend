@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './PostProject.css';
 import DashboardNavbar from '../../components/DashboardNavbar/DashboardNavbar';
 import Footer from '../../components/Footer';
@@ -22,12 +22,16 @@ import {
 const PostProject = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { id: editProjectId } = useParams();
+  const isEditing = Boolean(editProjectId);
 
   const [step, setStep] = useState(1);
   const [categories, setCategories] = useState([]);
   const [skillSuggestions, setSkillSuggestions] = useState([]);
   const [loadingCats, setLoadingCats] = useState(true);
   const [catsError, setCatsError] = useState(null);
+  const [loadingProject, setLoadingProject] = useState(isEditing);
+  const [projectError, setProjectError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
@@ -48,7 +52,9 @@ const PostProject = () => {
     try {
       const list = await api.taxonomy.categories();
       setCategories(list);
-      setCategoryId((current) => current || list[0]?.id || '');
+      if (!isEditing) {
+        setCategoryId((current) => current || list[0]?.id || '');
+      }
       setCatsError(null);
     } catch (err) {
       setCatsError(err);
@@ -58,6 +64,46 @@ const PostProject = () => {
   };
 
   useLoader(fetchCats, []);
+
+  // Fetch existing project if in edit mode
+  useEffect(() => {
+    if (!editProjectId) return;
+    let active = true;
+    api.projects.get(editProjectId)
+      .then((proj) => {
+        if (!active) return;
+        if (user && proj.clientId && proj.clientId !== user.id && user.role !== 'admin') {
+          setProjectError(new Error('ليس لديك صلاحية لتعديل هذا المشروع.'));
+          return;
+        }
+        setTitle(proj.title || '');
+        setCategoryId(proj.categoryId || '');
+        setSkills(proj.skills || []);
+        setDescription(proj.description || '');
+        setBudget(proj.budget != null ? String(proj.budget) : '');
+        setDeadline(proj.deadline ? proj.deadline.slice(0, 10) : '');
+        if (proj.attachments && proj.attachments.length > 0) {
+          setAttachments(
+            proj.attachments.map((att) => ({
+              key: String(att.id),
+              name: att.name,
+              size: att.size || '',
+              status: 'done',
+              upload: att,
+            }))
+          );
+        }
+      })
+      .catch((err) => {
+        if (active) setProjectError(err);
+      })
+      .finally(() => {
+        if (active) setLoadingProject(false);
+      });
+
+    return () => { active = false; };
+  }, [editProjectId, user]);
+
   useEffect(() => {
     api.taxonomy.skills().then((list) => setSkillSuggestions(list.map((s) => s.name)), () => {});
   }, []);
@@ -149,30 +195,59 @@ const PostProject = () => {
     setSubmitError('');
 
     try {
-      const created = await api.projects.create({
+      const payload = {
         title: title.trim(),
         description: description.trim(),
         categoryId,
         budget: Number(budget),
         // End of the chosen day, so "today + N" is never already in the past.
-        deadline: new Date(`${deadline}T23:59:59`).toISOString(),
+        deadline: deadline.includes('T') ? deadline : new Date(`${deadline}T23:59:59`).toISOString(),
         skills,
         attachmentIds: attachments.filter((a) => a.upload).map((a) => a.upload.id),
-      });
+      };
 
-      navigate(`/projects/${created.id}`);
+      const result = isEditing
+        ? await api.projects.update(editProjectId, payload)
+        : await api.projects.create(payload);
+
+      navigate(`/projects/${result.id}`);
     } catch (err) {
       // Keep every entered value; point the user at the step with the problem.
       const fieldErrors = err.fieldErrors || {};
       if (fieldErrors.title || fieldErrors.categoryId) setStep(1);
       else if (fieldErrors.description || fieldErrors.budget || fieldErrors.deadline) setStep(2);
-      setSubmitError(err.message || 'تعذر نشر المشروع، يرجى المحاولة ثانية.');
+      setSubmitError(err.message || (isEditing ? 'تعذر حفظ تعديلات المشروع، يرجى المحاولة ثانية.' : 'تعذر نشر المشروع، يرجى المحاولة ثانية.'));
     } finally {
       setSubmitting(false);
     }
   };
 
   const selectedCatObj = categories.find((c) => c.id === categoryId);
+
+  if (loadingProject) {
+    return (
+      <div className="post-project-page" dir="rtl">
+        <DashboardNavbar />
+        <main className="post-project-main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '350px', gap: '16px' }}>
+          <div className="profile-spinner" />
+          <p style={{ color: '#64748b', fontSize: '1rem' }}>جارٍ تحميل بيانات المشروع للتعديل...</p>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (projectError) {
+    return (
+      <div className="post-project-page" dir="rtl">
+        <DashboardNavbar />
+        <main className="post-project-main" style={{ maxWidth: '600px', margin: '40px auto', padding: '0 20px' }}>
+          <ErrorState title="تعذر تحميل المشروع" error={projectError} onRetry={() => navigate('/client/projects')} />
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="post-project-page" dir="rtl">
@@ -195,7 +270,7 @@ const PostProject = () => {
             <div className={`step-connector ${step >= 3 ? 'active' : ''}`} />
             <div className={`step-node ${step === 3 ? 'active' : ''}`}>
               <div className="step-circle">3</div>
-              <span className="step-label">مراجعة ونشر</span>
+              <span className="step-label">{isEditing ? 'مراجعة وتعديل' : 'مراجعة ونشر'}</span>
             </div>
           </div>
 
@@ -486,7 +561,9 @@ const PostProject = () => {
                     onClick={handlePublish}
                     disabled={submitting || attachments.some((a) => a.status === 'uploading')}
                   >
-                    {submitting ? 'جارٍ نشر المشروع...' : 'نشر المشروع الآن'}
+                    {submitting
+                      ? (isEditing ? 'جارٍ حفظ التعديلات...' : 'جارٍ نشر المشروع...')
+                      : (isEditing ? 'حفظ تعديلات المشروع' : 'نشر المشروع الآن')}
                   </button>
                 </div>
               </div>

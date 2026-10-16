@@ -1,8 +1,16 @@
+import { useNavigate } from 'react-router-dom';
 import './Hero.css';
 import SearchBar from '../../components/SearchBar';
 import Button from '../../components/Button';
+import { FiArrowLeft } from 'react-icons/fi';
 
 const Hero = () => {
+  const navigate = useNavigate();
+
+  const handleTagClick = (keyword) => {
+    navigate(`/projects?search=${encodeURIComponent(keyword)}`);
+  };
+
   return (
     <section className="hero">
       <div className="hero-container">
@@ -16,21 +24,37 @@ const Hero = () => {
         </div>
 
         <div className="hero-tags">
-          <Button variant="outline" className="hero-tag-btn">
+          <Button
+            variant="outline"
+            className="hero-tag-btn"
+            onClick={() => handleTagClick('فيديو')}
+          >
             تعديل الفيديوهات
-            <span className="arrow-icon">←</span>
+            <FiArrowLeft className="arrow-icon" />
           </Button>
-          <Button variant="outline" className="hero-tag-btn">
+          <Button
+            variant="outline"
+            className="hero-tag-btn"
+            onClick={() => handleTagClick('تصميم')}
+          >
             تصميم
-            <span className="arrow-icon">←</span>
+            <FiArrowLeft className="arrow-icon" />
           </Button>
-          <Button variant="outline" className="hero-tag-btn">
+          <Button
+            variant="outline"
+            className="hero-tag-btn"
+            onClick={() => handleTagClick('تسويق')}
+          >
             تسويق
-            <span className="arrow-icon">←</span>
+            <FiArrowLeft className="arrow-icon" />
           </Button>
-          <Button variant="outline" className="hero-tag-btn">
+          <Button
+            variant="outline"
+            className="hero-tag-btn"
+            onClick={() => handleTagClick('تطوير مواقع')}
+          >
             تطوير المواقع الاكترونية
-            <span className="arrow-icon">←</span>
+            <FiArrowLeft className="arrow-icon" />
           </Button>
         </div>
       </div>

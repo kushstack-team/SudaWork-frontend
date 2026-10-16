@@ -24,7 +24,8 @@ import {
   FiPlus,
   FiToggleRight,
   FiFileText,
-  FiList
+  FiList,
+  FiClock
 } from 'react-icons/fi';
 
 // Modular Tab Components
@@ -44,6 +45,7 @@ const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'contracts', 'disput
 const TAB_ALIASES = { payments: 'escrow' };
 
 const EMPTY_SETTINGS_FORM = {
+  platformName: 'SudanWork Freelance Marketplace',
   commissionPercent: 10,
   bankName: '',
   accountName: '',
@@ -51,6 +53,10 @@ const EMPTY_SETTINGS_FORM = {
   phone: '',
   paymentNotes: '',
   withdrawalInstructions: '',
+  contactEmail: '',
+  contactPhone: '',
+  termsAndConditions: '',
+  privacyPolicy: '',
 };
 
 const AdminDashboard = () => {
@@ -160,6 +166,7 @@ const AdminDashboard = () => {
       setCategoriesList(cats);
       setFeatures(feats);
       setSettingsForm({
+        platformName: setts.platform_name || 'SudanWork Freelance Marketplace',
         commissionPercent: setts.commission_percentage ?? 10,
         bankName: setts.payment_instructions?.bankName || '',
         accountName: setts.payment_instructions?.accountName || '',
@@ -167,6 +174,10 @@ const AdminDashboard = () => {
         phone: setts.payment_instructions?.phone || '',
         paymentNotes: setts.payment_instructions?.notes || '',
         withdrawalInstructions: setts.withdrawal_instructions || '',
+        contactEmail: setts.contact_info?.email || '',
+        contactPhone: setts.contact_info?.phone || '',
+        termsAndConditions: setts.terms_and_conditions || '',
+        privacyPolicy: setts.privacy_policy || '',
       });
       setLoadError(null);
     } catch (err) {
@@ -289,6 +300,24 @@ const AdminDashboard = () => {
     });
   };
 
+  const handleDeleteUser = (targetUser) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'حذف حساب المستخدم نهائياً',
+      message: `هل أنت متأكد من حذف حساب "${targetUser.fullName}" نهائياً من المنصة؟ هذا الإجراء لا يمكن التراجع عنه.`,
+      confirmText: 'حذف نهائي',
+      cancelText: 'إلغاء',
+      type: 'danger',
+      onConfirm: () => {
+        closeConfirm();
+        runAction(
+          () => api.admin.deleteUser(targetUser.id),
+          `تم حذف حساب ${targetUser.fullName} بنجاح.`
+        );
+      }
+    });
+  };
+
   // 2. Manual payment verification
   const handleApprovePayment = (payReq) => {
     setConfirmModal({
@@ -395,6 +424,21 @@ const AdminDashboard = () => {
     setSubmittingDisputeResolution(false);
   };
 
+  const handleDeleteReport = (disp) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'حذف البلاغ نهائياً',
+      message: `هل أنت متأكد من حذف البلاغ #${disp.id.slice(0, 8)} (${disp.reason}) نهائياً؟ هذا الإجراء لا يمكن التراجع عنه.`,
+      confirmText: 'حذف البلاغ',
+      cancelText: 'إلغاء',
+      type: 'danger',
+      onConfirm: () => {
+        closeConfirm();
+        runAction(() => api.admin.deleteReport(disp.id), 'تم حذف البلاغ بنجاح.');
+      }
+    });
+  };
+
   // 5. Category Management Actions
   const handleAddCategory = async (e) => {
     e.preventDefault();
@@ -436,6 +480,36 @@ const AdminDashboard = () => {
     });
   };
 
+  const handleDeleteProject = (proj) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'حذف المشروع نهائياً',
+      message: `هل أنت متأكد من حذف مشروع "${proj.title}" نهائياً من قاعدة البيانات؟ لا يمكن التراجع عن هذا الإجراء.`,
+      confirmText: 'حذف المشروع',
+      cancelText: 'إلغاء',
+      type: 'danger',
+      onConfirm: () => {
+        closeConfirm();
+        runAction(() => api.admin.deleteProject(proj.id), 'تم حذف المشروع نهائياً.');
+      }
+    });
+  };
+
+  const handleCloseProject = (proj) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'إغلاق المشروع',
+      message: `هل أنت متأكد من إغلاق مشروع "${proj.title}"؟ سيتم إيقاف استقبال العروض الجديدة.`,
+      confirmText: 'إغلاق المشروع',
+      cancelText: 'إلغاء',
+      type: 'warning',
+      onConfirm: () => {
+        closeConfirm();
+        runAction(() => api.admin.moderateProject(proj.id, { status: 'CANCELLED' }), 'تم إغلاق المشروع بنجاح.');
+      }
+    });
+  };
+
   // 6. Platform Settings Update
   const handleSaveSettings = async (e) => {
     e.preventDefault();
@@ -443,15 +517,22 @@ const AdminDashboard = () => {
     const ok = await runAction(
       () =>
         api.admin.saveSettings({
+          platform_name: (settingsForm.platformName || '').trim(),
           commission_percentage: Number(settingsForm.commissionPercent),
           payment_instructions: {
-            bankName: settingsForm.bankName.trim(),
-            accountName: settingsForm.accountName.trim(),
-            accountNumber: settingsForm.accountNumber.trim(),
-            phone: settingsForm.phone.trim(),
-            notes: settingsForm.paymentNotes.trim(),
+            bankName: (settingsForm.bankName || '').trim(),
+            accountName: (settingsForm.accountName || '').trim(),
+            accountNumber: (settingsForm.accountNumber || '').trim(),
+            phone: (settingsForm.phone || '').trim(),
+            notes: (settingsForm.paymentNotes || '').trim(),
           },
-          withdrawal_instructions: settingsForm.withdrawalInstructions.trim(),
+          withdrawal_instructions: (settingsForm.withdrawalInstructions || '').trim(),
+          contact_info: {
+            email: (settingsForm.contactEmail || '').trim(),
+            phone: (settingsForm.contactPhone || '').trim(),
+          },
+          terms_and_conditions: (settingsForm.termsAndConditions || '').trim(),
+          privacy_policy: (settingsForm.privacyPolicy || '').trim(),
         }),
       'تم حفظ إعدادات المنصة وتعليمات التحويل البنكي بنجاح.'
     );
@@ -473,9 +554,16 @@ const AdminDashboard = () => {
   };
 
   // Metrics (from the server; a genuine zero is shown as zero)
-  const pendingPaymentsCount = metrics?.payments.pending ?? 0;
-  const pendingWithdrawalsCount = (metrics?.withdrawals.pending ?? 0) + (metrics?.withdrawals.approved ?? 0);
-  const openDisputesCount = metrics?.reports.open ?? 0;
+  // 8 Required Statistics under SRS Section 18:
+  const totalUsersCount = metrics?.users?.total ?? usersPage.total ?? 0;
+  const totalFreelancersCount = metrics?.users?.freelancers ?? 0;
+  const totalClientsCount = metrics?.users?.clients ?? 0;
+  const totalProjectsCount = metrics?.projects?.total ?? (metrics?.projects?.open != null ? (metrics.projects.open + (metrics.projects.completed || 0) + (metrics.projects.cancelled || 0)) : projectsList.length);
+  const activeProjectsCount = metrics?.projects?.open ?? metrics?.contracts?.active ?? projectsList.filter(p => p.status === 'Open').length;
+  const completedProjectsCount = metrics?.projects?.completed ?? metrics?.contracts?.completed ?? projectsList.filter(p => p.status === 'Completed').length;
+  const pendingPaymentsCount = metrics?.payments?.pending ?? 0;
+  const pendingWithdrawalsCount = (metrics?.withdrawals?.pending ?? 0) + (metrics?.withdrawals?.approved ?? 0);
+  const openDisputesCount = metrics?.reports?.open ?? 0;
   const filteredUsers = usersPage.items;
 
   if (loading) {
@@ -547,38 +635,105 @@ const AdminDashboard = () => {
             </div>
           </div>
 
-          {/* Platform KPI Metrics Grid */}
+          {/* Platform KPI Metrics Grid (All 8 SRS Section 18 Metrics Distinctly Visible) */}
           {metrics && (
             <div className="admin-metrics-grid">
+              {/* 1. Total Users */}
               <div className="metric-card">
                 <div className="metric-icon-wrap users">
                   <FiUsers />
                 </div>
                 <div className="metric-data">
-                  <span className="metric-num">{metrics.users.total}</span>
-                  <span className="metric-title">
-                    إجمالي المستخدمين ({metrics.users.clients} عميل · {metrics.users.freelancers} مستقل)
-                  </span>
+                  <span className="metric-num">{totalUsersCount}</span>
+                  <span className="metric-title">1. إجمالي المستخدمين</span>
                 </div>
               </div>
 
+              {/* 2. Total Freelancers */}
+              <div className="metric-card">
+                <div className="metric-icon-wrap users">
+                  <FiUsers />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{totalFreelancersCount}</span>
+                  <span className="metric-title">2. إجمالي المستقلين</span>
+                </div>
+              </div>
+
+              {/* 3. Total Clients */}
+              <div className="metric-card">
+                <div className="metric-icon-wrap users">
+                  <FiUsers />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{totalClientsCount}</span>
+                  <span className="metric-title">3. إجمالي أصحاب الأعمال</span>
+                </div>
+              </div>
+
+              {/* 4. Total Projects */}
               <div className="metric-card">
                 <div className="metric-icon-wrap projects">
                   <FiBriefcase />
                 </div>
                 <div className="metric-data">
-                  <span className="metric-num">{metrics.projects.open}</span>
-                  <span className="metric-title">مشاريع مفتوحة ({metrics.contracts.active} عقد نشط)</span>
+                  <span className="metric-num">{totalProjectsCount}</span>
+                  <span className="metric-title">4. إجمالي المشاريع</span>
                 </div>
               </div>
 
+              {/* 5. Active Projects */}
+              <div className="metric-card">
+                <div className="metric-icon-wrap projects">
+                  <FiActivity />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{activeProjectsCount}</span>
+                  <span className="metric-title">5. المشاريع النشطة</span>
+                </div>
+              </div>
+
+              {/* 6. Completed Projects */}
+              <div className="metric-card">
+                <div className="metric-icon-wrap projects">
+                  <FiCheckCircle />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{completedProjectsCount}</span>
+                  <span className="metric-title">6. المشاريع المكتملة</span>
+                </div>
+              </div>
+
+              {/* 7. Pending Payments */}
+              <div className="metric-card alert-card">
+                <div className="metric-icon-wrap escrow">
+                  <FiClock />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{pendingPaymentsCount}</span>
+                  <span className="metric-title">7. مدفوعات معلقة (دفع)</span>
+                </div>
+              </div>
+
+              {/* 8. Pending Withdrawals */}
+              <div className="metric-card alert-card">
+                <div className="metric-icon-wrap revenue">
+                  <FiDollarSign />
+                </div>
+                <div className="metric-data">
+                  <span className="metric-num">{pendingWithdrawalsCount}</span>
+                  <span className="metric-title">8. طلبات سحب معلقة</span>
+                </div>
+              </div>
+
+              {/* Additional Financial & System Indicators */}
               <div className="metric-card">
                 <div className="metric-icon-wrap escrow">
                   <FiDollarSign />
                 </div>
                 <div className="metric-data">
-                  <span className="metric-num">{metrics.contracts.escrowHeld.toLocaleString()} ج.س</span>
-                  <span className="metric-title">أموال الضمان المحتجزة (عقود نشطة)</span>
+                  <span className="metric-num">{(metrics.contracts?.escrowHeld || 0).toLocaleString()} ج.س</span>
+                  <span className="metric-title">أموال الضمان المحتجزة</span>
                 </div>
               </div>
 
@@ -587,8 +742,8 @@ const AdminDashboard = () => {
                   <FiTrendingUp />
                 </div>
                 <div className="metric-data">
-                  <span className="metric-num">{metrics.revenue.platformFees.toLocaleString()} ج.س</span>
-                  <span className="metric-title">عمولة المنصة المحققة (عقود مكتملة)</span>
+                  <span className="metric-num">{(metrics.revenue?.platformFees || 0).toLocaleString()} ج.س</span>
+                  <span className="metric-title">عمولة المنصة المحققة</span>
                 </div>
               </div>
 
@@ -598,7 +753,7 @@ const AdminDashboard = () => {
                 </div>
                 <div className="metric-data">
                   <span className="metric-num">{openDisputesCount}</span>
-                  <span className="metric-title">قضايا نزاع مفتوحة</span>
+                  <span className="metric-title">قضايا نزاع وبلاغات</span>
                 </div>
               </div>
             </div>
@@ -727,6 +882,7 @@ const AdminDashboard = () => {
               userRoleFilter={userRoleFilter}
               setUserRoleFilter={setUserRoleFilter}
               onToggleUserStatus={handleToggleUserStatus}
+              onDeleteUser={handleDeleteUser}
               currentUserId={user?.id}
             />
           )}
@@ -791,6 +947,7 @@ const AdminDashboard = () => {
                 setDisputeAction('none');
                 setDisputeResolutionNotes(disp.resolutionNotes || '');
               }}
+              onDeleteReport={handleDeleteReport}
             />
           )}
 
@@ -801,6 +958,8 @@ const AdminDashboard = () => {
               onOpenCategoryModal={() => setIsCategoryModalOpen(true)}
               onDeleteCategory={handleDeleteCategory}
               onModerateProject={handleModerateProject}
+              onDeleteProject={handleDeleteProject}
+              onCloseProject={handleCloseProject}
               skillsList={skillsList}
               onOpenSkillModal={() => setIsSkillModalOpen(true)}
               onToggleSkill={handleToggleSkill}

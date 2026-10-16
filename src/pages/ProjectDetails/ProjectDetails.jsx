@@ -27,7 +27,8 @@ import {
   FiX,
   FiSend,
   FiTrash2,
-  FiInfo
+  FiInfo,
+  FiEdit2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 
@@ -356,6 +357,28 @@ const ProjectDetails = () => {
                   <span>{project.categoryName || 'عام'}</span>
                 </span>
                 <h1 className="project-title">{project.title}</h1>
+                {isClientOwner && project.status === 'Open' && (
+                  <Link
+                    to={`/projects/${project.id}/edit`}
+                    style={{
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      padding: '6px 14px',
+                      borderRadius: '8px',
+                      border: '1px solid #bfdbfe',
+                      backgroundColor: '#eff6ff',
+                      color: '#1d4ed8',
+                      fontWeight: 600,
+                      fontSize: '0.9rem',
+                      textDecoration: 'none',
+                      marginTop: '8px',
+                    }}
+                  >
+                    <FiEdit2 />
+                    <span>تعديل المشروع</span>
+                  </Link>
+                )}
               </div>
 
               <div className="budget-box">

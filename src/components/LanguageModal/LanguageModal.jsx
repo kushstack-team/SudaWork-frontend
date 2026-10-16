@@ -1,4 +1,4 @@
-import { FiCheck } from 'react-icons/fi';
+import { FiCheck, FiGlobe } from 'react-icons/fi';
 import './LanguageModal.css';
 
 const LanguageModal = ({ isOpen, onClose, currentLang = 'ar', onSelectLang }) => {
@@ -14,13 +14,11 @@ const LanguageModal = ({ isOpen, onClose, currentLang = 'ar', onSelectLang }) =>
   const languages = [
     {
       code: 'ar',
-      name: 'العربية',
-      flag: '🇸🇩'
+      name: 'العربية (السودان)'
     },
     {
       code: 'en',
-      name: 'English',
-      flag: '🌐'
+      name: 'English'
     }
   ];
 
@@ -48,7 +46,9 @@ const LanguageModal = ({ isOpen, onClose, currentLang = 'ar', onSelectLang }) =>
               onClick={() => handleSelect(item.code)}
             >
               <div className="lang-item-content">
-                <span className="lang-item-flag">{item.flag}</span>
+                <span className="lang-item-flag">
+                  <FiGlobe className="lang-icon" />
+                </span>
                 <span className="lang-item-name">{item.name}</span>
               </div>
               {isActive && (

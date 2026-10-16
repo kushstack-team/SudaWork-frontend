@@ -11,30 +11,35 @@ import videoAnimationIcon from '../../assets/services_section/video_editing.svg'
 const services = [
   {
     title: 'البرمجة و التكنولوجيا',
+    query: 'برمجة',
     icon: (
       <img src={programmingIcon} alt="programming" />
     )
   },
   {
     title: 'التسويق الرقمي',
+    query: 'تسويق',
     icon: (
       <img src={digitalMarketingIcon} alt="digital marketing" />
     )
   },
   {
-    title: 'التصميم الاجرافيكي',
+    title: 'التصميم الجرافيكي',
+    query: 'تصميم',
     icon: (
        <img src={graphicDesignIcon} alt="graphic design" />
     )
   },
   {
     title: 'خدمات الذكاء الاصطناعي',
+    query: 'ذكاء اصطناعي',
     icon: (
       <img src={aiIcon} alt="ai" />
     )
   },
   {
     title: 'الفيديو & الرسوم المتحركة',
+    query: 'فيديو',
     icon: (
       <img src={videoAnimationIcon} alt="video animation" />
     )
@@ -44,6 +49,10 @@ const services = [
 const ServicesGrid = () => {
   const navigate = useNavigate();
 
+  const handleServiceClick = (query) => {
+    navigate(`/projects?search=${encodeURIComponent(query)}`);
+  };
+
   return (
     <section className="services-section">
       <div className="services-container">
@@ -52,7 +61,20 @@ const ServicesGrid = () => {
 
         <div className="services-grid">
           {services.map((service, index) => (
-            <div key={index} className="service-card">
+            <div
+              key={index}
+              className="service-card"
+              role="button"
+              tabIndex={0}
+              onClick={() => handleServiceClick(service.query)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                  e.preventDefault();
+                  handleServiceClick(service.query);
+                }
+              }}
+              title={`تصفح مشاريع ${service.title}`}
+            >
               <div className="service-icon">{service.icon}</div>
               <div className="service-title">{service.title}</div>
             </div>

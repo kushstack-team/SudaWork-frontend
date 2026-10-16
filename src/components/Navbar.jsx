@@ -7,7 +7,7 @@ import LanguageModal from './LanguageModal/LanguageModal';
 import HireTalentDropdown from './HireTalentDropdown/HireTalentDropdown';
 import FindWorkDropdown from './FindWorkDropdown/FindWorkDropdown';
 import logo from '../assets/logo.svg';
-import downarrow from '../assets/downarrow.png';
+import { FiChevronDown } from 'react-icons/fi';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -119,7 +119,7 @@ const Navbar = () => {
                 aria-expanded={activeDropdown === 'why'}
               >
                 <span className={`dropdown-arrow ${activeDropdown === 'why' ? 'rotated' : ''}`}>
-                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                  <FiChevronDown className="dropdown-arrow-icon" style={{ marginTop: '4px' }} />
                 </span>
                 {isArabic ? 'لماذا سوداوورك' : 'Why SudaWork'}
               </button>
@@ -171,7 +171,7 @@ const Navbar = () => {
                 onClick={() => setActiveDropdown(null)}
               >
                 <span className={`dropdown-arrow ${activeDropdown === 'talent' ? 'rotated' : ''}`}>
-                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                  <FiChevronDown className="dropdown-arrow-icon" style={{ marginTop: '4px' }} />
                 </span>
                 {isArabic ? 'وظف موهبة' : 'Hire Talent'}
               </Link>
@@ -195,7 +195,7 @@ const Navbar = () => {
                 onClick={() => setActiveDropdown(null)}
               >
                 <span className={`dropdown-arrow ${activeDropdown === 'work' ? 'rotated' : ''}`}>
-                  <img src={downarrow} alt="downarrow" className="dropdown-arrow-icon" width={10} style={{ marginTop: "6px" }} />
+                  <FiChevronDown className="dropdown-arrow-icon" style={{ marginTop: '4px' }} />
                 </span>
                 {isArabic ? 'ابحث عن عمل' : 'Find Work'}
               </Link>

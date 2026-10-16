@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiTrash2, FiEye, FiSlash } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiEye, FiSearch, FiXCircle } from 'react-icons/fi';
 import { formatDate } from '../../../utils/formatters';
 
 export default function AdminProjectsTab({
@@ -7,18 +8,33 @@ export default function AdminProjectsTab({
   projectsList,
   onOpenCategoryModal,
   onDeleteCategory,
-  onModerateProject,
+  onDeleteProject,
+  onCloseProject,
   skillsList = [],
   onOpenSkillModal,
   onToggleSkill
 }) {
+  const [projectSearch, setProjectSearch] = useState('');
+  const [projectStatusFilter, setProjectStatusFilter] = useState('all');
+
+  const filteredProjects = projectsList.filter((p) => {
+    const term = projectSearch.trim().toLowerCase();
+    const matchSearch =
+      !term ||
+      (p.title && p.title.toLowerCase().includes(term)) ||
+      (p.clientName && p.clientName.toLowerCase().includes(term)) ||
+      (p.categoryName && p.categoryName.toLowerCase().includes(term));
+    const matchStatus = projectStatusFilter === 'all' || p.status === projectStatusFilter;
+    return matchSearch && matchStatus;
+  });
+
   const STATUS_TEXT = {
     Open: 'مفتوح للعروض',
     'Awaiting Payment': 'بانتظار الدفع',
     'In Progress': 'قيد التنفيذ',
     Submitted: 'تم التسليم',
     Completed: 'مكتمل',
-    Cancelled: 'ملغي',
+    Cancelled: 'ملغي / مغلق',
   };
   return (
     <div className="admin-tab-content">
@@ -88,10 +104,35 @@ export default function AdminProjectsTab({
 
       {/* Projects Overview Box */}
       <div className="admin-card-section">
-        <div className="section-header">
+        <div className="section-header" style={{ flexWrap: 'wrap', gap: '16px' }}>
           <div>
             <h3 className="section-title">المشاريع المنشورة ({projectsList.length})</h3>
-            <p className="section-desc">سجل المشاريع المنشورة على منصة سوداوورك وحالتها التعاقدية.</p>
+            <p className="section-desc">سجل المشاريع المنشورة على منصة سوداوورك وحالتها التعاقدية وإدارتها.</p>
+          </div>
+
+          <div className="users-filter-controls">
+            <div className="search-input-box">
+              <FiSearch className="search-icon" />
+              <input
+                type="text"
+                placeholder="بحث بعنوان المشروع أو العميل..."
+                value={projectSearch}
+                onChange={(e) => setProjectSearch(e.target.value)}
+              />
+            </div>
+
+            <select
+              className="role-filter-select"
+              value={projectStatusFilter}
+              onChange={(e) => setProjectStatusFilter(e.target.value)}
+            >
+              <option value="all">جميع الحالات</option>
+              <option value="Open">مفتوح للعروض</option>
+              <option value="In Progress">قيد التنفيذ</option>
+              <option value="Submitted">تم التسليم</option>
+              <option value="Completed">مكتمل</option>
+              <option value="Cancelled">ملغي / مغلق</option>
+            </select>
           </div>
         </div>
 
@@ -104,16 +145,16 @@ export default function AdminProjectsTab({
                 <th>الميزانية</th>
                 <th>تاريخ النشر</th>
                 <th>الحالة</th>
-                <th>معاينة</th>
+                <th>الإجراءات</th>
               </tr>
             </thead>
             <tbody>
-              {projectsList.length === 0 && (
+              {filteredProjects.length === 0 && (
                 <tr>
-                  <td colSpan="6" className="empty-table-cell">لم يتم نشر أي مشاريع بعد</td>
+                  <td colSpan="6" className="empty-table-cell">لا توجد مشاريع مطابقة للبحث</td>
                 </tr>
               )}
-              {projectsList.map((proj) => (
+              {filteredProjects.map((proj) => (
                 <tr key={proj.id}>
                   <td className="font-mono">{proj.clientName}</td>
                   <td className="font-bold">{proj.title}</td>
@@ -125,15 +166,35 @@ export default function AdminProjectsTab({
                     </span>
                   </td>
                   <td>
-                    <Link to={`/projects/${proj.id}`} className="view-project-link">
-                      <FiEye />
-                      <span>عرض</span>
-                    </Link>
-                    {proj.status === 'Open' && (
-                      <button type="button" className="cat-delete-btn" title="إيقاف المشروع" onClick={() => onModerateProject(proj)}>
-                        <FiSlash />
-                      </button>
-                    )}
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <Link to={`/projects/${proj.id}`} className="view-project-link" title="معاينة تفاصيل المشروع">
+                        <FiEye />
+                        <span>عرض</span>
+                      </Link>
+                      {proj.status === 'Open' && onCloseProject && (
+                        <button
+                          type="button"
+                          className="cat-delete-btn"
+                          title="إغلاق المشروع"
+                          style={{ color: '#d97706', borderColor: '#fde68a' }}
+                          onClick={() => onCloseProject(proj)}
+                        >
+                          <FiXCircle />
+                          <span>إغلاق</span>
+                        </button>
+                      )}
+                      {onDeleteProject && (
+                        <button
+                          type="button"
+                          className="cat-delete-btn"
+                          title="حذف المشروع نهائياً"
+                          onClick={() => onDeleteProject(proj)}
+                        >
+                          <FiTrash2 />
+                          <span>حذف</span>
+                        </button>
+                      )}
+                    </div>
                   </td>
                 </tr>
               ))}

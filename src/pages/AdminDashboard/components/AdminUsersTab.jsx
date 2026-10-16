@@ -8,6 +8,7 @@ export default function AdminUsersTab({
   userRoleFilter,
   setUserRoleFilter,
   onToggleUserStatus,
+  onDeleteUser,
   currentUserId
 }) {
   return (
@@ -16,7 +17,7 @@ export default function AdminUsersTab({
         <div className="section-header">
           <div>
             <h3 className="section-title">إدارة حسابات المستخدمين</h3>
-            <p className="section-desc">عرض وتعديل وتجميد حسابات العملاء والمستقلين.</p>
+            <p className="section-desc">عرض وتعديل وتجميد وحذف حسابات العملاء والمستقلين.</p>
           </div>
 
           <div className="users-filter-controls">
@@ -87,13 +88,36 @@ export default function AdminUsersTab({
                   </td>
                   <td>
                     {u.role !== 'admin' && u.id !== currentUserId && (
-                      <button
-                        type="button"
-                        className={`user-status-btn ${u.status === 'active' ? 'suspend' : 'activate'}`}
-                        onClick={() => onToggleUserStatus(u)}
-                      >
-                        {u.status === 'active' ? 'تجميد الحساب' : 'تفعيل الحساب'}
-                      </button>
+                      <div className="user-table-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                        <button
+                          type="button"
+                          className={`user-status-btn ${u.status === 'active' ? 'suspend' : 'activate'}`}
+                          onClick={() => onToggleUserStatus(u)}
+                        >
+                          {u.status === 'active' ? 'تجميد الحساب' : 'تفعيل الحساب'}
+                        </button>
+                        {onDeleteUser && (
+                          <button
+                            type="button"
+                            className="user-delete-btn"
+                            style={{
+                              padding: '6px 12px',
+                              borderRadius: '8px',
+                              border: '1px solid #fecaca',
+                              backgroundColor: '#fff',
+                              color: '#dc2626',
+                              fontWeight: 600,
+                              fontSize: '0.82rem',
+                              cursor: 'pointer',
+                              transition: 'all 0.15s ease',
+                            }}
+                            onClick={() => onDeleteUser(u)}
+                            title="حذف المستخدم نهائياً"
+                          >
+                            حذف
+                          </button>
+                        )}
+                      </div>
                     )}
                   </td>
                 </tr>

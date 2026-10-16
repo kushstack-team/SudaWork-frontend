@@ -8,8 +8,9 @@
  */
 import { translateError } from './errors.js';
 
-const API_URL = (import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1').replace(/\/$/, '');
-const API_ORIGIN = new URL(API_URL, window.location.origin).origin;
+const baseOrigin = typeof window !== 'undefined' ? window.location.origin : 'http://localhost:5173';
+const API_URL = (import.meta.env.VITE_API_URL || '/api/v1').replace(/\/$/, '');
+const API_ORIGIN = new URL(API_URL, baseOrigin).origin;
 
 const ACCESS_KEY = 'sudawork_access_token';
 const REFRESH_KEY = 'sudawork_refresh_token';
@@ -74,7 +75,7 @@ export const setSessionExpiredHandler = (fn) => { onSessionExpired = fn; };
 
 // ---------- helpers ----------
 const buildUrl = (path, query) => {
-  const url = new URL(`${API_URL}${path}`);
+  const url = new URL(`${API_URL}${path}`, baseOrigin);
   if (query) {
     Object.entries(query).forEach(([k, v]) => {
       if (v !== undefined && v !== null && v !== '' && v !== 'all') url.searchParams.set(k, v);

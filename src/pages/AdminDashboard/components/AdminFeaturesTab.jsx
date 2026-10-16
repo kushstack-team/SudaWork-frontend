@@ -58,7 +58,7 @@ export default function AdminFeaturesTab({ features, onChange }) {
           onChange={() => toggle(feature, field)}
         />
         <span className={`feature-switch-text ${on ? 'on' : 'off'}`}>
-          {savingKey === key ? 'جارٍ الحفظ...' : savedKey === key ? 'تم الحفظ ✓' : on ? 'مفعّل' : 'متوقف'}
+          {savingKey === key ? 'جارٍ الحفظ...' : savedKey === key ? 'تم الحفظ بنجاح' : on ? 'مفعّل' : 'متوقف'}
         </span>
       </label>
     );

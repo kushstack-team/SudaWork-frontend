@@ -51,8 +51,17 @@ const MobileBottomNav = () => {
     if (showNotifications) api.notifications.unreadCount().then(setUnreadNotifCount, () => {});
   }, [user?.id, location.pathname, showMessages, showNotifications]);
 
-  const handleLogout = async () => {
+  const handleNavClick = () => {
     setIsDrawerOpen(false);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'smooth',
+    });
+  };
+
+  const handleLogout = async () => {
+    handleNavClick();
     await logout();
     navigate('/login');
   };
@@ -74,6 +83,7 @@ const MobileBottomNav = () => {
           <div className="mobile-nav-items">
             <NavLink
               to={homePath}
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiHome className="tab-icon" />
@@ -82,6 +92,7 @@ const MobileBottomNav = () => {
 
             <NavLink
               to={browseTab.to}
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiBriefcase className="tab-icon" />
@@ -91,6 +102,7 @@ const MobileBottomNav = () => {
             {showMessages && (
             <NavLink
               to="/messages"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <div className="tab-icon-wrap">
@@ -106,6 +118,7 @@ const MobileBottomNav = () => {
             {showNotifications && (
             <NavLink
               to="/notifications"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <div className="tab-icon-wrap">
@@ -132,6 +145,7 @@ const MobileBottomNav = () => {
           <div className="mobile-nav-items">
             <NavLink
               to="/"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiHome className="tab-icon" />
@@ -141,6 +155,7 @@ const MobileBottomNav = () => {
             {isFeatureAvailable(FEATURES.PROJECT_BROWSING) && (
             <NavLink
               to="/projects"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiBriefcase className="tab-icon" />
@@ -151,6 +166,7 @@ const MobileBottomNav = () => {
             {isFeatureAvailable(FEATURES.FREELANCER_DIRECTORY) && (
             <NavLink
               to="/freelancers"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiUser className="tab-icon" />
@@ -160,6 +176,7 @@ const MobileBottomNav = () => {
 
             <NavLink
               to="/login"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
             >
               <FiLogIn className="tab-icon" />
@@ -168,6 +185,7 @@ const MobileBottomNav = () => {
 
             <NavLink
               to="/role-selection"
+              onClick={handleNavClick}
               className={({ isActive }) => `mobile-nav-tab highlight ${isActive ? 'active' : ''}`}
             >
               <FiUserPlus className="tab-icon" />
@@ -217,7 +235,7 @@ const MobileBottomNav = () => {
                   <Link
                     to="/admin"
                     className="drawer-nav-link admin-highlight"
-                    onClick={() => setIsDrawerOpen(false)}
+                    onClick={handleNavClick}
                   >
                     <FiShield className="drawer-nav-icon" />
                     <span>لوحة تحكم الإدارة والتحكيم</span>
@@ -229,7 +247,7 @@ const MobileBottomNav = () => {
                     <Link
                       to={user?.role === 'freelancer' ? `/freelancers/${user.id}` : `/clients/${user?.id}`}
                       className="drawer-nav-link"
-                      onClick={() => setIsDrawerOpen(false)}
+                      onClick={handleNavClick}
                     >
                       <FiUser className="drawer-nav-icon" />
                       <span>الملف الشخصي العام</span>
@@ -238,7 +256,7 @@ const MobileBottomNav = () => {
                     <Link
                       to={user?.role === 'freelancer' ? '/freelancer/profile/edit' : '/client/profile/edit'}
                       className="drawer-nav-link"
-                      onClick={() => setIsDrawerOpen(false)}
+                      onClick={handleNavClick}
                     >
                       <FiSettings className="drawer-nav-icon" />
                       <span>تعديل بيانات الحساب</span>
@@ -249,7 +267,7 @@ const MobileBottomNav = () => {
                 <Link
                   to="/contracts"
                   className="drawer-nav-link"
-                  onClick={() => setIsDrawerOpen(false)}
+                  onClick={handleNavClick}
                 >
                   <FiFileText className="drawer-nav-icon" />
                   <span>عقود العمل والمراحل</span>
@@ -260,7 +278,7 @@ const MobileBottomNav = () => {
                     <Link
                       to="/client/projects"
                       className="drawer-nav-link"
-                      onClick={() => setIsDrawerOpen(false)}
+                      onClick={handleNavClick}
                     >
                       <FiBriefcase className="drawer-nav-icon" />
                       <span>مشاريعي المنشورة</span>
@@ -270,7 +288,7 @@ const MobileBottomNav = () => {
                       <Link
                         to="/client/payments"
                         className="drawer-nav-link"
-                        onClick={() => setIsDrawerOpen(false)}
+                        onClick={handleNavClick}
                       >
                         <FiDollarSign className="drawer-nav-icon" />
                         <span>الضمان والمدفوعات</span>
@@ -284,7 +302,7 @@ const MobileBottomNav = () => {
                     <Link
                       to="/freelancer/proposals"
                       className="drawer-nav-link"
-                      onClick={() => setIsDrawerOpen(false)}
+                      onClick={handleNavClick}
                     >
                       <FiBriefcase className="drawer-nav-icon" />
                       <span>عروضي المقدمة</span>
@@ -293,7 +311,7 @@ const MobileBottomNav = () => {
                     <Link
                       to="/freelancer/wallet"
                       className="drawer-nav-link"
-                      onClick={() => setIsDrawerOpen(false)}
+                      onClick={handleNavClick}
                     >
                       <FiDollarSign className="drawer-nav-icon" />
                       <span>المحفظة وسحب الأرباح</span>
@@ -305,7 +323,7 @@ const MobileBottomNav = () => {
                   <Link
                     to="/disputes"
                     className="drawer-nav-link"
-                    onClick={() => setIsDrawerOpen(false)}
+                    onClick={handleNavClick}
                   >
                     <FiAlertTriangle className="drawer-nav-icon" />
                     <span>مركز النزاعات والتحكيم</span>
@@ -316,7 +334,7 @@ const MobileBottomNav = () => {
                   <Link
                     to="/notifications"
                     className="drawer-nav-link"
-                    onClick={() => setIsDrawerOpen(false)}
+                    onClick={handleNavClick}
                   >
                     <FiBell className="drawer-nav-icon" />
                     <span>الإشعارات والتنبيهات</span>

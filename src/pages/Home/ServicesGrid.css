@@ -68,6 +68,11 @@
   border-color: var(--color-primary);
 }
 
+.service-card:focus-visible {
+  outline: 3px solid var(--color-primary, #007A55);
+  outline-offset: 3px;
+}
+
 .service-icon {
   color: var(--color-primary);
   position: absolute;

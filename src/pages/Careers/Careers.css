@@ -1,0 +1,198 @@
+.careers-page {
+  min-height: calc(100vh - 140px);
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  padding: 56px 20px 80px;
+}
+
+.careers-container {
+  max-width: 980px;
+  margin: 0 auto;
+}
+
+.careers-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.careers-badge {
+  display: inline-block;
+  background-color: #fef3c7;
+  color: #b45309;
+  font-size: 0.85rem;
+  font-weight: 700;
+  padding: 4px 14px;
+  border-radius: 999px;
+  margin-bottom: 12px;
+}
+
+.careers-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 12px 0;
+}
+
+.careers-subtitle {
+  font-size: 1.1rem;
+  color: #64748b;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+
+.careers-values-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+  margin-bottom: 40px;
+}
+
+.value-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 28px 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+}
+
+.value-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background-color: #eff6ff;
+  color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+}
+
+.value-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.value-card p {
+  font-size: 0.92rem;
+  color: #64748b;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.openings-card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 40px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+}
+
+.openings-card h2 {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.openings-subtitle {
+  font-size: 0.98rem;
+  color: #64748b;
+  margin: 0 0 28px 0;
+  line-height: 1.6;
+}
+
+.openings-notice-box {
+  background-color: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+
+.notice-mail-icon {
+  font-size: 1.8rem;
+  color: #16a34a;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.openings-notice-box h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #14532d;
+  margin: 0 0 6px 0;
+}
+
+.openings-notice-box p {
+  font-size: 0.92rem;
+  color: #166534;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.careers-email-link {
+  font-weight: 700;
+  color: #15803d;
+  text-decoration: underline;
+}
+
+.freelance-alternative-box {
+  background-color: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 24px;
+}
+
+.freelance-alternative-box h4 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.freelance-alternative-box p {
+  font-size: 0.92rem;
+  color: #64748b;
+  margin: 0 0 16px 0;
+  line-height: 1.6;
+}
+
+.join-freelancers-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background-color: var(--color-primary, #007A55);
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.join-freelancers-cta:hover {
+  background-color: var(--color-primary-dark, #00543B);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+  .careers-page {
+    padding: 36px 16px 60px;
+  }
+  .openings-card {
+    padding: 24px 18px;
+  }
+  .careers-title {
+    font-size: 1.6rem;
+  }
+}

@@ -16,7 +16,8 @@ import {
   FiTrash2,
   FiXCircle,
   FiArrowLeft,
-  FiCheckCircle
+  FiCheckCircle,
+  FiEdit2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 
@@ -258,6 +259,14 @@ const ClientProjects = () => {
 
                       {p.status === 'Open' && (
                         <div className="open-actions-group">
+                          <Link
+                            to={`/projects/${p.id}/edit`}
+                            className="action-icon-btn edit-btn"
+                            title="تعديل المشروع"
+                          >
+                            <FiEdit2 />
+                            <span>تعديل</span>
+                          </Link>
                           <button
                             type="button"
                             className="action-icon-btn delete-btn"

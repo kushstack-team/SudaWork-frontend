@@ -183,6 +183,7 @@ export const adminApi = {
   users: async (params) => m.mapPage(await get('/admin/users', params), m.mapUser),
   suspendUser: (id) => post(`/admin/users/${id}/suspend`),
   activateUser: (id) => post(`/admin/users/${id}/activate`),
+  deleteUser: (id) => del(`/admin/users/${id}`),
   projects: async (params) => m.mapPage(await get('/admin/projects', params), m.mapProject),
   moderateProject: (id, data) => patch(`/admin/projects/${id}`, data),
   deleteProject: (id) => del(`/admin/projects/${id}`),
@@ -198,6 +199,7 @@ export const adminApi = {
   reports: async (params) => m.mapPage(await get('/admin/reports', params), m.mapReport),
   reviewReport: (id) => post(`/admin/reports/${id}/review`),
   resolveReport: (id, { resolution, action }) => post(`/admin/reports/${id}/resolve`, { resolution, action }),
+  deleteReport: (id) => del(`/admin/reports/${id}`),
   categories: async () => (await get('/admin/categories')).map(m.mapCategory),
   skills: async () => (await get('/admin/skills')).map((sk) => ({
     id: sk.id, name: sk.name, categoryId: sk.category_id, categoryName: sk.category_name || '', isActive: sk.is_active !== false,

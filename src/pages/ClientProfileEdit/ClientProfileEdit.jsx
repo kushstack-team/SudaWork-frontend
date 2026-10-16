@@ -62,6 +62,16 @@ const ClientProfileEdit = () => {
     const file = e.target.files?.[0];
     e.target.value = '';
     if (!file) return;
+    const MAX_LOGO_BYTES = 10 * 1024 * 1024; // 10MB
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    if (!ALLOWED_TYPES.includes(file.type)) {
+      setErrorMessage('صيغة الشعار غير مدعومة. يرجى اختيار ملف PNG أو JPG أو WEBP.');
+      return;
+    }
+    if (file.size > MAX_LOGO_BYTES) {
+      setErrorMessage('حجم الشعار يتجاوز الحد المسموح (10 ميجابايت).');
+      return;
+    }
     setUploadingLogo(true);
     setErrorMessage('');
     try {

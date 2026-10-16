@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom';
-import { FiFileText, FiShield } from 'react-icons/fi';
+import { FiFileText, FiShield, FiTrash2 } from 'react-icons/fi';
 import { formatDate } from '../../../utils/formatters';
 
 export default function AdminDisputesTab({
   disputesList,
-  onOpenResolveDispute
+  onOpenResolveDispute,
+  onDeleteReport
 }) {
   return (
     <div className="admin-tab-content">
@@ -77,16 +78,42 @@ export default function AdminDisputesTab({
                     )}
                   </div>
 
-                  {disp.status !== 'Resolved' && (
-                  <button
-                    type="button"
-                    className="dispute-resolve-btn"
-                    onClick={() => onOpenResolveDispute(disp)}
-                  >
-                    <FiShield />
-                    <span>{disp.status === 'Open' ? 'بدء المراجعة / إصدار قرار' : 'إصدار قرار التحكيم'}</span>
-                  </button>
-                  )}
+                  <div className="dispute-actions-group" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {disp.status !== 'Resolved' && (
+                      <button
+                        type="button"
+                        className="dispute-resolve-btn"
+                        onClick={() => onOpenResolveDispute(disp)}
+                      >
+                        <FiShield />
+                        <span>{disp.status === 'Open' ? 'بدء المراجعة / إصدار قرار' : 'إصدار قرار التحكيم'}</span>
+                      </button>
+                    )}
+                    {onDeleteReport && (
+                      <button
+                        type="button"
+                        className="dispute-delete-btn"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          padding: '8px 14px',
+                          borderRadius: '8px',
+                          border: '1px solid #fecaca',
+                          backgroundColor: '#fff',
+                          color: '#dc2626',
+                          fontSize: '0.85rem',
+                          fontWeight: 600,
+                          cursor: 'pointer',
+                        }}
+                        onClick={() => onDeleteReport(disp)}
+                        title="حذف البلاغ نهائياً"
+                      >
+                        <FiTrash2 />
+                        <span>حذف</span>
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))
