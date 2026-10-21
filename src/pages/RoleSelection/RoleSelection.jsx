@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import './RoleSelection.css';
 import RoleCard from '../../components/RoleCard/RoleCard';
 import { FreelancerIcon, ClientIcon } from '../../components/Icons/RoleIcons';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 
 /**
  * RoleSelectionPage - Arabic RTL Role Selection Page for Sudawork.
@@ -35,9 +35,7 @@ const RoleSelection = () => {
       {/* Top Header with Sudawork Logo */}
       <header className="role-selection-header">
         <div className="role-selection-header__container">
-          <Link to="/" className="role-selection-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="role-selection-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

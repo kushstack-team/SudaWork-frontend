@@ -1,9 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './Footer.css';
-import Logo from '../assets/logo.svg';
 import { FaX, FaInstagram, FaLinkedin, FaFacebook, FaTiktok } from 'react-icons/fa6';
-import { FiChevronDown, FiGlobe, FiShield } from 'react-icons/fi';
+import { FiChevronDown } from 'react-icons/fi';
 
 const FOOTER_SECTIONS = [
   {
@@ -118,67 +117,37 @@ const Footer = () => {
             );
           })}
         </div>
-      </div>
 
-      {/* Upwork-style Secondary Strip: Brand, Trust, Selectors, and Socials */}
-      <div className="footer-bottom">
-        <div className="footer-bottom-container">
-          <div className="footer-mid-bar">
-            {/* Brand Logo & Socials Section */}
-            <div className="footer-brand-social-group">
-              <Link to="/" onClick={handleScrollTop} className="footer-brand-link" aria-label="Sudawork Home">
-                <img src={Logo} alt="SudaWork Logo" className="footer-brand-logo" />
-              </Link>
-              <div className="footer-social-section">
-                <span className="socials-label">تابعنا على:</span>
-                <div className="footer-social-icons">
-                  <a href="#x" aria-label="X (Twitter)"><FaX /></a>
-                  <a href="#linkedin" aria-label="LinkedIn"><FaLinkedin /></a>
-                  <a href="#facebook" aria-label="Facebook"><FaFacebook /></a>
-                  <a href="#instagram" aria-label="Instagram"><FaInstagram /></a>
-                  <a href="#tiktok" aria-label="TikTok"><FaTiktok /></a>
-                </div>
-              </div>
-            </div>
-
-            {/* Trust and Selectors */}
-            <div className="footer-trust-selectors">
-              <div className="trust-badge-pill">
-                <FiShield className="trust-icon" />
-                <span>ضمان المعاملات البنكية 100%</span>
-              </div>
-              <button
-                type="button"
-                className="selector-pill"
-                onClick={() => window.dispatchEvent(new CustomEvent('sudawork:open-language'))}
-                aria-label="تغيير لغة المنصة"
-              >
-                <FiGlobe className="selector-icon" />
-                <span>العربية (السودان)</span>
-              </button>
-              <div className="selector-pill currency-pill">
-                <span>SDG / ج.س</span>
-              </div>
+        {/* Upwork-style Middle Section: Social Media Icons */}
+        <div className="footer-social-row">
+          <div className="footer-social-section">
+            <span className="socials-label">تابعنا على:</span>
+            <div className="footer-social-icons">
+              <a href="#x" aria-label="X (Twitter)"><FaX /></a>
+              <a href="#linkedin" aria-label="LinkedIn"><FaLinkedin /></a>
+              <a href="#facebook" aria-label="Facebook"><FaFacebook /></a>
+              <a href="#instagram" aria-label="Instagram"><FaInstagram /></a>
+              <a href="#tiktok" aria-label="TikTok"><FaTiktok /></a>
             </div>
           </div>
+        </div>
 
-          {/* Legal Links & Copyright Bar */}
-          <div className="footer-legal-bar">
-            <p className="footer-copyright">
-              © {new Date().getFullYear()} سوداوورك (SudaWork Inc.) — المنصة السودانية الأولى للعمل الحر والضمان البنكي. جميع الحقوق محفوظة.
-            </p>
+        {/* Upwork-style Bottom Section: Copyright & Legal Links */}
+        <div className="footer-bottom-row">
+          <p className="footer-copyright">
+            © {new Date().getFullYear()} سوداوورك (SudaWork Inc.) — المنصة السودانية الأولى للعمل الحر والضمان البنكي. جميع الحقوق محفوظة.
+          </p>
 
-            <div className="footer-legal-links">
-              <Link to="/terms" onClick={handleScrollTop}>شروط الاستخدام</Link>
-              <span className="legal-dot">•</span>
-              <Link to="/privacy" onClick={handleScrollTop}>سياسة الخصوصية</Link>
-              <span className="legal-dot">•</span>
-              <Link to="/how-it-works" onClick={handleScrollTop}>الضمان والأمان</Link>
-              <span className="legal-dot">•</span>
-              <Link to="/help" onClick={handleScrollTop}>مركز المساعدة</Link>
-              <span className="legal-dot">•</span>
-              <Link to="/careers" onClick={handleScrollTop}>الوظائف</Link>
-            </div>
+          <div className="footer-legal-links">
+            <Link to="/terms" onClick={handleScrollTop}>شروط الاستخدام</Link>
+            <span className="legal-dot">•</span>
+            <Link to="/privacy" onClick={handleScrollTop}>سياسة الخصوصية</Link>
+            <span className="legal-dot">•</span>
+            <Link to="/how-it-works" onClick={handleScrollTop}>الضمان والأمان</Link>
+            <span className="legal-dot">•</span>
+            <Link to="/help" onClick={handleScrollTop}>مركز المساعدة</Link>
+            <span className="legal-dot">•</span>
+            <Link to="/careers" onClick={handleScrollTop}>الوظائف</Link>
           </div>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './FreelancerRegister.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../context/auth';
 import { validateRegisterForm } from '../../utils/validators';
 import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
@@ -101,9 +101,7 @@ const FreelancerRegister = () => {
       {/* Header */}
       <header className="freelancer-register-header">
         <div className="freelancer-register-header__container">
-          <Link to="/" className="freelancer-register-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="freelancer-register-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

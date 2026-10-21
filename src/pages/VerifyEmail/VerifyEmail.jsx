@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { Link, Navigate, useLocation, useNavigate } from 'react-router-dom';
+import { Navigate, useLocation, useNavigate } from 'react-router-dom';
 import '../ForgotPassword/ForgotPassword.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { FiMail, FiCheckCircle } from 'react-icons/fi';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/auth';
@@ -83,9 +83,7 @@ const VerifyEmail = () => {
     <div className="forgot-pwd-page" dir="rtl">
       <header className="forgot-pwd-header">
         <div className="forgot-pwd-header__container">
-          <Link to="/" className="forgot-pwd-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="forgot-pwd-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

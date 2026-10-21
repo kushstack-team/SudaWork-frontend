@@ -1,0 +1,87 @@
+/* ==========================================================================
+   Sudawork Wordmark Logo Styles
+   ========================================================================== */
+
+.sw-logo {
+  font-family: var(--font-logo, "Outfit", "Lexend", "Poppins", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+  font-weight: 600;
+  font-style: normal;
+  font-size: 20px;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  direction: ltr;
+  unicode-bidi: isolate;
+  user-select: text;
+  -webkit-user-select: text;
+  cursor: pointer;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.sw-logo:hover {
+  opacity: 0.88;
+  text-decoration: none;
+}
+
+.sw-logo:focus-visible {
+  outline: 2px solid #00C685;
+  outline-offset: 4px;
+  border-radius: 4px;
+}
+
+.sw-logo__suda {
+  color: var(--color-logo-suda, #004D34);
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+.sw-logo__work {
+  color: var(--color-logo-work, #00C685);
+  font-weight: 600;
+  transition: color 0.15s ease;
+}
+
+/* Dark Backgrounds */
+.sw-logo--dark .sw-logo__suda,
+.dark .sw-logo .sw-logo__suda,
+[data-theme='dark'] .sw-logo .sw-logo__suda {
+  color: #FFFFFF !important;
+}
+
+/* Size Variants */
+.sw-logo--xs {
+  font-size: 14px;
+}
+
+.sw-logo--sm {
+  font-size: 17px;
+}
+
+.sw-logo--md {
+  font-size: 20px;
+}
+
+.sw-logo--lg,
+.sw-logo--auth {
+  font-size: 23px;
+}
+
+/* Mobile responsive scaling */
+@media (max-width: 768px) {
+  .sw-logo {
+    font-size: 18px;
+  }
+  .sw-logo--lg,
+  .sw-logo--auth {
+    font-size: 20px;
+  }
+  .sw-logo--sm {
+    font-size: 15px;
+  }
+  .sw-logo--xs {
+    font-size: 13px;
+  }
+}

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './Login.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../context/auth';
 import { homeForRole } from '../../utils/roles';
 import { validateLoginForm } from '../../utils/validators';
@@ -110,9 +110,7 @@ const Login = () => {
       {/* Header */}
       <header className="login-header">
         <div className="login-header__container">
-          <Link to="/" className="login-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="login-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

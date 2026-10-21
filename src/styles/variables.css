@@ -5,6 +5,11 @@
   --color-accent: #00DCAC;          /* Primary CTA buttons */
   --color-white: #FFFFFF;           /* Card & section backgrounds */
 
+  /* Wordmark Brand Colors */
+  --color-logo-suda: #004D34;
+  --color-logo-work: #00C685;
+  --font-logo: "Outfit", "Lexend", "Poppins", system-ui, -apple-system, sans-serif;
+
   /* Text (verify exact values in Figma) */
   --color-text-dark: #1A1A1A;
   --color-text-light: #FFFFFF;
