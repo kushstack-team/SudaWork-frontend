@@ -163,6 +163,9 @@ export const mapProject = (p) => p && ({
   proposalsCount: Number(p.proposals_count || 0),
   contractId: p.contract_id || null,
   contractStatus: label(CONTRACT_STATUS, p.contract_status),
+  reviewNote: p.review_note || '',
+  submittedAt: p.submitted_at || null,
+  reviewedAt: p.reviewed_at || null,
   createdAt: p.created_at,
 });
 

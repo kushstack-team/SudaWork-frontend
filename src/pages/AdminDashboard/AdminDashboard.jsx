@@ -74,6 +74,7 @@ const AdminDashboard = () => {
   const [metrics, setMetrics] = useState(null);
   const [usersPage, setUsersPage] = useState({ items: [], total: 0 });
   const [projectsList, setProjectsList] = useState([]);
+  const [pendingProjects, setPendingProjects] = useState([]);
   const [paymentRequests, setPaymentRequests] = useState([]);
   const [withdrawalRequests, setWithdrawalRequests] = useState([]);
   const [disputesList, setDisputesList] = useState([]);
@@ -89,6 +90,9 @@ const AdminDashboard = () => {
   const [newSkillCategory, setNewSkillCategory] = useState('');
   const [contractCancelTarget, setContractCancelTarget] = useState(null);
   const [contractCancelReason, setContractCancelReason] = useState('');
+  const [projectRejectTarget, setProjectRejectTarget] = useState(null);
+  const [projectRejectReason, setProjectRejectReason] = useState('');
+  const [reviewingProjectId, setReviewingProjectId] = useState(null);
 
   // Filtering & Search (users are filtered on the server)
   const [userSearch, setUserSearch] = useState('');
@@ -146,9 +150,11 @@ const AdminDashboard = () => {
 
   const loadAllAdminData = useCallback(async () => {
     try {
-      const [dash, projs, pays, withs, disps, cats, setts, feats, skills] = await Promise.all([
+      const [dash, projs, pending, pays, withs, disps, cats, setts, feats, skills] = await Promise.all([
         api.admin.dashboard(),
         api.admin.projects({ limit: 50 }),
+        // Review queue is loaded on its own so it is never cut off by the page above (oldest first).
+        api.admin.projects({ status: 'PENDING_REVIEW', limit: 100 }),
         api.admin.payments({ limit: 50 }),
         api.admin.withdrawals({ limit: 50 }),
         api.admin.reports({ limit: 50 }),
@@ -160,6 +166,7 @@ const AdminDashboard = () => {
       setSkillsList(skills);
       setMetrics(dash);
       setProjectsList(projs.items);
+      setPendingProjects(pending.items);
       setPaymentRequests(pays.items);
       setWithdrawalRequests(withs.items);
       setDisputesList(disps.items);
@@ -480,6 +487,39 @@ const AdminDashboard = () => {
     });
   };
 
+  // Project moderation: approve publishes the project, reject returns it to the client with a reason.
+  const handleApproveProject = (proj) => {
+    setConfirmModal({
+      isOpen: true,
+      title: 'الموافقة على نشر المشروع',
+      message: `نشر مشروع "${proj.title}" في سوق المشاريع ليبدأ المستقلون بتقديم العروض؟ سيتم إبلاغ العميل.`,
+      confirmText: 'موافقة ونشر',
+      cancelText: 'إلغاء',
+      type: 'success',
+      onConfirm: async () => {
+        closeConfirm();
+        setReviewingProjectId(proj.id);
+        await runAction(() => api.admin.approveProject(proj.id), 'تمت الموافقة على المشروع ونشره.');
+        setReviewingProjectId(null);
+      }
+    });
+  };
+
+  const handleRejectProject = async (e) => {
+    e.preventDefault();
+    if (!projectRejectTarget || projectRejectReason.trim().length < 3) return;
+    setReviewingProjectId(projectRejectTarget.id);
+    const ok = await runAction(
+      () => api.admin.rejectProject(projectRejectTarget.id, projectRejectReason.trim()),
+      'تم رفض المشروع وإبلاغ العميل بالسبب.'
+    );
+    if (ok) {
+      setProjectRejectTarget(null);
+      setProjectRejectReason('');
+    }
+    setReviewingProjectId(null);
+  };
+
   const handleDeleteProject = (proj) => {
     setConfirmModal({
       isOpen: true,
@@ -564,6 +604,7 @@ const AdminDashboard = () => {
   const pendingPaymentsCount = metrics?.payments?.pending ?? 0;
   const pendingWithdrawalsCount = (metrics?.withdrawals?.pending ?? 0) + (metrics?.withdrawals?.approved ?? 0);
   const openDisputesCount = metrics?.reports?.open ?? 0;
+  const pendingProjectsCount = metrics?.projects?.pendingReview ?? pendingProjects.length;
   const filteredUsers = usersPage.items;
 
   if (loading) {
@@ -768,7 +809,7 @@ const AdminDashboard = () => {
             >
               <FiActivity />
               <span>طابور العمليات والمهام</span>
-              {(pendingPaymentsCount > 0 || pendingWithdrawalsCount > 0 || openDisputesCount > 0) && (
+              {(pendingPaymentsCount > 0 || pendingWithdrawalsCount > 0 || openDisputesCount > 0 || pendingProjectsCount > 0) && (
                 <span className="tab-alert-dot" />
               )}
             </button>
@@ -834,6 +875,9 @@ const AdminDashboard = () => {
             >
               <FiBriefcase />
               <span>المشاريع والتصنيفات</span>
+              {pendingProjectsCount > 0 && (
+                <span className="tab-pill-badge warning">{pendingProjectsCount}</span>
+              )}
             </button>
 
             <button
@@ -869,6 +913,7 @@ const AdminDashboard = () => {
               pendingPaymentsCount={pendingPaymentsCount}
               pendingWithdrawalsCount={pendingWithdrawalsCount}
               openDisputesCount={openDisputesCount}
+              pendingProjectsCount={pendingProjectsCount}
               onRefresh={refreshAll}
               onNavigateTab={setActiveTab}
             />
@@ -960,6 +1005,13 @@ const AdminDashboard = () => {
               onModerateProject={handleModerateProject}
               onDeleteProject={handleDeleteProject}
               onCloseProject={handleCloseProject}
+              pendingProjects={pendingProjects}
+              onApproveProject={handleApproveProject}
+              onRejectProject={(proj) => {
+                setProjectRejectReason('');
+                setProjectRejectTarget(proj);
+              }}
+              reviewingId={reviewingProjectId}
               skillsList={skillsList}
               onOpenSkillModal={() => setIsSkillModalOpen(true)}
               onToggleSkill={handleToggleSkill}
@@ -1213,6 +1265,43 @@ const AdminDashboard = () => {
                   <span>{submittingWithdrawalAction ? 'جارٍ الرفض...' : 'تأكيد الرفض'}</span>
                 </button>
                 <button type="button" className="modal-secondary-btn" disabled={submittingWithdrawalAction} onClick={() => setWithdrawalRejectTarget(null)}>
+                  إلغاء
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Project Rejection Modal */}
+      {projectRejectTarget && (
+        <div className="admin-modal-backdrop" onClick={() => !reviewingProjectId && setProjectRejectTarget(null)}>
+          <div className="admin-modal-dialog" onClick={(e) => e.stopPropagation()} role="dialog">
+            <div className="modal-header">
+              <h3>رفض نشر المشروع: {projectRejectTarget.title}</h3>
+              <button type="button" className="modal-close-btn" onClick={() => setProjectRejectTarget(null)} disabled={Boolean(reviewingProjectId)}>
+                <FiX />
+              </button>
+            </div>
+            <form onSubmit={handleRejectProject} className="modal-form">
+              <div className="form-group">
+                <label className="form-label" htmlFor="project-reject-reason">سبب الرفض (سيظهر للعميل):</label>
+                <textarea
+                  id="project-reject-reason"
+                  rows="3"
+                  className="modal-textarea"
+                  value={projectRejectReason}
+                  onChange={(e) => setProjectRejectReason(e.target.value)}
+                  placeholder="مثال: وصف المشروع غير كافٍ، يرجى توضيح المطلوب بالتفصيل."
+                  required
+                />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="modal-danger-btn" disabled={Boolean(reviewingProjectId) || projectRejectReason.trim().length < 3}>
+                  <FiX />
+                  <span>{reviewingProjectId ? 'جارٍ الرفض...' : 'تأكيد الرفض'}</span>
+                </button>
+                <button type="button" className="modal-secondary-btn" disabled={Boolean(reviewingProjectId)} onClick={() => setProjectRejectTarget(null)}>
                   إلغاء
                 </button>
               </div>

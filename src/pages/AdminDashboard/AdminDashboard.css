@@ -953,6 +953,17 @@
   color: #1d4ed8;
 }
 
+.project-status-tag.pending-review {
+  background-color: #fff7ed;
+  color: #c2410c;
+}
+
+.project-status-tag.rejected,
+.project-status-tag.cancelled {
+  background-color: #fef2f2;
+  color: #b91c1c;
+}
+
 .project-status-tag.completed {
   background-color: #f1f5f9;
   color: #64748b;

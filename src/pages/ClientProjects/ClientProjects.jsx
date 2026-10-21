@@ -7,6 +7,7 @@ import { useAuth } from '../../context/auth';
 import { api } from '../../services/api';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
+import { PROJECT_STATUS, CLIENT_MANAGEABLE_PROJECT_STATUSES } from '../../constants/projectStatuses';
 import {
   FiPlus,
   FiFolder,
@@ -97,7 +98,13 @@ const ClientProjects = () => {
 
   // "In progress" covers every hired stage (awaiting payment through delivery).
   const IN_PROGRESS = ['Awaiting Payment', 'In Progress', 'Submitted'];
-  const tabStatus = (p) => (IN_PROGRESS.includes(p.status) ? 'In Progress' : p.status);
+  // "Under review" covers projects waiting for admin approval and those sent back for changes.
+  const IN_REVIEW = [PROJECT_STATUS.PENDING_REVIEW, PROJECT_STATUS.REJECTED];
+  const tabStatus = (p) => {
+    if (IN_PROGRESS.includes(p.status)) return 'In Progress';
+    if (IN_REVIEW.includes(p.status)) return 'In Review';
+    return p.status;
+  };
   const filteredProjects = projects.filter((p) => activeTab === 'All' || tabStatus(p) === activeTab);
 
   return (
@@ -143,6 +150,13 @@ const ClientProjects = () => {
               onClick={() => setActiveTab('All')}
             >
               الكل ({projects.length})
+            </button>
+            <button
+              type="button"
+              className={`tab-btn ${activeTab === 'In Review' ? 'active' : ''}`}
+              onClick={() => setActiveTab('In Review')}
+            >
+              قيد المراجعة ({projects.filter((p) => tabStatus(p) === 'In Review').length})
             </button>
             <button
               type="button"
@@ -216,6 +230,8 @@ const ClientProjects = () => {
 
                       <span className={`status-pill pill-${p.status.toLowerCase().replace(/\s+/g, '-')}`}>
                         {{
+                          'Pending Review': 'بانتظار موافقة الإدارة',
+                          Rejected: 'مرفوض - يحتاج تعديل',
                           Open: 'مفتوح للتقديم',
                           'Awaiting Payment': 'بانتظار الدفع',
                           'In Progress': 'قيد التنفيذ',
@@ -225,6 +241,17 @@ const ClientProjects = () => {
                         }[p.status] || p.status}
                       </span>
                     </div>
+
+                    {p.status === PROJECT_STATUS.PENDING_REVIEW && (
+                      <p className="review-note-banner">
+                        مشروعك قيد المراجعة من الإدارة وسيظهر للمستقلين فور الموافقة عليه.
+                      </p>
+                    )}
+                    {p.status === PROJECT_STATUS.REJECTED && (
+                      <p className="review-note-banner rejected">
+                        لم تتم الموافقة على نشر المشروع{p.reviewNote ? `: ${p.reviewNote}` : '.'} عدّل المشروع لإعادة إرساله للمراجعة.
+                      </p>
+                    )}
 
                     <p className="project-manage-desc">{p.description}</p>
 
@@ -257,7 +284,7 @@ const ClientProjects = () => {
                         </Link>
                       )}
 
-                      {p.status === 'Open' && (
+                      {CLIENT_MANAGEABLE_PROJECT_STATUSES.includes(p.status) && (
                         <div className="open-actions-group">
                           <Link
                             to={`/projects/${p.id}/edit`}

@@ -16,6 +16,7 @@ export default function StatusPill({ status, label, variant }) {
         return 'success';
       case 'in_progress':
       case 'under_review':
+      case 'pending_review':
       case 'pending':
       case 'submitted':
       case 'awaiting_payment':

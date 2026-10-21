@@ -114,7 +114,8 @@ const Notifications = () => {
   const filteredNotifications = notifications.filter((n) => {
     if (activeTab === 'unread') return !n.isRead;
     if (activeTab === 'projects') {
-      return ['proposal_received', 'proposal_accepted', 'proposal_rejected', 'project_moderated'].includes(n.type);
+      return ['proposal_received', 'proposal_accepted', 'proposal_rejected', 'project_moderated',
+        'project_submitted', 'project_approved', 'project_rejected'].includes(n.type);
     }
     if (activeTab === 'contracts') {
       return ['work_submitted', 'revision_requested', 'contract_cancelled', 'new_message'].includes(n.type);
@@ -149,6 +150,12 @@ const Notifications = () => {
 
   const getNotifDetails = (type) => {
     switch (type) {
+      case 'project_submitted':
+        return { icon: <FiClock />, label: 'مشروع بانتظار المراجعة', theme: 'delivery' };
+      case 'project_approved':
+        return { icon: <FiCheckCircle />, label: 'نشر مشروع', theme: 'success' };
+      case 'project_rejected':
+        return { icon: <FiAlertTriangle />, label: 'رفض نشر مشروع', theme: 'dispute' };
       case 'proposal_received':
         return { icon: <FiFileText />, label: 'عرض جديد على المشروع', theme: 'proposal' };
       case 'proposal_rejected':

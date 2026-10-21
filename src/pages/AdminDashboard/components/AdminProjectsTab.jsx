@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiPlus, FiTrash2, FiEye, FiSearch, FiXCircle } from 'react-icons/fi';
+import { FiPlus, FiTrash2, FiEye, FiSearch, FiXCircle, FiCheck, FiX } from 'react-icons/fi';
 import { formatDate } from '../../../utils/formatters';
 
 export default function AdminProjectsTab({
@@ -10,6 +10,10 @@ export default function AdminProjectsTab({
   onDeleteCategory,
   onDeleteProject,
   onCloseProject,
+  pendingProjects = [],
+  onApproveProject,
+  onRejectProject,
+  reviewingId,
   skillsList = [],
   onOpenSkillModal,
   onToggleSkill
@@ -29,6 +33,8 @@ export default function AdminProjectsTab({
   });
 
   const STATUS_TEXT = {
+    'Pending Review': 'بانتظار المراجعة',
+    Rejected: 'مرفوض',
     Open: 'مفتوح للعروض',
     'Awaiting Payment': 'بانتظار الدفع',
     'In Progress': 'قيد التنفيذ',
@@ -38,6 +44,73 @@ export default function AdminProjectsTab({
   };
   return (
     <div className="admin-tab-content">
+      {/* Review queue: nothing is published until it is approved here (oldest first). */}
+      <div className="admin-card-section mb-32">
+        <div className="section-header">
+          <div>
+            <h3 className="section-title">مشاريع بانتظار المراجعة ({pendingProjects.length})</h3>
+            <p className="section-desc">لا يظهر أي مشروع في سوق المشاريع قبل موافقتك. عند الرفض يصل السبب للعميل ويمكنه التعديل وإعادة الإرسال.</p>
+          </div>
+        </div>
+
+        <div className="admin-table-wrapper">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>العميل</th>
+                <th>عنوان المشروع</th>
+                <th>التصنيف</th>
+                <th>الميزانية</th>
+                <th>تاريخ الإرسال</th>
+                <th>الإجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pendingProjects.length === 0 && (
+                <tr>
+                  <td colSpan="6" className="empty-table-cell">لا توجد مشاريع بانتظار المراجعة</td>
+                </tr>
+              )}
+              {pendingProjects.map((proj) => (
+                <tr key={proj.id}>
+                  <td className="font-mono">{proj.clientName}</td>
+                  <td className="font-bold">{proj.title}</td>
+                  <td>{proj.categoryName || '—'}</td>
+                  <td>{Number(proj.budget || 0).toLocaleString()} ج.س</td>
+                  <td>{formatDate(proj.submittedAt || proj.createdAt)}</td>
+                  <td>
+                    <div className="table-action-btns">
+                      <Link to={`/projects/${proj.id}`} className="view-project-link" title="معاينة تفاصيل المشروع">
+                        <FiEye />
+                        <span>عرض</span>
+                      </Link>
+                      <button
+                        type="button"
+                        className="btn-approve"
+                        disabled={reviewingId === proj.id}
+                        onClick={() => onApproveProject(proj)}
+                      >
+                        <FiCheck />
+                        <span>موافقة ونشر</span>
+                      </button>
+                      <button
+                        type="button"
+                        className="btn-reject"
+                        disabled={reviewingId === proj.id}
+                        onClick={() => onRejectProject(proj)}
+                      >
+                        <FiX />
+                        <span>رفض</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       {/* Categories Management Box */}
       <div className="admin-card-section mb-32">
         <div className="section-header">
@@ -106,8 +179,8 @@ export default function AdminProjectsTab({
       <div className="admin-card-section">
         <div className="section-header" style={{ flexWrap: 'wrap', gap: '16px' }}>
           <div>
-            <h3 className="section-title">المشاريع المنشورة ({projectsList.length})</h3>
-            <p className="section-desc">سجل المشاريع المنشورة على منصة سوداوورك وحالتها التعاقدية وإدارتها.</p>
+            <h3 className="section-title">جميع المشاريع ({projectsList.length})</h3>
+            <p className="section-desc">سجل مشاريع منصة سوداوورك وحالة مراجعتها وحالتها التعاقدية وإدارتها.</p>
           </div>
 
           <div className="users-filter-controls">
@@ -127,6 +200,8 @@ export default function AdminProjectsTab({
               onChange={(e) => setProjectStatusFilter(e.target.value)}
             >
               <option value="all">جميع الحالات</option>
+              <option value="Pending Review">بانتظار المراجعة</option>
+              <option value="Rejected">مرفوض</option>
               <option value="Open">مفتوح للعروض</option>
               <option value="In Progress">قيد التنفيذ</option>
               <option value="Submitted">تم التسليم</option>

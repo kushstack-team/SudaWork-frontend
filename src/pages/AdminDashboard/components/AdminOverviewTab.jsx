@@ -1,9 +1,10 @@
-import { FiClock, FiDollarSign, FiAlertTriangle } from 'react-icons/fi';
+import { FiClock, FiDollarSign, FiAlertTriangle, FiBriefcase } from 'react-icons/fi';
 
 export default function AdminOverviewTab({
   pendingPaymentsCount,
   pendingWithdrawalsCount,
   openDisputesCount,
+  pendingProjectsCount = 0,
   onRefresh,
   onNavigateTab
 }) {
@@ -21,6 +22,24 @@ export default function AdminOverviewTab({
         </div>
 
         <div className="urgent-tasks-stack">
+          {/* Item 0: Projects waiting for approval before they are published */}
+          <div className="urgent-task-item">
+            <div className="task-icon-box warning">
+              <FiBriefcase />
+            </div>
+            <div className="task-info">
+              <h4>مشاريع جديدة بانتظار الموافقة على النشر</h4>
+              <p>يوجد <strong>{pendingProjectsCount}</strong> مشروع لن يظهر في سوق المشاريع قبل مراجعته والموافقة عليه.</p>
+            </div>
+            <button
+              type="button"
+              className="task-action-btn"
+              onClick={() => onNavigateTab('projects')}
+            >
+              مراجعة المشاريع &larr;
+            </button>
+          </div>
+
           {/* Item 1: Pending Escrow Payments */}
           <div className="urgent-task-item">
             <div className="task-icon-box warning">

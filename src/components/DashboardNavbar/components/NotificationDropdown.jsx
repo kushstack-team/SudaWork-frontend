@@ -26,6 +26,7 @@ export default function NotificationDropdown({
         return <FiFileText className="notif-item-icon proposal" />;
       case 'work_submitted':
       case 'deliverable_approved':
+      case 'project_approved':
         return <FiCheckCircle className="notif-item-icon delivery" />;
       case 'escrow_funded':
       case 'escrow_released':

@@ -31,8 +31,11 @@ import {
   FiEdit2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { PROJECT_STATUS, CLIENT_MANAGEABLE_PROJECT_STATUSES } from '../../constants/projectStatuses';
 
 const STATUS_LABELS = {
+  'Pending Review': 'بانتظار موافقة الإدارة',
+  Rejected: 'مرفوض - يحتاج تعديل',
   Open: 'مفتوح لتلقي العروض',
   'Awaiting Payment': 'تم التوظيف - بانتظار الدفع',
   'In Progress': 'قيد التنفيذ',
@@ -348,6 +351,23 @@ const ProjectDetails = () => {
             </div>
           )}
 
+          {/* Moderation state: only the owner, admins and existing bidders can see an unpublished project. */}
+          {project.status === PROJECT_STATUS.PENDING_REVIEW && (
+            <div className="modal-error-alert" role="status" style={{ backgroundColor: '#fff7ed', color: '#9a3412', borderColor: '#fed7aa' }}>
+              <FiInfo />
+              <span>هذا المشروع بانتظار موافقة الإدارة ولن يظهر في سوق المشاريع أو يستقبل عروضاً قبل الموافقة عليه.</span>
+            </div>
+          )}
+          {project.status === PROJECT_STATUS.REJECTED && (
+            <div className="modal-error-alert" role="status">
+              <FiAlertCircle />
+              <span>
+                لم تتم الموافقة على نشر هذا المشروع{project.reviewNote ? `: ${project.reviewNote}` : '.'}
+                {isClientOwner && ' عدّل المشروع لإعادة إرساله للمراجعة.'}
+              </span>
+            </div>
+          )}
+
           {/* Main Hero Card */}
           <div className="project-main-card">
             <div className="project-card-header">
@@ -357,7 +377,7 @@ const ProjectDetails = () => {
                   <span>{project.categoryName || 'عام'}</span>
                 </span>
                 <h1 className="project-title">{project.title}</h1>
-                {isClientOwner && project.status === 'Open' && (
+                {isClientOwner && CLIENT_MANAGEABLE_PROJECT_STATUSES.includes(project.status) && (
                   <Link
                     to={`/projects/${project.id}/edit`}
                     style={{

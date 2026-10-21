@@ -58,6 +58,8 @@ const ClientProjectsFeed = ({ projects = [], proposalsMap = {}, loading = false 
             const isOpen = project.status === 'Open';
             const budgetFormatted = `${Number(project.budget || 0).toLocaleString()} ج.س`;
             const statusText = {
+              'Pending Review': 'بانتظار موافقة الإدارة',
+              Rejected: 'مرفوض - يحتاج تعديل',
               'Awaiting Payment': 'بانتظار الدفع',
               'In Progress': 'قيد التنفيذ',
               Submitted: 'تم التسليم',

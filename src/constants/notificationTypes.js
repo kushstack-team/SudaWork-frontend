@@ -1,5 +1,8 @@
 // Mirrors NOTIFICATION_TYPES in the backend (src/core/services/notify.service.js).
 export const NOTIFICATION_TYPES = Object.freeze({
+  PROJECT_SUBMITTED: 'project_submitted',
+  PROJECT_APPROVED: 'project_approved',
+  PROJECT_REJECTED: 'project_rejected',
   PROPOSAL_RECEIVED: 'proposal_received',
   PROPOSAL_ACCEPTED: 'proposal_accepted',
   PROPOSAL_REJECTED: 'proposal_rejected',
