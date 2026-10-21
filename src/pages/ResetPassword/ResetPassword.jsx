@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import './ResetPassword.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { validatePassword } from '../../utils/validators';
 import { FiLock, FiCheckCircle } from 'react-icons/fi';
 import { api } from '../../services/api';
@@ -80,9 +80,7 @@ const ResetPassword = () => {
       {/* Header */}
       <header className="reset-pwd-header">
         <div className="reset-pwd-header__container">
-          <Link to="/" className="reset-pwd-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="reset-pwd-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

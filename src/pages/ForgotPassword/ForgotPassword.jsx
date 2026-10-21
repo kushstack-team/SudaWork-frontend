@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './ForgotPassword.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { validateEmail } from '../../utils/validators';
 import { api } from '../../services/api';
 import { FiMail, FiCheckCircle, FiArrowRight } from 'react-icons/fi';
@@ -37,9 +36,7 @@ const ForgotPassword = () => {
       {/* Header */}
       <header className="forgot-pwd-header">
         <div className="forgot-pwd-header__container">
-          <Link to="/" className="forgot-pwd-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="forgot-pwd-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

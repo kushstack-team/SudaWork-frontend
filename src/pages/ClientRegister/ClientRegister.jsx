@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './ClientRegister.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../context/auth';
 import { validateRegisterForm } from '../../utils/validators';
 import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
@@ -101,9 +101,7 @@ const ClientRegister = () => {
       {/* Header */}
       <header className="client-register-header">
         <div className="client-register-header__container">
-          <Link to="/" className="client-register-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="client-register-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

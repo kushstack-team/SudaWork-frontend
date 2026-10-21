@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { FiMail } from 'react-icons/fi';
 import './DashboardNavbar.css';
-import logo from '../../assets/logo.svg';
+import Logo from '../Logo/Logo';
 import { useAuth } from '../../context/auth';
 import { api } from '../../services/api';
 import { usePlatform } from '../../context/platform';
@@ -138,9 +138,7 @@ const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
           
           {/* Right Side: Logo */}
           <div className="topbar-right">
-            <Link to={homeForRole(user?.role)} className="dashboard-logo" aria-label="Sudawork Home">
-              <img src={logo} alt="Sudawork" className="dashboard-logo-img" />
-            </Link>
+            <Logo to={homeForRole(user?.role)} ariaLabel="Sudawork Home" />
           </div>
 
           {/* Center: Search Bar */}

@@ -7,7 +7,7 @@ import { FreelancerIcon, ClientIcon } from '../../components/Icons/RoleIcons';
 import { useAuth } from '../../context/auth';
 import { homeForRole } from '../../utils/roles';
 import { GOOGLE_REGISTRATION_KEY } from '../../hooks/useGoogleAuthFlow';
-import logo from '../../assets/logo.svg';
+import Logo from '../../components/Logo/Logo';
 
 const MAX_AGE_MS = 30 * 60 * 1000;
 
@@ -77,9 +77,7 @@ const GoogleRegistrationComplete = () => {
     <div className="role-selection-page" dir="rtl">
       <header className="role-selection-header">
         <div className="role-selection-header__container">
-          <Link to="/" className="role-selection-logo" aria-label="Sudawork Home">
-            <img src={logo} alt="Sudawork" className="role-selection-logo__img" />
-          </Link>
+          <Logo to="/" size="auth" ariaLabel="Sudawork Home" />
         </div>
       </header>
 

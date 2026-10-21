@@ -47,8 +47,8 @@ const MobileBottomNav = () => {
   // Refresh unread counts on navigation (badges only; failures keep the last value).
   useEffect(() => {
     if (!user?.id) return;
-    if (showMessages) api.messages.unreadCount().then(setUnreadMsgCount, () => {});
-    if (showNotifications) api.notifications.unreadCount().then(setUnreadNotifCount, () => {});
+    if (showMessages) api.messages.unreadCount().then(setUnreadMsgCount, () => { });
+    if (showNotifications) api.notifications.unreadCount().then(setUnreadNotifCount, () => { });
   }, [user?.id, location.pathname, showMessages, showNotifications]);
 
   const handleNavClick = () => {
@@ -100,35 +100,35 @@ const MobileBottomNav = () => {
             </NavLink>
 
             {showMessages && (
-            <NavLink
-              to="/messages"
-              onClick={handleNavClick}
-              className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
-            >
-              <div className="tab-icon-wrap">
-                <FiMail className="tab-icon" />
-                {unreadMsgCount > 0 && (
-                  <span className="mobile-badge">{unreadMsgCount}</span>
-                )}
-              </div>
-              <span className="tab-label">الرسائل</span>
-            </NavLink>
+              <NavLink
+                to="/messages"
+                onClick={handleNavClick}
+                className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
+              >
+                <div className="tab-icon-wrap">
+                  <FiMail className="tab-icon" />
+                  {unreadMsgCount > 0 && (
+                    <span className="mobile-badge">{unreadMsgCount}</span>
+                  )}
+                </div>
+                <span className="tab-label">الرسائل</span>
+              </NavLink>
             )}
 
             {showNotifications && (
-            <NavLink
-              to="/notifications"
-              onClick={handleNavClick}
-              className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
-            >
-              <div className="tab-icon-wrap">
-                <FiBell className="tab-icon" />
-                {unreadNotifCount > 0 && (
-                  <span className="mobile-badge">{unreadNotifCount}</span>
-                )}
-              </div>
-              <span className="tab-label">التنبيهات</span>
-            </NavLink>
+              <NavLink
+                to="/notifications"
+                onClick={handleNavClick}
+                className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
+              >
+                <div className="tab-icon-wrap">
+                  <FiBell className="tab-icon" />
+                  {unreadNotifCount > 0 && (
+                    <span className="mobile-badge">{unreadNotifCount}</span>
+                  )}
+                </div>
+                <span className="tab-label">التنبيهات</span>
+              </NavLink>
             )}
 
             <button
@@ -153,25 +153,25 @@ const MobileBottomNav = () => {
             </NavLink>
 
             {isFeatureAvailable(FEATURES.PROJECT_BROWSING) && (
-            <NavLink
-              to="/projects"
-              onClick={handleNavClick}
-              className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
-            >
-              <FiBriefcase className="tab-icon" />
-              <span className="tab-label">المشاريع</span>
-            </NavLink>
+              <NavLink
+                to="/projects"
+                onClick={handleNavClick}
+                className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
+              >
+                <FiBriefcase className="tab-icon" />
+                <span className="tab-label">المشاريع</span>
+              </NavLink>
             )}
 
             {isFeatureAvailable(FEATURES.FREELANCER_DIRECTORY) && (
-            <NavLink
-              to="/freelancers"
-              onClick={handleNavClick}
-              className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
-            >
-              <FiUser className="tab-icon" />
-              <span className="tab-label">المستقلون</span>
-            </NavLink>
+              <NavLink
+                to="/freelancers"
+                onClick={handleNavClick}
+                className={({ isActive }) => `mobile-nav-tab ${isActive ? 'active' : ''}`}
+              >
+                <FiUser className="tab-icon" />
+                <span className="tab-label">المستقلون</span>
+              </NavLink>
             )}
 
             <NavLink
@@ -199,7 +199,7 @@ const MobileBottomNav = () => {
       {isDrawerOpen && isAuthenticated && (
         <div className="mobile-drawer-backdrop" onClick={() => setIsDrawerOpen(false)}>
           <div className="mobile-drawer-sheet" onClick={(e) => e.stopPropagation()} dir="rtl">
-            
+
             {/* Drawer Header */}
             <div className="drawer-header">
               <div className="drawer-user-info">
