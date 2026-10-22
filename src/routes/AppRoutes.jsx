@@ -1,8 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useParams } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 import FeatureRoute from '../components/FeatureRoute/FeatureRoute';
+import GuestRoute from '../components/GuestRoute/GuestRoute';
 import { useAuth } from '../context/auth';
 import { FEATURES } from '../constants/features';
 import { PageLoader } from '../components/common';
@@ -58,6 +59,12 @@ const ProjectsBrowseRoute = () => {
   );
 };
 
+// <Navigate> does not substitute route params, so legacy edit links need this.
+const LegacyProjectEditRedirect = () => {
+  const { id } = useParams();
+  return <Navigate replace to={`/projects/${id}/edit`} />;
+};
+
 export default function AppRoutes() {
   return (
     <Suspense fallback={<PageLoader />}>
@@ -78,17 +85,17 @@ export default function AppRoutes() {
         <Route path="/admin-dashboard" element={<Navigate replace to="/admin" />} />
 
         {/* Role Selection Page */}
-        <Route path="/role-selection" element={<RoleSelection />} />
+        <Route path="/role-selection" element={<GuestRoute><RoleSelection /></GuestRoute>} />
 
         {/* Registration Pages */}
-        <Route path="/register/client" element={<ClientRegister />} />
-        <Route path="/register/freelancer" element={<FreelancerRegister />} />
+        <Route path="/register/client" element={<GuestRoute><ClientRegister /></GuestRoute>} />
+        <Route path="/register/freelancer" element={<GuestRoute><FreelancerRegister /></GuestRoute>} />
         <Route path="/register/complete" element={<GoogleRegistrationComplete />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
 
         {/* Authentication & Recovery Pages */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />
+        <Route path="/forgot-password" element={<GuestRoute><ForgotPassword /></GuestRoute>} />
         <Route path="/reset-password/:token" element={<ResetPassword />} />
 
         {/* Public Informational & Legal Pages */}
@@ -214,7 +221,7 @@ export default function AppRoutes() {
             </ProtectedRoute>
           }
         />
-        <Route path="/client/projects/:id/edit" element={<Navigate replace to="/projects/:id/edit" />} />
+        <Route path="/client/projects/:id/edit" element={<LegacyProjectEditRedirect />} />
         <Route
           path="/client/projects"
           element={

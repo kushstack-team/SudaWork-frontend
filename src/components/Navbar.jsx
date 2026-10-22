@@ -6,11 +6,19 @@ import WhySudaWorkModal from './WhySudaWorkModal/WhySudaWorkModal';
 import HireTalentDropdown from './HireTalentDropdown/HireTalentDropdown';
 import FindWorkDropdown from './FindWorkDropdown/FindWorkDropdown';
 import Logo from './Logo/Logo';
+import { useAuth } from '../context/auth';
+import { homeForRole } from '../utils/roles';
 import { FiChevronDown, FiArrowLeft, FiX } from 'react-icons/fi';
 
 const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  // The public header is shared by signed-in users (e.g. returning to "/"),
+  // so it must reflect the session instead of always offering login/sign-up.
+  const { isAuthenticated, loading: authLoading, role } = useAuth();
+  const dashboardPath = homeForRole(role);
+  const hireTalentPath = isAuthenticated ? dashboardPath : '/login?role=client';
+  const findWorkPath = isAuthenticated ? dashboardPath : '/login?role=freelancer';
 
   // Desktop active dropdown ('why' | 'talent' | 'work' | null)
   const [activeDropdown, setActiveDropdown] = useState(null);
@@ -178,7 +186,7 @@ const Navbar = () => {
               onMouseLeave={handleMouseLeave}
             >
               <Link
-                to="/login?role=client"
+                to={hireTalentPath}
                 className={`nav-link ${activeDropdown === 'talent' ? 'active' : ''}`}
                 onClick={() => setActiveDropdown(null)}
               >
@@ -202,7 +210,7 @@ const Navbar = () => {
               onMouseLeave={handleMouseLeave}
             >
               <Link
-                to="/login?role=freelancer"
+                to={findWorkPath}
                 className={`nav-link ${activeDropdown === 'work' ? 'active' : ''}`}
                 onClick={() => setActiveDropdown(null)}
               >
@@ -223,22 +231,38 @@ const Navbar = () => {
               <span className="navbar-divider" />
             </li>
 
-            <li>
-              <Link to="/login" className="nav-link nav-link-login">
-                تسجيل الدخول
-              </Link>
-            </li>
+            {!authLoading && !isAuthenticated && (
+              <li>
+                <Link to="/login" className="nav-link nav-link-login">
+                  تسجيل الدخول
+                </Link>
+              </li>
+            )}
           </ul>
 
-          <div className="navbar-actions">
-            <Button
-              variant="primary"
-              className="btn-register-filled"
-              onClick={() => navigate('/role-selection')}
-            >
-              انشاء حساب
-            </Button>
-          </div>
+          {/* Nothing is shown until the stored session is resolved, so a
+              signed-in user never sees login/sign-up flash on refresh. */}
+          {!authLoading && (
+            <div className="navbar-actions">
+              {isAuthenticated ? (
+                <Button
+                  variant="primary"
+                  className="btn-register-filled"
+                  onClick={() => navigate(dashboardPath)}
+                >
+                  لوحة التحكم
+                </Button>
+              ) : (
+                <Button
+                  variant="primary"
+                  className="btn-register-filled"
+                  onClick={() => navigate('/role-selection')}
+                >
+                  انشاء حساب
+                </Button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Mobile View Toggle Button with nav-toggle-box and nav-toggle-inner */}
@@ -347,7 +371,7 @@ const Navbar = () => {
                 {mobileExpandedSection === 'talent' && (
                   <div className="mobile-accordion-body">
                     <Link
-                      to="/login?role=client"
+                      to={hireTalentPath}
                       className="mobile-sub-link"
                       onClick={closeMobileMenu}
                     >
@@ -355,7 +379,7 @@ const Navbar = () => {
                       <span className="mobile-sub-desc">سجّل دخولك لنشر مشروعك واستقبال العروض التنافسية.</span>
                     </Link>
                     <Link
-                      to="/login?role=client"
+                      to={hireTalentPath}
                       className="mobile-sub-link"
                       onClick={closeMobileMenu}
                     >
@@ -370,7 +394,7 @@ const Navbar = () => {
             {/* 3. Search jobs (ابحث عن عمل) Button */}
             <div className="mobile-search-jobs-section">
               <Link
-                to="/login?role=freelancer"
+                to={findWorkPath}
                 className="mobile-search-jobs-btn"
                 onClick={closeMobileMenu}
               >
@@ -380,25 +404,42 @@ const Navbar = () => {
             </div>
 
             {/* 4. Login & Sign-up Navigation Links */}
-            <div className="mobile-auth-actions">
-              <Link
-                to="/login"
-                className="mobile-login-link"
-                onClick={closeMobileMenu}
-              >
-                تسجيل الدخول
-              </Link>
-              <Button
-                variant="primary"
-                className="btn-register-filled mobile-register-btn"
-                onClick={() => {
-                  closeMobileMenu();
-                  navigate('/role-selection');
-                }}
-              >
-                انشاء حساب
-              </Button>
-            </div>
+            {!authLoading && (
+              <div className="mobile-auth-actions">
+                {isAuthenticated ? (
+                  <Button
+                    variant="primary"
+                    className="btn-register-filled mobile-register-btn"
+                    onClick={() => {
+                      closeMobileMenu();
+                      navigate(dashboardPath);
+                    }}
+                  >
+                    لوحة التحكم
+                  </Button>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="mobile-login-link"
+                      onClick={closeMobileMenu}
+                    >
+                      تسجيل الدخول
+                    </Link>
+                    <Button
+                      variant="primary"
+                      className="btn-register-filled mobile-register-btn"
+                      onClick={() => {
+                        closeMobileMenu();
+                        navigate('/role-selection');
+                      }}
+                    >
+                      انشاء حساب
+                    </Button>
+                  </>
+                )}
+              </div>
+            )}
           </div>
         </aside>
       )}

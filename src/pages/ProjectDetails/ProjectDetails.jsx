@@ -293,6 +293,10 @@ const ProjectDetails = () => {
     );
   }
 
+  // Mirrors the server rule: an open project stops taking bids once its deadline passes.
+  const { deadlinePassed } = project;
+  const acceptingProposals = project.status === 'Open' && !deadlinePassed;
+
   const existingFreelancerProposal = proposals.find((p) => p.freelancerId === user?.id && p.status !== 'Withdrawn');
 
   const openAttachment = async (att) => {
@@ -518,7 +522,7 @@ const ProjectDetails = () => {
                         <p>{existingFreelancerProposal.coverLetter}</p>
                       </div>
 
-                      {existingFreelancerProposal.status === 'Pending' && project.status === 'Open' && (
+                      {existingFreelancerProposal.status === 'Pending' && acceptingProposals && (
                         <div className="proposal-withdraw-strip">
                           <button
                             type="button"
@@ -532,12 +536,12 @@ const ProjectDetails = () => {
                         </div>
                       )}
                     </div>
-                  ) : project.status === 'Open' && !canSubmitProposals ? (
+                  ) : acceptingProposals && !canSubmitProposals ? (
                     <div className="project-closed-notice">
                       <FiInfo className="notice-info-icon" />
                       <span>تقديم العروض غير متاح حالياً بقرار من إدارة المنصة. يرجى المحاولة لاحقاً.</span>
                     </div>
-                  ) : project.status === 'Open' ? (
+                  ) : acceptingProposals ? (
                     <div className="submit-prompt">
                       <h4>هل أنت جاهز لتنفيذ هذا المشروع؟</h4>
                       <p>قدم عرضك المالي وحدد مدة التنفيذ ووضح مهاراتك لبدء العمل فور موافقة العميل.</p>
@@ -552,7 +556,11 @@ const ProjectDetails = () => {
                   ) : (
                     <div className="project-closed-notice">
                       <FiInfo className="notice-info-icon" />
-                      <span>هذا المشروع مغلق لتلقي العروض حالياً ({statusLabel(project.status)}).</span>
+                      <span>
+                        {project.status === 'Open' && deadlinePassed
+                          ? 'انتهى موعد هذا المشروع ولم يعد يستقبل عروضاً جديدة.'
+                          : `هذا المشروع مغلق لتلقي العروض حالياً (${statusLabel(project.status)}).`}
+                      </span>
                     </div>
                   )
                 ) : null}

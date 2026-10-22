@@ -153,6 +153,7 @@ export const mapProject = (p) => p && ({
   deadlineAt: p.deadline,
   duration: durationLabel(p.deadline),
   daysLeft: daysUntil(p.deadline),
+  deadlinePassed: Boolean(p.deadline) && new Date(p.deadline).getTime() <= Date.now(),
   status: label(PROJECT_STATUS, p.status),
   rawStatus: p.status,
   skills: skillNames(p.skills),
