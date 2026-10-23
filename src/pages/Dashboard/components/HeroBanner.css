@@ -228,6 +228,8 @@
     justify-content: center;
     box-sizing: border-box;
     text-align: center;
+    padding: 8px 18px;
+    font-size: 0.9rem;
   }
 }
 
