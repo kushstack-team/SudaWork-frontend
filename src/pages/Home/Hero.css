@@ -64,10 +64,19 @@
   }
 }
 
+@keyframes sw-rotate-spin {
+  from {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}
+
 .hero-cta-wrapper {
   margin-top: var(--space-2, 8px);
   margin-bottom: var(--space-2, 8px);
-  padding: 6px 4px;
+  padding: 8px 6px;
   display: flex;
   align-items: center;
 }
@@ -198,46 +207,133 @@
   transform: rotate(180deg) translateX(-4px);
 }
 
-/* Accessibility: Reduced Motion */
+/* Accessibility: Reduced Motion (Gentle 8s loop, no scaling, no glow pulsing) */
 @media (prefers-reduced-motion: reduce) {
   .sw-cta-wrap::before,
   .sw-cta,
-  .hero-cta-neon {
-    animation: none !important;
+  .hero-cta-neon,
+  .sw-no-houdini .sw-cta-wrap::before,
+  .sw-no-houdini .sw-cta::before,
+  .sw-no-houdini .hero-cta-neon::before {
+    animation-duration: 8s !important;
   }
-  .sw-cta-wrap::before {
-    background: var(--cta-neon, #00C685);
-    filter: blur(12px);
-    opacity: 0.5;
-  }
-  .sw-cta,
-  .hero-cta-neon {
-    border-color: var(--cta-neon, #00C685);
-    background: var(--cta-fill, #00251B);
-  }
+
   .sw-cta-wrap,
-  .sw-cta-wrap:hover {
+  .sw-cta-wrap:hover,
+  .sw-cta-wrap:active {
     transform: none !important;
+    transition: none !important;
+  }
+
+  .sw-cta-wrap:hover::before,
+  .sw-no-houdini .sw-cta-wrap:hover::before {
+    opacity: 0.65 !important;
+    filter: blur(14px) !important;
+  }
+
+  .sw-cta .cta-arrow,
+  .sw-cta-wrap:hover .cta-arrow {
+    transform: none !important;
+    transition: none !important;
+  }
+
+  [dir="ltr"] .sw-cta .cta-arrow,
+  [dir="ltr"] .sw-cta-wrap:hover .cta-arrow {
+    transform: rotate(180deg) !important;
   }
 }
 
-/* Fallback for browsers without @property support */
-@supports not at-rule(@property) {
-  .sw-cta-wrap::before,
-  .sw-cta,
-  .hero-cta-neon {
-    animation: none !important;
-  }
-  .sw-cta-wrap::before {
-    background: var(--cta-neon, #00C685);
-    filter: blur(12px);
-    opacity: 0.5;
-  }
-  .sw-cta,
-  .hero-cta-neon {
-    border-color: var(--cta-neon, #00C685);
-    background: var(--cta-fill, #00251B);
-  }
+/* Fallback for browsers without @property support (.sw-no-houdini)
+   Animates rotating conic-gradient layer using transform: rotate() */
+.sw-no-houdini .sw-cta-wrap::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 520px;
+  height: 520px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0deg,
+    var(--cta-neon, #00C685) 70deg,
+    var(--cta-neon-light, #7DFFC9) 100deg,
+    transparent 160deg,
+    transparent 360deg
+  );
+  filter: blur(16px);
+  opacity: 0.65;
+  animation: sw-rotate-spin 3s linear infinite;
+  pointer-events: none;
+  z-index: -1;
+  inset: auto;
+  -webkit-mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 88%);
+  mask-image: radial-gradient(closest-side, rgba(0,0,0,1) 50%, rgba(0,0,0,0) 88%);
+}
+
+.sw-no-houdini .sw-cta-wrap:hover::before {
+  opacity: 0.95;
+  filter: blur(20px);
+}
+
+.sw-no-houdini .sw-cta,
+.sw-no-houdini .hero-cta-neon {
+  position: relative;
+  overflow: hidden;
+  border: none !important;
+  background: transparent !important;
+  animation: none !important;
+}
+
+/* Rotating conic-gradient layer behind button fill */
+.sw-no-houdini .sw-cta::before,
+.sw-no-houdini .hero-cta-neon::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 900px;
+  height: 900px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  background: conic-gradient(
+    from 0deg,
+    var(--cta-ring-idle, #0B6B4A) 0deg,
+    var(--cta-neon, #00C685) 70deg,
+    var(--cta-neon-light, #7DFFC9) 100deg,
+    var(--cta-ring-idle, #0B6B4A) 160deg,
+    var(--cta-ring-idle, #0B6B4A) 360deg
+  );
+  animation: sw-rotate-spin 3s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Solid inner fill (#00251B) with exactly 3px ring clearance */
+.sw-no-houdini .sw-cta::after,
+.sw-no-houdini .hero-cta-neon::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 9999px;
+  background: var(--current-cta-fill, var(--cta-fill, #00251B));
+  z-index: 1;
+  pointer-events: none;
+  transition: background 200ms ease;
+}
+
+.sw-no-houdini .sw-cta-wrap:hover .sw-cta::after,
+.sw-no-houdini .sw-cta:hover::after {
+  background: var(--cta-fill-hover, #00362A);
+}
+
+.sw-no-houdini .sw-cta .cta-text,
+.sw-no-houdini .sw-cta .cta-arrow,
+.sw-no-houdini .hero-cta-neon .cta-text,
+.sw-no-houdini .hero-cta-neon .cta-arrow {
+  position: relative;
+  z-index: 2;
 }
 
 .hero-search-wrapper {
@@ -343,34 +439,38 @@
   }
 
   .hero-cta-wrapper {
-    width: auto;
+    width: 100%;
+    max-width: 760px;
     margin-top: 4px;
     margin-bottom: 4px;
+    padding: 8px 6px;
+    box-sizing: border-box;
   }
 
   .sw-cta-wrap {
-    width: auto;
+    width: 100%;
     max-width: 100%;
+    display: flex;
   }
 
   .sw-cta-wrap::before {
-    filter: blur(10px);
+    filter: blur(12px);
     inset: -3px;
   }
 
   .sw-cta,
   .hero-cta-neon {
-    width: auto;
-    min-height: 48px;
-    padding: 0 24px;
-    font-size: 16px;
-    gap: 10px;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 28px;
+    font-size: 18px;
+    gap: 12px;
     justify-content: center;
   }
 
   .sw-cta .cta-arrow,
   .hero-cta-neon .cta-arrow {
-    font-size: 18px;
+    font-size: 20px;
   }
 }
 
@@ -383,16 +483,23 @@
     font-size: 15px;
   }
 
+  .hero-cta-wrapper {
+    width: 100%;
+    max-width: 100%;
+    padding: 8px 4px;
+  }
+
   .sw-cta,
   .hero-cta-neon {
-    min-height: 44px;
-    padding: 0 20px;
-    font-size: 15px;
-    gap: 8px;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 24px;
+    font-size: 18px;
+    gap: 10px;
   }
 
   .sw-cta .cta-arrow,
   .hero-cta-neon .cta-arrow {
-    font-size: 16px;
+    font-size: 18px;
   }
 }

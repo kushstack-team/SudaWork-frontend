@@ -41,13 +41,7 @@
 
   /* Reserve space for fixed MobileBottomNav on layout roots only (prevents stacking) */
   .app-container,
-  .dashboard-layout-container,
-  .login-page,
-  .role-selection-page,
-  .client-register-page,
-  .freelancer-register-page,
-  .forgot-pwd-page,
-  .reset-pwd-page {
+  .dashboard-layout-container {
     padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
   }
 

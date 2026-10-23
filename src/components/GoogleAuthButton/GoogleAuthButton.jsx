@@ -6,7 +6,6 @@ const GIS_SRC = 'https://accounts.google.com/gsi/client';
 // Google Identity Services only accepts button widths between 200 and 400px.
 const MIN_WIDTH = 200;
 const MAX_WIDTH = 400;
-const DEFAULT_BUTTON_WIDTH = 260;
 let gisPromise = null;
 
 const loadGis = () => {
@@ -39,42 +38,62 @@ const GoogleGLogo = () => (
   </svg>
 );
 
+const getButtonWidth = (wrapper) => {
+  if (!wrapper) return MAX_WIDTH;
+  const measured = wrapper.clientWidth || wrapper.parentElement?.clientWidth || 0;
+  if (measured <= 0) {
+    if (typeof window !== 'undefined' && window.innerWidth) {
+      return Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, Math.round(window.innerWidth - 48)));
+    }
+    return MAX_WIDTH;
+  }
+  return Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, Math.round(measured)));
+};
+
 /**
  * "Continue with Google" using Google Identity Services. Google returns a
  * signed ID token (`credential`) which the backend verifies; nothing about the
  * identity is trusted on the client.
  *
- * Renders Google's official modern high-contrast button with pill shape
- * and elevation, matching the website's sleek modern aesthetic.
+ * Renders Google's official standard outline button with pill shape,
+ * seamlessly matching the website's clean green aesthetic.
  */
 export default function GoogleAuthButton({
   text = 'continue_with',
   theme = 'filled_blue',
   shape = 'pill',
-  width: customWidth = DEFAULT_BUTTON_WIDTH,
+  size = 'large',
+  type = 'standard',
+  logo_alignment = 'left',
+  locale = 'ar',
   onCredential,
   busy = false,
 }) {
   const { googleClientId, loading } = usePlatform();
+  const wrapperRef = useRef(null);
   const hostRef = useRef(null);
   const callbackRef = useRef(onCredential);
+  const lastWidthRef = useRef(0);
+  const debounceTimerRef = useRef(null);
   const [rendered, setRendered] = useState(false);
   const [loadError, setLoadError] = useState(false);
   const [retryKey, setRetryKey] = useState(0);
-
-  const targetWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, customWidth || DEFAULT_BUTTON_WIDTH));
 
   useEffect(() => {
     callbackRef.current = onCredential;
   }, [onCredential]);
 
   useEffect(() => {
-    const host = hostRef.current;
-    if (!googleClientId || !host) return undefined;
-    let cancelled = false;
+    if (!googleClientId) return undefined;
+    let isMounted = true;
 
     const render = (google) => {
-      if (cancelled || !hostRef.current) return;
+      const host = hostRef.current;
+      const wrapper = wrapperRef.current;
+      if (!isMounted || !host || !wrapper || !google?.accounts?.id) return;
+
+      const buttonWidth = getButtonWidth(wrapper);
+
       google.accounts.id.initialize({
         client_id: googleClientId,
         callback: (response) => callbackRef.current?.(response.credential),
@@ -82,51 +101,81 @@ export default function GoogleAuthButton({
         cancel_on_tap_outside: true,
       });
 
-      const parentWidth = host.parentElement?.offsetWidth || host.offsetWidth || targetWidth;
-      const width = Math.round(Math.max(MIN_WIDTH, Math.min(targetWidth, parentWidth)));
-
+      // Clear any existing button iframe to prevent duplicate iframes
       host.innerHTML = '';
+
       google.accounts.id.renderButton(host, {
-        type: 'standard',
+        type,
         theme,
-        size: 'large',
+        size,
+        text: text || 'continue_with',
         shape,
-        text,
-        locale: 'ar',
-        logo_alignment: 'left',
-        width,
+        logo_alignment,
+        locale,
+        width: buttonWidth,
       });
-      setRendered(true);
+
+      lastWidthRef.current = buttonWidth;
+      if (isMounted) {
+        setRendered(true);
+      }
+    };
+
+    const scheduleRender = () => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      debounceTimerRef.current = setTimeout(() => {
+        if (!isMounted || !wrapperRef.current || !hostRef.current || !window.google?.accounts?.id) return;
+        const nextWidth = getButtonWidth(wrapperRef.current);
+        if (nextWidth !== lastWidthRef.current) {
+          render(window.google);
+        }
+      }, 120);
     };
 
     loadGis()
       .then((google) => {
+        if (!isMounted) return;
         render(google);
       })
       .catch(() => {
-        if (!cancelled) setLoadError(true);
+        if (isMounted) setLoadError(true);
       });
 
     // Re-measure on container resize to keep the button responsive
     let resizeObserver = null;
-    if (typeof ResizeObserver !== 'undefined' && host.parentElement) {
-      let timeoutId = null;
-      resizeObserver = new ResizeObserver(() => {
-        if (timeoutId) clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          if (!cancelled && window.google?.accounts?.id && hostRef.current) {
-            render(window.google);
+    if (typeof ResizeObserver !== 'undefined' && wrapperRef.current) {
+      resizeObserver = new ResizeObserver((entries) => {
+        for (const entry of entries) {
+          const w = entry.contentRect?.width ? Math.round(entry.contentRect.width) : getButtonWidth(wrapperRef.current);
+          const clamped = Math.min(MAX_WIDTH, Math.max(MIN_WIDTH, w));
+          if (clamped !== lastWidthRef.current) {
+            scheduleRender();
           }
-        }, 150);
+        }
       });
-      resizeObserver.observe(host.parentElement);
+      resizeObserver.observe(wrapperRef.current);
     }
 
+    window.addEventListener('resize', scheduleRender);
+    window.addEventListener('orientationchange', scheduleRender);
+
     return () => {
-      cancelled = true;
-      if (resizeObserver) resizeObserver.disconnect();
+      isMounted = false;
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      if (resizeObserver) {
+        resizeObserver.disconnect();
+      }
+      window.removeEventListener('resize', scheduleRender);
+      window.removeEventListener('orientationchange', scheduleRender);
+      if (hostRef.current) {
+        hostRef.current.innerHTML = '';
+      }
     };
-  }, [googleClientId, text, theme, shape, targetWidth, retryKey]);
+  }, [googleClientId, text, theme, shape, size, type, logo_alignment, locale, retryKey]);
 
   const fallbackLabel =
     text === 'signin_with'
@@ -143,7 +192,7 @@ export default function GoogleAuthButton({
 
   if (!loading && (!googleClientId || loadError)) {
     return (
-      <div className="google-auth-slot" style={{ maxWidth: `${targetWidth}px` }}>
+      <div className="google-auth-wrapper">
         <button
           type="button"
           className="google-auth-fallback"
@@ -168,11 +217,13 @@ export default function GoogleAuthButton({
 
   return (
     <div
-      className={`google-auth-slot ${busy ? 'google-auth-slot--busy' : ''}`}
-      style={{ maxWidth: `${targetWidth}px` }}
+      ref={wrapperRef}
+      className={`google-auth-wrapper ${busy ? 'google-auth-wrapper--busy' : ''}`}
       aria-busy={busy || !rendered}
     >
-      {!rendered && <div className="google-auth-skeleton" aria-hidden="true" />}
+      {!rendered && (
+        <div className="google-auth-placeholder" aria-hidden="true" />
+      )}
       <div
         ref={hostRef}
         className={`google-auth-button-host ${rendered ? '' : 'google-auth-button-host--pending'}`}

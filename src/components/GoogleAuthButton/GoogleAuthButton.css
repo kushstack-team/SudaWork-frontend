@@ -1,64 +1,78 @@
-/* Centered compact slot */
+/* ==========================================================================
+   Google Identity Services (GIS) Button Styles
+   Plain, full-width container respecting brand colors and GIS iframe layout
+   ========================================================================== */
+
+/* Wrapper: plain, full-width container (display: flex; justify-content: center; width: 100%)
+   with NO background, border, border-radius, box-shadow, padding, overflow: hidden, or transform.
+   The only styling it keeps is its position and spacing. */
+.google-auth-wrapper,
 .google-auth-slot {
   position: relative;
   width: 100%;
-  max-width: 260px;
-  margin: 0 auto;
   min-height: 44px;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
-  gap: var(--space-2, 8px);
+  margin: 0 auto;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  transform: none;
+  box-sizing: border-box;
 }
 
+.google-auth-wrapper--busy,
 .google-auth-slot--busy {
   opacity: 0.65;
   pointer-events: none;
 }
 
+/* Host element: plain full-width container where Google's iframe is rendered */
 .google-auth-button-host {
   width: 100%;
   min-height: 44px;
   display: flex;
   justify-content: center;
   align-items: center;
-  color-scheme: light;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+  transform: none;
 }
 
-/* Style the Google GIS iframe for modern rounded pill aesthetic and brand elevation */
-.google-auth-button-host iframe {
-  border-radius: 22px !important;
-  box-shadow: 0 3px 10px rgba(26, 115, 232, 0.22);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  max-width: 100% !important;
-}
-
-.google-auth-button-host iframe:hover {
-  box-shadow: 0 5px 16px rgba(26, 115, 232, 0.32);
-  transform: translateY(-1px);
-}
-
-/* Kept in the layout (so it can be measured and drawn into) but invisible
-   until Google has rendered the button. */
+/* Keep in layout to measure clientWidth, but invisible until Google renders */
 .google-auth-button-host--pending {
-  visibility: hidden;
-}
-
-/* Modern pill shimmer placeholder with high-contrast gradient */
-.google-auth-skeleton {
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
-  margin: 0 auto;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+}
+
+/* Reserved 44px height placeholder before Google's script loads (prevents layout shift) */
+.google-auth-placeholder,
+.google-auth-skeleton {
   width: 100%;
-  max-width: 260px;
+  max-width: 400px;
   height: 44px;
-  border-radius: 22px;
-  background: linear-gradient(90deg, #e2e8f0 25%, #cbd5e1 50%, #e2e8f0 75%);
+  border-radius: 9999px;
+  border: 1px solid #dadce0;
+  background: linear-gradient(90deg, #f8fafc 25%, #f1f5f9 50%, #f8fafc 75%);
   background-size: 200% 100%;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-  animation: google-auth-shimmer 1.2s ease-in-out infinite;
+  box-sizing: border-box;
+  box-shadow: none;
+  animation: google-auth-shimmer 1.4s ease-in-out infinite;
 }
 
 @keyframes google-auth-shimmer {
@@ -67,60 +81,57 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .google-auth-skeleton { animation: none; }
+  .google-auth-placeholder,
+  .google-auth-skeleton {
+    animation: none;
+  }
 }
 
-/* Modern High-Contrast Fallback & Stand-in Button */
+/* Clean, Google Blue Fallback Button */
 .google-auth-fallback {
   width: 100%;
-  max-width: 260px;
+  max-width: 400px;
   height: 44px;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--space-2, 8px);
-  padding: 0 var(--space-3, 12px);
-  border-radius: 22px;
+  gap: var(--space-3, 12px);
+  padding: 0 var(--space-4, 16px);
+  border-radius: 9999px;
   border: none;
-  background: linear-gradient(135deg, #1a73e8 0%, #1557b0 100%);
+  background-color: #1a73e8;
   color: #ffffff;
   font-family: var(--font-primary, 'Tajawal', sans-serif);
-  font-size: 0.92rem;
-  font-weight: 700;
+  font-size: 0.95rem;
+  font-weight: 600;
   cursor: pointer;
-  box-shadow: 0 3px 10px rgba(26, 115, 232, 0.25);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  text-decoration: none;
   box-sizing: border-box;
+  box-shadow: none;
+  transition: background-color 0.15s ease;
 }
 
 .google-auth-fallback:hover:not(:disabled) {
-  background: linear-gradient(135deg, #1967d2 0%, #174ea6 100%);
-  box-shadow: 0 5px 16px rgba(26, 115, 232, 0.35);
-  transform: translateY(-1px);
+  background-color: #1557b0;
 }
 
 .google-auth-fallback:active:not(:disabled) {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.25);
+  background-color: #174ea6;
 }
 
 .google-auth-fallback:disabled {
   opacity: 0.75;
   cursor: not-allowed;
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.15);
 }
 
 .google-auth-logo-badge {
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 50%;
   background: #ffffff;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
 }
 
 .google-g-logo {
@@ -130,7 +141,6 @@
 .google-auth-fallback-text {
   flex: 1;
   text-align: center;
-  letter-spacing: -0.2px;
 }
 
 .google-auth-hint {
@@ -138,11 +148,9 @@
   color: #64748b;
   text-align: center;
   line-height: 1.4;
-  margin-top: var(--space-1, 4px);
+  margin-top: var(--space-2, 8px);
 }
 
 .google-auth-hint--error {
   color: #dc2626;
 }
-
-

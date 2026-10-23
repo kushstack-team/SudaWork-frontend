@@ -198,7 +198,7 @@
   }
 
   .role-selection-main {
-    padding: var(--space-4, 16px) var(--space-5, 20px) var(--space-7, 32px) var(--space-5, 20px);
+    padding: var(--space-4, 16px) var(--space-5, 20px) calc(64px + env(safe-area-inset-bottom, 0px) + 24px) var(--space-5, 20px);
   }
 
   .role-selection-hero {

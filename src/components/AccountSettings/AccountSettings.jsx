@@ -3,17 +3,21 @@ import { useNavigate } from 'react-router-dom';
 import { FiLock, FiCheck } from 'react-icons/fi';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/auth';
+import { isGoogleUser } from '../../utils/auth';
+import GoogleGLogo from '../Icons/GoogleGLogo';
 import ConfirmModal from '../common/ConfirmModal/ConfirmModal';
 import './AccountSettings.css';
 
 /**
- * Account security block for the profile editors: change (or, for Google-only
- * accounts, set) the password, and deactivate the account. Section and title
- * class names come from the host page so it matches that page's styling.
+ * Account security block for the profile editors:
+ * - Google-authenticated users: password fields and change button are completely hidden;
+ *   shows an informative Google provider card, plus account deactivation.
+ * - Standard email/password users: allows changing password, plus account deactivation.
  */
 export default function AccountSettings({ sectionClassName, titleClassName, iconClassName }) {
-  const { user, refreshUser, logout } = useAuth();
+  const { user, isGoogle: authIsGoogle, refreshUser, logout } = useAuth();
   const navigate = useNavigate();
+  const isGoogle = authIsGoogle || isGoogleUser(user);
   const hasPassword = user?.hasPassword !== false;
 
   const [oldPassword, setOldPassword] = useState('');
@@ -45,7 +49,7 @@ export default function AccountSettings({ sectionClassName, titleClassName, icon
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
-      setMessage(hasPassword ? 'تم تغيير كلمة المرور. تم تسجيل خروج الأجهزة الأخرى.' : 'تم تعيين كلمة المرور. يمكنك الآن الدخول بالبريد الإلكتروني أيضاً.');
+      setMessage('تم تغيير كلمة المرور بنجاح. تم تسجيل خروج الأجهزة الأخرى.');
     } catch (err) {
       setError(err.message);
     } finally {
@@ -75,42 +79,80 @@ export default function AccountSettings({ sectionClassName, titleClassName, icon
         <span>أمان الحساب</span>
       </h2>
 
-      <form onSubmit={handlePassword} className="account-settings-form" noValidate>
-        <p className="account-settings-hint">
-          {hasPassword
-            ? 'غيّر كلمة المرور الخاصة بحسابك.'
-            : 'حسابك مرتبط بقوقل. يمكنك تعيين كلمة مرور لتتمكن من الدخول بالبريد الإلكتروني أيضاً.'}
-        </p>
+      {isGoogle ? (
+        <div className="account-settings-google-wrapper">
+          <div className="account-settings-google-card">
+            <div className="account-settings-google-header">
+              <GoogleGLogo size={20} />
+              <span>تم تسجيل الدخول بواسطة Google</span>
+            </div>
+            <p className="account-settings-google-desc">
+              حسابك مرتبط ومحمٍ بواسطة Google. تتم إدارة كلمة المرور وإعدادات الأمان الخاصة بك مباشرةً عبر حساب Google الخاص بك، ولا يتطلب حسابك كلمة مرور منفصلة على المنصة.
+            </p>
+          </div>
 
-        {hasPassword && (
+          {error && <p className="account-settings-error" role="alert">{error}</p>}
+
+          <div className="account-settings-actions account-settings-actions--single">
+            <button
+              type="button"
+              className="account-settings-danger"
+              onClick={() => setConfirmOpen(true)}
+            >
+              إلغاء تفعيل الحساب
+            </button>
+          </div>
+        </div>
+      ) : (
+        <form onSubmit={handlePassword} className="account-settings-form" noValidate>
+          <p className="account-settings-hint">
+            غيّر كلمة المرور الخاصة بحسابك.
+          </p>
+
           <label className="account-settings-field">
             <span>كلمة المرور الحالية</span>
-            <input type="password" autoComplete="current-password" value={oldPassword} onChange={(e) => setOldPassword(e.target.value)} />
+            <input
+              type="password"
+              autoComplete="current-password"
+              value={oldPassword}
+              onChange={(e) => setOldPassword(e.target.value)}
+            />
           </label>
-        )}
-        <div className="account-settings-row">
-          <label className="account-settings-field">
-            <span>كلمة المرور الجديدة</span>
-            <input type="password" autoComplete="new-password" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
-          </label>
-          <label className="account-settings-field">
-            <span>تأكيد كلمة المرور</span>
-            <input type="password" autoComplete="new-password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
-          </label>
-        </div>
 
-        {error && <p className="account-settings-error" role="alert">{error}</p>}
-        {message && <p className="account-settings-success" role="status"><FiCheck /> {message}</p>}
+          <div className="account-settings-row">
+            <label className="account-settings-field">
+              <span>كلمة المرور الجديدة</span>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+              />
+            </label>
+            <label className="account-settings-field">
+              <span>تأكيد كلمة المرور</span>
+              <input
+                type="password"
+                autoComplete="new-password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+              />
+            </label>
+          </div>
 
-        <div className="account-settings-actions">
-          <button type="submit" className="account-settings-primary" disabled={saving}>
-            {saving ? 'جارٍ الحفظ...' : hasPassword ? 'تغيير كلمة المرور' : 'تعيين كلمة المرور'}
-          </button>
-          <button type="button" className="account-settings-danger" onClick={() => setConfirmOpen(true)}>
-            إلغاء تفعيل الحساب
-          </button>
-        </div>
-      </form>
+          {error && <p className="account-settings-error" role="alert">{error}</p>}
+          {message && <p className="account-settings-success" role="status"><FiCheck /> {message}</p>}
+
+          <div className="account-settings-actions">
+            <button type="submit" className="account-settings-primary" disabled={saving}>
+              {saving ? 'جارٍ الحفظ...' : 'تغيير كلمة المرور'}
+            </button>
+            <button type="button" className="account-settings-danger" onClick={() => setConfirmOpen(true)}>
+              إلغاء تفعيل الحساب
+            </button>
+          </div>
+        </form>
+      )}
 
       <ConfirmModal
         isOpen={confirmOpen}

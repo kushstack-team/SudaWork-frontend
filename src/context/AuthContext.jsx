@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { AuthContext } from './auth';
 import { api } from '../services/api';
 import { tokens, setSessionExpiredHandler } from '../services/api/client';
+import { isGoogleUser, AUTH_PROVIDER_STORAGE_KEY } from '../utils/auth';
 
 const hasStoredSession = () => Boolean(tokens.access || tokens.refresh);
 
@@ -42,12 +43,20 @@ export const AuthProvider = ({ children }) => {
   }, [restore]);
 
   useEffect(() => {
-    setSessionExpiredHandler(() => setUser(null));
+    setSessionExpiredHandler(() => {
+      try {
+        sessionStorage.removeItem(AUTH_PROVIDER_STORAGE_KEY);
+      } catch {}
+      setUser(null);
+    });
     if (hasStoredSession()) restore();
   }, [restore]);
 
   const login = async (email, password) => {
     const { user: loggedUser } = await api.auth.login(email, password);
+    try {
+      sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'local');
+    } catch {}
     setUser(loggedUser);
     return loggedUser;
   };
@@ -55,6 +64,9 @@ export const AuthProvider = ({ children }) => {
   const register = async ({ firstName, lastName, fullName, email, password, role }) => {
     const name = fullName || `${firstName || ''} ${lastName || ''}`.trim();
     const { user: newUser, verificationEmailSent } = await api.auth.register({ fullName: name, email: email.trim(), password, role });
+    try {
+      sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'local');
+    } catch {}
     setUser(newUser);
     return { ...newUser, verificationEmailSent };
   };
@@ -63,13 +75,33 @@ export const AuthProvider = ({ children }) => {
   // { status: 'NEEDS_PROFILE', registrationToken, missingFields, profile }.
   const loginWithGoogle = async ({ credential, role }) => {
     const result = await api.auth.google({ credential, role });
-    if (result.status === 'AUTHENTICATED') setUser(result.user);
+    if (result.status === 'AUTHENTICATED') {
+      try {
+        sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'google');
+      } catch {}
+      const gUser = {
+        ...result.user,
+        isGoogle: true,
+        provider: result.user?.provider || 'google',
+        authProvider: result.user?.authProvider || 'google',
+      };
+      setUser(gUser);
+    }
     return result;
   };
 
   const completeGoogleRegistration = async ({ registrationToken, role, fullName }) => {
     const result = await api.auth.googleComplete({ registrationToken, role, fullName });
-    setUser(result.user);
+    try {
+      sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'google');
+    } catch {}
+    const gUser = {
+      ...result.user,
+      isGoogle: true,
+      provider: result.user?.provider || 'google',
+      authProvider: result.user?.authProvider || 'google',
+    };
+    setUser(gUser);
     return result;
   };
 
@@ -83,6 +115,9 @@ export const AuthProvider = ({ children }) => {
     try {
       await api.auth.logout();
     } finally {
+      try {
+        sessionStorage.removeItem(AUTH_PROVIDER_STORAGE_KEY);
+      } catch {}
       setUser(null);
     }
   };
@@ -93,10 +128,13 @@ export const AuthProvider = ({ children }) => {
     return fresh;
   }, []);
 
+  const isGoogle = isGoogleUser(user);
+
   const value = {
     user,
     role: user?.role || null,
     isAuthenticated: Boolean(user),
+    isGoogle,
     loading,
     restoreError,
     retryRestore,

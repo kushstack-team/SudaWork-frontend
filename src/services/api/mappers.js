@@ -51,21 +51,35 @@ export const mapFile = (f) => f && ({
 });
 
 export const mapUser = (u) => u && ({
+  ...u,
   id: u.id,
-  fullName: u.full_name,
+  fullName: u.full_name || u.fullName,
   email: u.email,
   role: u.role,
-  avatar: resolveFileUrl(u.avatar_url),
+  avatar: resolveFileUrl(u.avatar_url || u.avatar),
   status: u.is_active === false ? 'suspended' : 'active',
   isActive: u.is_active !== false,
-  createdAt: u.created_at,
-  lastLoginAt: u.last_login_at,
-  hasPassword: u.has_password,
+  createdAt: u.created_at || u.createdAt,
+  lastLoginAt: u.last_login_at || u.lastLoginAt,
+  hasPassword: u.has_password !== undefined ? u.has_password : (u.hasPassword !== undefined ? u.hasPassword : true),
   // Accounts from list endpoints (admin) don't carry the flag; treat as verified.
-  emailVerified: u.email_verified !== false,
-  googleLinked: u.google_linked,
-  profileComplete: u.profile_complete,
-  missingProfileFields: u.missing_profile_fields || [],
+  emailVerified: u.email_verified !== false && u.emailVerified !== false,
+  googleLinked: Boolean(u.google_linked || u.googleLinked),
+  googleId: u.google_id || u.googleId || null,
+  provider: u.provider || u.auth_provider || u.authProvider || null,
+  authProvider: u.auth_provider || u.authProvider || u.provider || null,
+  isGoogle: Boolean(
+    u.is_google ||
+    u.isGoogle ||
+    u.google_id ||
+    u.googleId ||
+    (u.provider && String(u.provider).toLowerCase() === 'google') ||
+    (u.auth_provider && String(u.auth_provider).toLowerCase() === 'google') ||
+    (u.authProvider && String(u.authProvider).toLowerCase() === 'google') ||
+    ((u.google_linked || u.googleLinked) && (u.has_password === false || u.hasPassword === false))
+  ),
+  profileComplete: u.profile_complete !== undefined ? u.profile_complete : u.profileComplete,
+  missingProfileFields: u.missing_profile_fields || u.missingProfileFields || [],
 });
 
 export const mapPortfolioItem = (p) => ({
