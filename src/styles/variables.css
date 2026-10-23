@@ -1,6 +1,6 @@
 :root {
   /* Brand Colors */
-  --color-primary-dark: #00543B;   /* Hero bg, nav buttons, badges */
+  --color-primary-dark: #004D34;   /* Primary dark green: Hero bg, nav buttons, badges */
   --color-primary: #0B6E4F;         /* Signup card button, icon bg */
   --color-accent: #00DCAC;          /* Primary CTA buttons */
   --color-white: #FFFFFF;           /* Card & section backgrounds */
@@ -14,6 +14,55 @@
   --color-text-dark: #1A1A1A;
   --color-text-light: #FFFFFF;
   --font-primary: 'Tajawal', sans-serif;
+
+  /* Spacing Scale (multiples of 4px) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 48px;
+  --space-9: 64px;
+
+  /* Badge & Tag Theme Tokens (WCAG AA Compliant: Dark text, light bg, visible mid-tone border) */
+  --badge-green-text: #004D34;
+  --badge-green-bg: #E6F9F1;
+  --badge-green-border: #7FD9B5;
+
+  --badge-orange-text: #8A4600;
+  --badge-orange-bg: #FFF1D6;
+  --badge-orange-border: #F0B24F;
+
+  --badge-blue-text: #075985;
+  --badge-blue-bg: #E0F2FE;
+  --badge-blue-border: #7DD3FC;
+
+  --badge-red-text: #991B1B;
+  --badge-red-bg: #FEE2E2;
+  --badge-red-border: #FCA5A5;
+
+  --badge-gray-text: #334155;
+  --badge-gray-bg: #F1F5F9;
+  --badge-gray-border: #CBD5E1;
+
+  --badge-purple-text: #581C87;
+  --badge-purple-bg: #F3E8FF;
+  --badge-purple-border: #D8B4FE;
+
+  --badge-teal-text: #0F766E;
+  --badge-teal-bg: #CCFBF1;
+  --badge-teal-border: #5EEAD4;
+
+  /* Hero Neon CTA Tokens */
+  --cta-fill: #00251B;
+  --cta-fill-hover: #00362A;
+  --cta-text: #FFFFFF;
+  --cta-arrow: #7DFFC9;
+  --cta-ring-idle: #0B6B4A;
+  --cta-neon: #00C685;
+  --cta-neon-light: #7DFFC9;
 }
 
 body{

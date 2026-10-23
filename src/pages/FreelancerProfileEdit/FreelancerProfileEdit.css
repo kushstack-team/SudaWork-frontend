@@ -375,20 +375,47 @@
   font-size: 0.9rem;
   color: #94a3b8;
   font-style: italic;
+  display: block;
+  padding: var(--space-4, 16px) var(--space-5, 20px);
+  background-color: #f8fafc;
+  border: 1px dashed #e2e8f0;
+  border-radius: 10px;
+  line-height: 1.6;
 }
 
 /* Portfolio */
 .portfolio-add-box {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4, 16px);
   background-color: #f8fafc;
   border: 1px dashed #cbd5e1;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 24px;
+  padding: var(--space-6, 24px);
+  margin-bottom: var(--space-6, 24px);
+}
+
+.portfolio-add-box .form-grid-two {
+  margin-bottom: 0;
+  gap: var(--space-4, 16px);
+}
+
+.portfolio-add-box .form-row--two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-4, 16px);
+}
+
+@media (max-width: 640px) {
+  .portfolio-add-box .form-row--two-col {
+    grid-template-columns: 1fr;
+  }
 }
 
 .add-portfolio-btn {
+  align-self: flex-start;
   height: 44px;
-  padding: 0 20px;
+  padding: 0 var(--space-5, 20px);
   background-color: #ffffff;
   border: 1.5px solid var(--color-primary, #0B6E4F);
   border-radius: 10px;
@@ -399,8 +426,9 @@
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-2, 8px);
   transition: all 0.2s ease;
+  margin-top: var(--space-1, 4px);
 }
 
 .add-portfolio-btn:hover {
@@ -465,7 +493,8 @@
 .profile-submit-row {
   display: flex;
   justify-content: flex-end;
-  margin-top: 12px;
+  margin-top: var(--space-6, 24px);
+  margin-bottom: var(--space-7, 32px);
 }
 
 .save-profile-btn {

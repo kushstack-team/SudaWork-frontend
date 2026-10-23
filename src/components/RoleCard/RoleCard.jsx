@@ -48,7 +48,7 @@ const RoleCard = ({
       <div className="role-card__content">
         <h3 className="role-card__title">
           <span>{titleLine1}</span>
-          <span>{titleLine2}</span>
+          {titleLine2 ? <span>{titleLine2}</span> : null}
         </h3>
       </div>
 

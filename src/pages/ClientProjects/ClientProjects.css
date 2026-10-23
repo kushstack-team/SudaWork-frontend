@@ -10,7 +10,7 @@
 
 .client-projects-main {
   flex: 1;
-  padding: 40px 24px;
+  padding: var(--space-8, 48px) var(--space-6, 24px);
 }
 
 .client-projects-container {
@@ -23,16 +23,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-7, 32px);
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-4, 16px);
 }
 
 .page-title {
   font-size: 2rem;
   font-weight: 700;
   color: #0f172a;
-  margin: 0 0 6px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
 }
 
 .page-subtitle {
@@ -72,7 +72,7 @@
   padding: 12px 20px;
   border-radius: 12px;
   font-weight: 600;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-6, 24px);
   animation: banner-fade 0.2s ease;
 }
 
@@ -84,12 +84,13 @@
 /* Tabs */
 .status-tabs-strip {
   display: flex;
-  gap: 10px;
+  gap: var(--space-2, 8px);
   overflow-x: auto;
-  padding-bottom: 8px;
-  margin-bottom: 24px;
+  padding-bottom: var(--space-2, 8px);
+  margin-bottom: var(--space-6, 24px);
 }
 
+.status-tabs-strip .tab-btn,
 .tab-btn {
   white-space: nowrap;
   padding: 8px 18px;
@@ -102,31 +103,50 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s ease;
+  outline: none;
+  text-decoration: none;
 }
 
+.status-tabs-strip .tab-btn:hover,
 .tab-btn:hover {
   background-color: #f1f5f9;
   border-color: #94a3b8;
 }
 
+.status-tabs-strip .tab-btn.active,
 .tab-btn.active {
   background-color: var(--color-primary, #0B6E4F);
   border-color: var(--color-primary, #0B6E4F);
   color: #ffffff;
 }
 
+/* Ensure no underline or pseudo-element line appears under active filter tabs */
+.status-tabs-strip .tab-btn::before,
+.status-tabs-strip .tab-btn::after,
+.status-tabs-strip .tab-btn.active::before,
+.status-tabs-strip .tab-btn.active::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* Keyboard accessibility: outline only appears for keyboard navigation (Tab key) */
+.status-tabs-strip .tab-btn:focus-visible {
+  outline: 2px solid var(--color-primary, #0B6E4F);
+  outline-offset: 2px;
+}
+
 /* Projects Stack */
 .projects-management-stack {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: var(--space-6, 24px);
 }
 
 .project-manage-card {
   background-color: #ffffff;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
-  padding: 24px 28px;
+  padding: var(--space-6, 24px) var(--space-7, 32px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   transition: all 0.2s ease;
 }
@@ -173,29 +193,37 @@
 }
 
 .status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
   padding: 4px 14px;
-  border-radius: 14px;
-  font-size: 0.85rem;
+  border-radius: 9999px;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
   flex-shrink: 0;
+  border: 1px solid transparent;
+  opacity: 1;
+  white-space: nowrap;
 }
 
 .pill-open {
-  background-color: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background-color: var(--badge-green-bg, #E6F9F1);
+  color: var(--badge-green-text, #004D34);
+  border-color: var(--badge-green-border, #7FD9B5);
 }
 
 .pill-pending-review {
-  background-color: #fff7ed;
-  color: #c2410c;
-  border: 1px solid #fed7aa;
+  background-color: var(--badge-orange-bg, #FFF1D6);
+  color: var(--badge-orange-text, #8A4600);
+  border-color: var(--badge-orange-border, #F0B24F);
 }
 
 .pill-rejected {
-  background-color: #fef2f2;
-  color: #b91c1c;
-  border: 1px solid #fecaca;
+  background-color: var(--badge-red-bg, #FEE2E2);
+  color: var(--badge-red-text, #991B1B);
+  border-color: var(--badge-red-border, #FCA5A5);
 }
 
 .review-note-banner {
@@ -247,8 +275,8 @@
 .card-info-strip {
   display: flex;
   align-items: center;
-  gap: 20px;
-  margin-bottom: 20px;
+  gap: var(--space-5, 20px);
+  margin-bottom: var(--space-5, 20px);
   flex-wrap: wrap;
 }
 
@@ -274,9 +302,9 @@
   justify-content: space-between;
   align-items: center;
   border-top: 1px solid #f1f5f9;
-  padding-top: 16px;
+  padding-top: var(--space-4, 16px);
   flex-wrap: wrap;
-  gap: 12px;
+  gap: var(--space-3, 12px);
 }
 
 .view-proposals-cta {
@@ -295,7 +323,7 @@
 
 .open-actions-group {
   display: flex;
-  gap: 12px;
+  gap: var(--space-3, 12px);
 }
 
 .action-icon-btn {
@@ -346,25 +374,25 @@
   background-color: #ffffff;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
-  padding: 48px 24px;
+  padding: var(--space-8, 48px) var(--space-6, 24px);
   text-align: center;
 }
 
 .empty-folder-icon {
   font-size: 3rem;
   color: #cbd5e1;
-  margin-bottom: 12px;
+  margin-bottom: var(--space-3, 12px);
 }
 
 .empty-projects-card h3 {
   font-size: 1.3rem;
   color: #1e293b;
-  margin: 0 0 8px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
 }
 
 .empty-projects-card p {
   color: #64748b;
-  margin: 0 0 20px 0;
+  margin: 0 0 var(--space-5, 20px) 0;
 }
 
 .empty-post-btn {
@@ -399,13 +427,13 @@
 
 @media (max-width: 640px) {
   .client-projects-main {
-    padding: 20px 14px;
+    padding: var(--space-6, 24px) var(--space-4, 16px);
   }
 
   .client-projects-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 14px;
+    gap: var(--space-4, 16px);
   }
 
   .page-title {
@@ -418,7 +446,7 @@
   }
 
   .project-manage-card {
-    padding: 18px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
     border-radius: 14px;
   }
 

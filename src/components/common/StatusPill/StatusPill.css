@@ -1,35 +1,93 @@
-.status-pill {
+/* ==========================================================================
+   Shared Status Pill & Badge System
+   ========================================================================== */
+
+.status-pill,
+.app-badge,
+.metric-tag,
+.action-card-tag {
   display: inline-flex;
   align-items: center;
-  padding: 0.25rem 0.75rem;
+  justify-content: center;
+  padding: 4px 10px;
   border-radius: 9999px;
-  font-size: 0.8rem;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 1.25;
+  line-height: 1.3;
+  box-sizing: border-box;
+  border: 1px solid transparent;
   white-space: nowrap;
+  opacity: 1;
 }
 
-.status-pill.success {
-  background-color: #d1fae5;
-  color: #065f46;
+/* Green Variant */
+.status-pill.success,
+.status-pill.green,
+.app-badge.success,
+.app-badge.green,
+.metric-tag.success,
+.metric-tag.info,
+.action-card-tag.success {
+  background-color: var(--badge-green-bg, #E6F9F1);
+  color: var(--badge-green-text, #004D34);
+  border-color: var(--badge-green-border, #7FD9B5);
 }
 
-.status-pill.warning {
-  background-color: #fef3c7;
-  color: #92400e;
+/* Orange Variant */
+.status-pill.warning,
+.status-pill.orange,
+.app-badge.warning,
+.app-badge.orange,
+.metric-tag.warning,
+.action-card-tag.warning {
+  background-color: var(--badge-orange-bg, #FFF1D6);
+  color: var(--badge-orange-text, #8A4600);
+  border-color: var(--badge-orange-border, #F0B24F);
 }
 
-.status-pill.danger {
-  background-color: #fee2e2;
-  color: #991b1b;
+/* Blue Variant */
+.status-pill.info,
+.status-pill.blue,
+.app-badge.info,
+.app-badge.blue,
+.action-card-tag.info {
+  background-color: var(--badge-blue-bg, #E0F2FE);
+  color: var(--badge-blue-text, #075985);
+  border-color: var(--badge-blue-border, #7DD3FC);
 }
 
-.status-pill.info {
-  background-color: #e0f2fe;
-  color: #075985;
+/* Red Variant */
+.status-pill.danger,
+.status-pill.red,
+.app-badge.danger,
+.app-badge.red {
+  background-color: var(--badge-red-bg, #FEE2E2);
+  color: var(--badge-red-text, #991B1B);
+  border-color: var(--badge-red-border, #FCA5A5);
 }
 
-.status-pill.neutral {
-  background-color: #f1f5f9;
-  color: #475569;
+/* Neutral / Gray Variant */
+.status-pill.neutral,
+.status-pill.gray,
+.app-badge.neutral,
+.app-badge.gray {
+  background-color: var(--badge-gray-bg, #F1F5F9);
+  color: var(--badge-gray-text, #334155);
+  border-color: var(--badge-gray-border, #CBD5E1);
+}
+
+/* Purple Variant */
+.status-pill.purple,
+.app-badge.purple {
+  background-color: var(--badge-purple-bg, #F3E8FF);
+  color: var(--badge-purple-text, #581C87);
+  border-color: var(--badge-purple-border, #D8B4FE);
+}
+
+/* Teal Variant */
+.status-pill.teal,
+.app-badge.teal {
+  background-color: var(--badge-teal-bg, #CCFBF1);
+  color: var(--badge-teal-text, #0F766E);
+  border-color: var(--badge-teal-border, #5EEAD4);
 }

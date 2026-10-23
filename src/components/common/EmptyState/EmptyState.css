@@ -4,11 +4,11 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 3.5rem 1.5rem;
+  padding: var(--space-8, 48px) var(--space-6, 24px);
   background-color: #ffffff;
   border: 1px dashed #cbd5e1;
   border-radius: 1rem;
-  margin: 1rem 0;
+  margin: var(--space-4, 16px) 0;
   width: 100%;
 }
 
@@ -22,7 +22,7 @@
   justify-content: center;
   font-size: 1.75rem;
   color: #94a3b8;
-  margin-bottom: 1rem;
+  margin-bottom: var(--space-4, 16px);
 }
 
 .empty-state-title {
@@ -33,7 +33,7 @@
 }
 
 .empty-state-description {
-  margin: 0.5rem 0 1.25rem;
+  margin: var(--space-2, 8px) 0 var(--space-5, 20px);
   font-size: 0.925rem;
   color: #64748b;
   max-width: 400px;
@@ -44,7 +44,7 @@
   background-color: #0b6e4f;
   color: #ffffff;
   border: none;
-  padding: 0.625rem 1.25rem;
+  padding: var(--space-3, 12px) var(--space-6, 24px);
   border-radius: 0.5rem;
   font-size: 0.9rem;
   font-weight: 600;

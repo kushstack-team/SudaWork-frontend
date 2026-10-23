@@ -25,14 +25,14 @@
   border: 1px solid #e2e8f0;
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-7, 32px);
 }
 
 .profile-hero-content {
-  padding: 36px 36px 28px 36px;
+  padding: var(--space-7, 32px);
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: var(--space-6, 24px);
   flex-wrap: wrap;
 }
 
@@ -275,26 +275,26 @@
 .profile-two-columns {
   display: grid;
   grid-template-columns: 1fr 320px;
-  gap: 28px;
+  gap: var(--space-6, 24px);
 }
 
 .column-main {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6, 24px);
 }
 
 .column-sidebar {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6, 24px);
 }
 
 .profile-section-card {
   background-color: #ffffff;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
-  padding: 28px;
+  padding: var(--space-7, 32px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
@@ -302,8 +302,8 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 16px 0;
-  padding-bottom: 10px;
+  margin: 0 0 var(--space-4, 16px) 0;
+  padding-bottom: var(--space-3, 12px);
   border-bottom: 1.5px solid #f1f5f9;
 }
 
@@ -496,20 +496,20 @@
     grid-template-columns: 1fr;
   }
   .profile-hero-content {
-    padding: 24px;
+    padding: var(--space-6, 24px);
   }
 }
 
 @media (max-width: 640px) {
   .freelancer-profile-main {
-    padding: 20px 14px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
   }
 
   .profile-hero-content {
-    padding: 20px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: var(--space-4, 16px);
   }
 
   .profile-identity-info {
@@ -524,7 +524,7 @@
   .profile-hero-actions {
     flex-direction: column;
     width: 100%;
-    gap: 10px;
+    gap: var(--space-3, 12px);
   }
 
   .hire-me-cta-btn,
@@ -535,10 +535,10 @@
   }
 
   .profile-stats-strip {
-    padding: 14px 16px;
+    padding: var(--space-4, 16px);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: var(--space-3, 12px);
   }
 
   .stat-divider {
@@ -546,7 +546,7 @@
   }
 
   .profile-section-card {
-    padding: 20px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
   }
 
   .card-heading {

@@ -33,9 +33,12 @@ const VerifyEmail = () => {
     return () => clearTimeout(timer);
   }, [cooldown]);
 
+  const redirectParam = new URLSearchParams(location.search).get('redirect') || location.state?.redirect;
+  const safeRedirect = redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
+
   if (loading) return null;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user.emailVerified) return <Navigate to={homeForRole(user.role)} replace />;
+  if (user.emailVerified) return <Navigate to={safeRedirect || homeForRole(user.role)} replace />;
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,7 +51,7 @@ const VerifyEmail = () => {
     try {
       const verified = await api.auth.verifyEmail(code.trim());
       setUser(verified);
-      navigate(homeForRole(verified.role), { replace: true });
+      navigate(safeRedirect || homeForRole(verified.role), { replace: true });
     } catch (err) {
       setError(err.message);
       if (err.code === 'VERIFICATION_CODE_EXPIRED' || err.code === 'VERIFICATION_TOO_MANY_ATTEMPTS') setCode('');

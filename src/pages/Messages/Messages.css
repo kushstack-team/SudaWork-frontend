@@ -10,7 +10,7 @@
 
 .messages-main {
   flex: 1;
-  padding: 24px 20px;
+  padding: var(--space-6, 24px) var(--space-5, 20px);
   display: flex;
 }
 
@@ -489,11 +489,11 @@
 
 /* Input Bar */
 .chat-input-bar {
-  padding: 14px 20px;
+  padding: var(--space-4, 16px) var(--space-5, 20px);
   border-top: 1px solid #e2e8f0;
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3, 12px);
   background-color: #ffffff;
 }
 

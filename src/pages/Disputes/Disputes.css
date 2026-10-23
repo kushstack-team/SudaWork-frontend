@@ -14,21 +14,21 @@
 
 .disputes-main {
   flex: 1;
-  padding: 36px 0 60px;
+  padding: var(--space-8, 48px) 0 var(--space-9, 64px);
 }
 
 .disputes-container {
   max-width: 1140px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 var(--space-5, 20px);
 }
 
 /* Breadcrumb */
 .disputes-breadcrumb {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin-bottom: 24px;
+  gap: var(--space-2, 8px);
+  margin-bottom: var(--space-6, 24px);
   font-size: 0.9rem;
   color: #64748b;
 }
@@ -80,17 +80,17 @@
   background-color: #ffffff;
   border-radius: 20px;
   border: 1px solid #e2e8f0;
-  padding: 36px;
+  padding: var(--space-7, 32px);
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.04);
-  margin-bottom: 28px;
+  margin-bottom: var(--space-7, 32px);
 }
 
 .disputes-hero-header {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  gap: 24px;
-  margin-bottom: 32px;
+  gap: var(--space-6, 24px);
+  margin-bottom: var(--space-7, 32px);
   flex-wrap: wrap;
 }
 
@@ -103,18 +103,33 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  background-color: #f0fdf4;
-  color: #166534;
-  border: 1px solid #bbf7d0;
+  background-color: #E6F9F1;
+  color: #004D34;
+  border: 1px solid #a7f3d0;
   padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 0.82rem;
-  font-weight: 700;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
   margin-bottom: 12px;
 }
 
+.hero-badge svg {
+  color: currentColor;
+  stroke: currentColor;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+.hero-badge span {
+  color: #004D34;
+  font-size: 13px;
+  font-weight: 600;
+  opacity: 1;
+}
+
 .hero-title {
-  margin: 0 0 10px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
   font-size: 1.75rem;
   font-weight: 800;
   color: #0f172a;
@@ -220,13 +235,13 @@
 .arbitration-guarantee-box {
   display: flex;
   align-items: flex-start;
-  gap: 16px;
+  gap: var(--space-4, 16px);
   background-color: #eff6ff;
   border: 1px solid #bfdbfe;
   border-right: 5px solid #2563eb;
   border-radius: 14px;
-  padding: 20px 24px;
-  margin-bottom: 28px;
+  padding: var(--space-5, 20px) var(--space-6, 24px);
+  margin-bottom: var(--space-7, 32px);
 }
 
 .guarantee-icon-wrap {
@@ -243,7 +258,7 @@
 }
 
 .guarantee-content h3 {
-  margin: 0 0 8px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
   font-size: 1.05rem;
   font-weight: 700;
   color: #1e3a8a;
@@ -258,13 +273,13 @@
 
 /* Filter Tabs Bar */
 .disputes-tabs-bar {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-6, 24px);
 }
 
 .tabs-list {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2, 8px);
   overflow-x: auto;
   padding-bottom: 4px;
 }
@@ -440,34 +455,39 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 14px;
-  border-radius: 20px;
-  font-size: 0.82rem;
-  font-weight: 700;
+  box-sizing: border-box;
+  padding: 4px 12px;
+  border-radius: 9999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  border: 1px solid transparent;
+  opacity: 1;
+  white-space: nowrap;
 }
 
 .dispute-status-pill.status-open {
-  background-color: #fff7ed;
-  color: #c2410c;
-  border: 1px solid #fed7aa;
+  background-color: var(--badge-orange-bg, #FFF1D6);
+  color: var(--badge-orange-text, #8A4600);
+  border-color: var(--badge-orange-border, #F0B24F);
 }
 
 .dispute-status-pill.status-in-review {
-  background-color: #eff6ff;
-  color: #1d4ed8;
-  border: 1px solid #bfdbfe;
+  background-color: var(--badge-blue-bg, #E0F2FE);
+  color: var(--badge-blue-text, #075985);
+  border-color: var(--badge-blue-border, #7DD3FC);
 }
 
 .dispute-status-pill.status-resolved {
-  background-color: #ecfdf5;
-  color: #065f46;
-  border: 1px solid #a7f3d0;
+  background-color: var(--badge-green-bg, #E6F9F1);
+  color: var(--badge-green-text, #004D34);
+  border-color: var(--badge-green-border, #7FD9B5);
 }
 
 .dispute-status-pill.status-dismissed {
-  background-color: #f1f5f9;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background-color: var(--badge-gray-bg, #F1F5F9);
+  color: var(--badge-gray-text, #334155);
+  border-color: var(--badge-gray-border, #CBD5E1);
 }
 
 /* Card Body */
@@ -846,17 +866,17 @@
 
 @media (max-width: 640px) {
   .disputes-main {
-    padding: 20px 0 40px;
+    padding: var(--space-6, 24px) 0 var(--space-8, 48px);
   }
 
   .disputes-container {
-    padding: 0 14px;
+    padding: 0 var(--space-4, 16px);
   }
 
   .disputes-hero-card {
-    padding: 20px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
     border-radius: 16px;
-    margin-bottom: 20px;
+    margin-bottom: var(--space-5, 20px);
   }
 
   .hero-title {
@@ -868,13 +888,13 @@
   }
 
   .arbitration-guarantee-box {
-    padding: 16px 14px;
+    padding: var(--space-4, 16px);
     flex-direction: column;
-    gap: 12px;
+    gap: var(--space-3, 12px);
   }
 
   .dispute-card {
-    padding: 18px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
     border-radius: 14px;
   }
 
@@ -888,7 +908,7 @@
   }
 
   .disputes-modal-dialog {
-    padding: 20px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
     border-radius: 16px;
   }
 

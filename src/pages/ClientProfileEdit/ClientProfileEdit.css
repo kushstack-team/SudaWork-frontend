@@ -136,6 +136,8 @@
 .client-submit-row {
   display: flex;
   justify-content: flex-end;
+  margin-top: var(--space-6, 24px);
+  margin-bottom: var(--space-7, 32px);
 }
 
 .save-client-btn {

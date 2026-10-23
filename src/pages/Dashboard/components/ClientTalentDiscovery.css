@@ -4,16 +4,16 @@
 
 .client-talent-discovery-section {
   width: 100%;
-  margin-bottom: 48px;
+  margin-bottom: var(--space-8, 48px);
 }
 
 .discovery-header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: var(--space-5, 20px);
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-4, 16px);
 }
 
 .discovery-tag {
@@ -38,7 +38,7 @@
   font-size: 1.35rem;
   font-weight: 800;
   color: #1e293b;
-  margin: 0 0 6px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
 }
 
 .discovery-subtitle {
@@ -69,13 +69,13 @@
 
 /* Filter Tabs */
 .talent-filter-tabs {
-  margin-bottom: 22px;
+  margin-bottom: var(--space-6, 24px);
 }
 
 .filter-pills-row {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-2, 8px);
   overflow-x: auto;
   padding-bottom: 6px;
 }
@@ -111,14 +111,14 @@
 .talent-cards-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 18px;
+  gap: var(--space-4, 16px);
 }
 
 .freelancer-talent-card {
   background-color: #ffffff;
   border: 1px solid #e2e8f0;
   border-radius: 14px;
-  padding: 20px;
+  padding: var(--space-5, 20px);
   display: flex;
   flex-direction: column;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
@@ -135,8 +135,8 @@
 .card-talent-header {
   display: flex;
   align-items: flex-start;
-  gap: 12px;
-  margin-bottom: 14px;
+  gap: var(--space-3, 12px);
+  margin-bottom: var(--space-3, 12px);
 }
 
 .talent-avatar-box {

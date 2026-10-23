@@ -27,22 +27,22 @@
 .freelancers-header-banner {
   background: linear-gradient(135deg, var(--color-primary-dark, #00543B) 0%, #06402d 100%);
   border-radius: 20px;
-  padding: 36px 40px;
+  padding: var(--space-7, 32px) var(--space-8, 48px);
   color: #ffffff;
-  margin-bottom: 24px;
+  margin-bottom: var(--space-7, 32px);
   box-shadow: 0 10px 25px -5px rgba(0, 84, 59, 0.2);
 }
 
 .browse-title {
   font-size: 2.1rem;
   font-weight: 700;
-  margin: 0 0 10px 0;
+  margin: 0 0 var(--space-2, 8px) 0;
 }
 
 .browse-subtitle {
   font-size: 1.05rem;
   color: #e2e8f0;
-  margin: 0 0 24px 0;
+  margin: 0 0 var(--space-6, 24px) 0;
   max-width: 680px;
   line-height: 1.6;
 }
@@ -196,7 +196,7 @@
 .browse-layout {
   display: grid;
   grid-template-columns: 280px 1fr;
-  gap: 28px;
+  gap: var(--space-6, 24px);
   align-items: flex-start;
 }
 

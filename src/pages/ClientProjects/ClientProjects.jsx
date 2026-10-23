@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 import './ClientProjects.css';
 import DashboardNavbar from '../../components/DashboardNavbar/DashboardNavbar';
 import Footer from '../../components/Footer';
@@ -24,13 +24,24 @@ import useLoader from '../../hooks/useLoader';
 
 const ClientProjects = () => {
   const { user } = useAuth();
+  const location = useLocation();
 
   const [projects, setProjects] = useState([]);
   const [activeTab, setActiveTab] = useState('All');
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
-  const [actionNotice, setActionNotice] = useState('');
+  const [actionNotice, setActionNotice] = useState(
+    location.state?.projectSuccessMessage || ''
+  );
   const [actionError, setActionError] = useState('');
+
+  useEffect(() => {
+    if (location.state?.projectSuccessMessage) {
+      const timer = setTimeout(() => setActionNotice(''), 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [location.state?.projectSuccessMessage]);
+
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     title: '',

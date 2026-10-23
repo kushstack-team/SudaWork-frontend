@@ -4,7 +4,7 @@
   min-height: calc(100dvh - 74px);
   display: flex;
   align-items: center;
-  padding: 60px 50px;
+  padding: var(--space-9, 64px) var(--space-8, 48px);
   text-align: right;
   direction: inherit;
   box-sizing: border-box;
@@ -21,7 +21,7 @@
   flex-direction: column;
   align-items: flex-start;
   margin-right: 0 !important;
-  gap: 36px;
+  gap: var(--space-7, 32px);
 }
 
 [dir="ltr"] .hero-container {
@@ -40,6 +40,204 @@
 
 .hero-headline .accent-text {
   color: var(--color-white);
+}
+
+.hero-description {
+  font-family: var(--font-primary);
+  font-size: 19px;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.92);
+  margin: 0;
+  max-width: 680px;
+}
+
+/* Primary Neon CTA Button for Project Owners */
+@property --sw-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes sw-spin {
+  to {
+    --sw-angle: 360deg;
+  }
+}
+
+.hero-cta-wrapper {
+  margin-top: var(--space-2, 8px);
+  margin-bottom: var(--space-2, 8px);
+  padding: 6px 4px;
+  display: flex;
+  align-items: center;
+}
+
+/* Wrapper holds the soft outer neon glow behind the button */
+.sw-cta-wrap {
+  position: relative;
+  display: inline-flex;
+  isolation: isolate;
+  border-radius: 9999px;
+  transition: transform 200ms ease;
+  vertical-align: middle;
+}
+
+/* Glow: strictly behind the button, outside its edge only */
+.sw-cta-wrap::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  z-index: -1;
+  pointer-events: none;
+  background: conic-gradient(
+    from var(--sw-angle),
+    transparent 0deg,
+    var(--cta-neon, #00C685) 70deg,
+    var(--cta-neon-light, #7DFFC9) 100deg,
+    transparent 160deg,
+    transparent 360deg
+  );
+  filter: blur(14px);
+  opacity: 0.65;
+  animation: sw-spin 3s linear infinite;
+  transition: opacity 200ms ease, filter 200ms ease;
+}
+
+/* Button: solid opaque #00251B fill inside padding-box, moving light strictly in the 3px border-box */
+.sw-cta,
+.hero-cta-neon {
+  --current-cta-fill: var(--cta-fill, #00251B);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  border-radius: 9999px;
+  border: 3px solid transparent;
+  color: var(--cta-text, #ffffff) !important;
+  font-family: var(--font-primary);
+  font-size: 19px;
+  font-weight: 700;
+  text-decoration: none !important;
+  min-height: 56px;
+  padding: 0 40px;
+  box-sizing: border-box;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  background:
+    linear-gradient(var(--current-cta-fill), var(--current-cta-fill)) padding-box,
+    conic-gradient(
+      from var(--sw-angle),
+      var(--cta-ring-idle, #0B6B4A) 0deg,
+      var(--cta-neon, #00C685) 70deg,
+      var(--cta-neon-light, #7DFFC9) 100deg,
+      var(--cta-ring-idle, #0B6B4A) 160deg,
+      var(--cta-ring-idle, #0B6B4A) 360deg
+    ) border-box;
+  background-origin: padding-box, border-box;
+  background-clip: padding-box, border-box;
+  animation: sw-spin 3s linear infinite;
+  transition: transform 200ms ease, box-shadow 200ms ease;
+}
+
+/* Hover & Active Interactions */
+.sw-cta-wrap:hover {
+  transform: translateY(-2px);
+}
+
+.sw-cta-wrap:hover::before {
+  opacity: 0.95;
+  filter: blur(18px);
+}
+
+.sw-cta-wrap:hover .sw-cta,
+.sw-cta:hover {
+  --current-cta-fill: var(--cta-fill-hover, #00362A);
+}
+
+.sw-cta-wrap:active {
+  transform: translateY(0);
+}
+
+.sw-cta:focus-visible,
+.hero-cta-neon:focus-visible {
+  outline: 2px solid var(--cta-neon-light, #7DFFC9);
+  outline-offset: 4px;
+  box-shadow: 0 0 24px rgba(0, 198, 133, 0.7);
+}
+
+.sw-cta .cta-text,
+.hero-cta-neon .cta-text {
+  color: var(--cta-text, #ffffff);
+  display: inline-block;
+  line-height: 1;
+  font-weight: 700;
+  opacity: 1;
+  z-index: 1;
+}
+
+.sw-cta .cta-arrow,
+.hero-cta-neon .cta-arrow {
+  font-size: 20px;
+  color: var(--cta-arrow, #7DFFC9);
+  transition: transform 200ms ease;
+  z-index: 1;
+}
+
+.sw-cta-wrap:hover .cta-arrow {
+  transform: translateX(-4px);
+}
+
+[dir="ltr"] .sw-cta .cta-arrow,
+[dir="ltr"] .hero-cta-neon .cta-arrow {
+  transform: rotate(180deg);
+}
+
+[dir="ltr"] .sw-cta-wrap:hover .cta-arrow {
+  transform: rotate(180deg) translateX(-4px);
+}
+
+/* Accessibility: Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .sw-cta-wrap::before,
+  .sw-cta,
+  .hero-cta-neon {
+    animation: none !important;
+  }
+  .sw-cta-wrap::before {
+    background: var(--cta-neon, #00C685);
+    filter: blur(12px);
+    opacity: 0.5;
+  }
+  .sw-cta,
+  .hero-cta-neon {
+    border-color: var(--cta-neon, #00C685);
+    background: var(--cta-fill, #00251B);
+  }
+  .sw-cta-wrap,
+  .sw-cta-wrap:hover {
+    transform: none !important;
+  }
+}
+
+/* Fallback for browsers without @property support */
+@supports not at-rule(@property) {
+  .sw-cta-wrap::before,
+  .sw-cta,
+  .hero-cta-neon {
+    animation: none !important;
+  }
+  .sw-cta-wrap::before {
+    background: var(--cta-neon, #00C685);
+    filter: blur(12px);
+    opacity: 0.5;
+  }
+  .sw-cta,
+  .hero-cta-neon {
+    border-color: var(--cta-neon, #00C685);
+    background: var(--cta-fill, #00251B);
+  }
 }
 
 .hero-search-wrapper {
@@ -113,7 +311,7 @@
 
 @media (max-width: 992px) {
   .hero {
-    padding: 60px 30px;
+    padding: var(--space-8, 48px) var(--space-6, 24px);
   }
 
   .hero-headline {
@@ -128,14 +326,73 @@
 @media (max-width: 768px) {
   .hero {
     min-height: auto;
-    padding: 50px 16px;
+    padding: var(--space-8, 48px) var(--space-4, 16px);
   }
   
   .hero-headline {
     font-size: 32px;
   }
 
+  .hero-description {
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
   .hero-container {
-    gap: 24px;
+    gap: var(--space-6, 24px);
+  }
+
+  .hero-cta-wrapper {
+    width: auto;
+    margin-top: 4px;
+    margin-bottom: 4px;
+  }
+
+  .sw-cta-wrap {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .sw-cta-wrap::before {
+    filter: blur(10px);
+    inset: -3px;
+  }
+
+  .sw-cta,
+  .hero-cta-neon {
+    width: auto;
+    min-height: 48px;
+    padding: 0 24px;
+    font-size: 16px;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .sw-cta .cta-arrow,
+  .hero-cta-neon .cta-arrow {
+    font-size: 18px;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-headline {
+    font-size: 28px;
+  }
+
+  .hero-description {
+    font-size: 15px;
+  }
+
+  .sw-cta,
+  .hero-cta-neon {
+    min-height: 44px;
+    padding: 0 20px;
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .sw-cta .cta-arrow,
+  .hero-cta-neon .cta-arrow {
+    font-size: 16px;
   }
 }

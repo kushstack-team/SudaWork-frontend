@@ -204,11 +204,9 @@ export default function AppRoutes() {
         <Route
           path="/post-project"
           element={
-            <ProtectedRoute allowedRoles={['client']}>
-              <FeatureRoute feature={FEATURES.PROJECT_POSTING}>
-                <PostProject />
-              </FeatureRoute>
-            </ProtectedRoute>
+            <FeatureRoute feature={FEATURES.PROJECT_POSTING}>
+              <PostProject />
+            </FeatureRoute>
           }
         />
         <Route

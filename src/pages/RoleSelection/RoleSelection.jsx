@@ -68,8 +68,7 @@ const RoleSelection = () => {
           <RoleCard
             id="role-client"
             roleValue="client"
-            titleLine1="انا عميل ابحث"
-            titleLine2="عن مشروع"
+            titleLine1="أنا صاحب عمل"
             icon={<ClientIcon size={58} />}
             selected={selectedRole === 'client'}
             onClick={() => handleRoleChange('client')}

@@ -66,9 +66,9 @@
   background-color: #ffffff;
   border-radius: 20px;
   border: 1px solid #e2e8f0;
-  padding: 36px;
+  padding: var(--space-7, 32px);
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.04);
-  margin-bottom: 36px;
+  margin-bottom: var(--space-7, 32px);
 }
 
 .project-card-header {
@@ -443,25 +443,36 @@
 }
 
 .prop-badge {
-  font-size: 0.78rem;
-  padding: 2px 8px;
-  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: 13px;
   font-weight: 600;
+  line-height: 1.3;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  opacity: 1;
+  white-space: nowrap;
 }
 
 .badge-pending {
-  background-color: #fefce8;
-  color: #854d0e;
+  background-color: var(--badge-orange-bg, #FFF1D6);
+  color: var(--badge-orange-text, #8A4600);
+  border-color: var(--badge-orange-border, #F0B24F);
 }
 
 .badge-accepted {
-  background-color: #ecfdf5;
-  color: #065f46;
+  background-color: var(--badge-green-bg, #E6F9F1);
+  color: var(--badge-green-text, #004D34);
+  border-color: var(--badge-green-border, #7FD9B5);
 }
 
 .badge-rejected {
-  background-color: #fef2f2;
-  color: #b91c1c;
+  background-color: var(--badge-red-bg, #FEE2E2);
+  color: var(--badge-red-text, #991B1B);
+  border-color: var(--badge-red-border, #FCA5A5);
 }
 
 .proposal-letter-body {
@@ -858,8 +869,8 @@
 .form-group-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 18px;
+  gap: var(--space-4, 16px);
+  margin-bottom: var(--space-4, 16px);
 }
 
 @media (max-width: 540px) {
@@ -869,7 +880,7 @@
 }
 
 .form-group {
-  margin-bottom: 18px;
+  margin-bottom: var(--space-5, 20px);
 }
 
 .form-label {

@@ -25,14 +25,14 @@
   border: 1px solid #e2e8f0;
   box-shadow: 0 4px 12px -2px rgba(0, 0, 0, 0.05);
   overflow: hidden;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-7, 32px);
 }
 
 .client-hero-body {
-  padding: 36px 36px 28px 36px;
+  padding: var(--space-7, 32px);
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: var(--space-6, 24px);
   flex-wrap: wrap;
 }
 
@@ -114,12 +114,12 @@
 .client-stats-strip {
   border-top: 1px solid #f1f5f9;
   background-color: #fafbfc;
-  padding: 16px 36px;
+  padding: var(--space-4, 16px) var(--space-7, 32px);
   display: flex;
   align-items: center;
   justify-content: space-around;
   flex-wrap: wrap;
-  gap: 16px;
+  gap: var(--space-4, 16px);
 }
 
 .client-stat-item {
@@ -144,26 +144,26 @@
 .client-content-layout {
   display: grid;
   grid-template-columns: 1fr 300px;
-  gap: 28px;
+  gap: var(--space-6, 24px);
 }
 
 .client-main-col {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6, 24px);
 }
 
 .client-side-col {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--space-6, 24px);
 }
 
 .client-section-box {
   background-color: #ffffff;
   border-radius: 16px;
   border: 1px solid #e2e8f0;
-  padding: 28px;
+  padding: var(--space-7, 32px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
 }
 
@@ -171,8 +171,8 @@
   font-size: 1.2rem;
   font-weight: 700;
   color: #1e293b;
-  margin: 0 0 16px 0;
-  padding-bottom: 10px;
+  margin: 0 0 var(--space-4, 16px) 0;
+  padding-bottom: var(--space-3, 12px);
   border-bottom: 1.5px solid #f1f5f9;
 }
 
@@ -343,12 +343,12 @@
 
 @media (max-width: 640px) {
   .client-profile-main {
-    padding: 20px 14px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
   }
 
   .client-hero-body {
-    padding: 20px 16px;
-    gap: 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
+    gap: var(--space-4, 16px);
     flex-direction: column;
     align-items: flex-start;
   }
@@ -368,14 +368,14 @@
   }
 
   .client-stats-strip {
-    padding: 14px 16px;
+    padding: var(--space-4, 16px);
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
+    gap: var(--space-3, 12px);
   }
 
   .client-section-box {
-    padding: 20px 16px;
+    padding: var(--space-5, 20px) var(--space-4, 16px);
   }
 
   .section-box-heading {

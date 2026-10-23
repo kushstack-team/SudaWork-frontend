@@ -256,7 +256,7 @@ const Login = () => {
             <p className="login-footer-text">
               <span>ليس لديك حساب بعد؟ </span>
               <Link 
-                to={roleParam === 'client' ? '/register/client' : roleParam === 'freelancer' ? '/register/freelancer' : '/role-selection'} 
+                to={`${roleParam === 'client' ? '/register/client' : roleParam === 'freelancer' ? '/register/freelancer' : '/role-selection'}${safeRedirect ? `${roleParam ? '&' : '?'}redirect=${encodeURIComponent(safeRedirect)}` : ''}`} 
                 className="login-signup-link"
               >
                 {roleParam === 'client' ? 'أنشئ حساب عميل الآن' : roleParam === 'freelancer' ? 'أنشئ حساب مستقل الآن' : 'انضم الآن'}

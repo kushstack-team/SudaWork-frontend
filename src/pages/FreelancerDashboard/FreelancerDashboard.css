@@ -13,6 +13,22 @@
   color: #1e293b;
 }
 
+/* Dashboard Content Layout */
+.dashboard-main-content {
+  flex: 1;
+  width: 100%;
+  padding: 32px 0 48px 0;
+  box-sizing: border-box;
+}
+
+.dashboard-content-container {
+  width: 100%;
+  max-width: 1320px;
+  margin: 0 auto;
+  padding: 0 24px;
+  box-sizing: border-box;
+}
+
 /* Hero Banner */
 .freelancer-hero-banner {
   margin-bottom: 32px;
@@ -21,20 +37,20 @@
 .freelancer-hero-card {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(135deg, #00543B 0%, #0B6E4F 60%, #064e3b 100%);
+  background: var(--color-primary-dark, #00543B);
   border-radius: 20px;
   padding: 36px 40px;
   color: #ffffff;
   box-shadow: 0 10px 25px rgba(0, 84, 59, 0.18);
 }
 
-.hero-badge {
+.freelancer-hero-banner .hero-badge {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   background: rgba(0, 220, 172, 0.18);
   border: 1px solid rgba(0, 220, 172, 0.35);
-  color: #00DCAC;
+  color: #ffffff;
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 0.85rem;
@@ -42,8 +58,13 @@
   margin-bottom: 16px;
 }
 
-.hero-badge-icon {
+.freelancer-hero-banner .hero-badge-icon {
   font-size: 1rem;
+  color: #ffffff;
+}
+
+.freelancer-hero-banner .hero-badge span {
+  color: #ffffff;
 }
 
 .freelancer-hero-title {
@@ -205,25 +226,31 @@
 }
 
 .metric-tag {
-  font-size: 0.78rem;
-  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: 9999px;
+  border: 1px solid transparent;
+  opacity: 1;
+  white-space: nowrap;
 }
 
-.metric-tag.success {
-  background: #ecfdf5;
-  color: #065f46;
-}
-
+.metric-tag.success,
 .metric-tag.info {
-  background: #f0fdf4;
-  color: #15803d;
+  background-color: var(--badge-green-bg, #E6F9F1);
+  color: var(--badge-green-text, #004D34);
+  border-color: var(--badge-green-border, #7FD9B5);
 }
 
 .metric-tag.warning {
-  background: #fffbeb;
-  color: #b45309;
+  background-color: var(--badge-orange-bg, #FFF1D6);
+  color: var(--badge-orange-text, #8A4600);
+  border-color: var(--badge-orange-border, #F0B24F);
 }
 
 .metric-title {
@@ -603,6 +630,14 @@
 }
 
 @media (max-width: 768px) {
+  .dashboard-main-content {
+    padding: 20px 0 36px 0;
+  }
+
+  .dashboard-content-container {
+    padding: 0 16px;
+  }
+
   .freelancer-hero-card {
     padding: 24px 20px;
     border-radius: 16px;

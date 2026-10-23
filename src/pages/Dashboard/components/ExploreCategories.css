@@ -4,7 +4,7 @@
 
 .explore-categories-section {
   width: 100%;
-  margin-bottom: 48px;
+  margin-bottom: var(--space-8, 48px);
 }
 
 /* Header */
@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 22px;
+  margin-bottom: var(--space-6, 24px);
 }
 
 .explore-title {
@@ -25,7 +25,7 @@
 .explore-nav-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-3, 12px);
 }
 
 .explore-view-all-btn {

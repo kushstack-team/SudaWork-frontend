@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import './ClientRegister.css';
 import Logo from '../../components/Logo/Logo';
 import { useAuth } from '../../context/auth';
@@ -37,8 +37,14 @@ const EyeIcon = ({ visible }) => (
 
 const ClientRegister = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { register } = useAuth();
-  const google = useGoogleAuthFlow({ role: 'client' });
+
+  const queryParams = new URLSearchParams(location.search);
+  const redirectParam = queryParams.get('redirect');
+  const safeRedirect = redirectParam && redirectParam.startsWith('/') && !redirectParam.startsWith('//') ? redirectParam : null;
+
+  const google = useGoogleAuthFlow({ role: 'client', redirectTo: safeRedirect || undefined });
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -82,7 +88,7 @@ const ClientRegister = () => {
         password: formData.password,
         role: 'client',
       });
-      navigate('/verify-email', { replace: true, state: { emailSent: created.verificationEmailSent } });
+      navigate('/verify-email', { replace: true, state: { emailSent: created.verificationEmailSent, redirect: safeRedirect } });
     } catch (err) {
       if (err.code === 'EMAIL_IN_USE') {
         setErrors((prev) => ({ ...prev, email: err.message }));
@@ -261,7 +267,10 @@ const ClientRegister = () => {
 
             <p className="client-register-footer-text">
               <span>لديك حساب بالفعل؟ </span>
-              <Link to="/login" className="client-register-login-link">
+              <Link
+                to={`/login?role=client${safeRedirect ? `&redirect=${encodeURIComponent(safeRedirect)}` : ''}`}
+                className="client-register-login-link"
+              >
                 سجل الدخول
               </Link>
             </p>

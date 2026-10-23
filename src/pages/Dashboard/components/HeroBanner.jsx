@@ -49,7 +49,7 @@ const HeroBanner = ({ userName = 'طارق' }) => {
 
           {/* Action CTAs */}
           <div className="hero-banner-actions">
-            <Link to="/post-project" className="btn-hero-primary">
+            <Link to="/post-project" className="btn-hero-secondary">
               <FiPlusCircle className="btn-icon" />
               <span>انشر مشروعاً جديداً</span>
             </Link>
@@ -59,11 +59,6 @@ const HeroBanner = ({ userName = 'طارق' }) => {
               <span>تصفح دليل المستقلين</span>
             </Link>
           </div>
-        </div>
-
-        <div className="hero-banner-decorations">
-          <div className="decor-circle decor-circle-1" />
-          <div className="decor-circle decor-circle-2" />
         </div>
       </div>
     </section>
