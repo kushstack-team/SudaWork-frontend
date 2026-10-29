@@ -1,0 +1,16 @@
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /client-dashboard
+Disallow: /freelancer-dashboard
+Disallow: /client/
+Disallow: /freelancer/
+Disallow: /contracts
+Disallow: /messages
+Disallow: /disputes
+Disallow: /notifications
+Disallow: /reset-password/
+Disallow: /verify-email
+Disallow: /register/complete
+
+Sitemap: https://sudawork.com/sitemap.xml
