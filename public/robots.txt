@@ -13,4 +13,4 @@ Disallow: /reset-password/
 Disallow: /verify-email
 Disallow: /register/complete
 
-Sitemap: https://sudawork.com/sitemap.xml
+Sitemap: https://www.sudawork.com/sitemap.xml
