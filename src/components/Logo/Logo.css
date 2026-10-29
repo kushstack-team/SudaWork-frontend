@@ -44,7 +44,53 @@
   transition: color 0.15s ease;
 }
 
+/* Symbol (sized relative to the wordmark's font-size) */
+.sw-logo-mark {
+  width: 1.4em;
+  height: 1.4em;
+  flex-shrink: 0;
+  margin-inline-end: 0.4em;
+}
+
+.sw-logo-mark__tile {
+  fill: var(--color-logo-suda, #004D34);
+}
+
+.sw-logo-mark__top {
+  stroke: #FFFFFF;
+}
+
+.sw-logo-mark__top-cap {
+  fill: #FFFFFF;
+}
+
+.sw-logo-mark__bottom {
+  stroke: var(--color-logo-work, #00C685);
+}
+
+.sw-logo-mark__bottom-cap {
+  fill: var(--color-logo-work, #00C685);
+}
+
 /* Dark Backgrounds */
+.sw-logo--dark .sw-logo-mark__tile,
+.dark .sw-logo .sw-logo-mark__tile,
+[data-theme='dark'] .sw-logo .sw-logo-mark__tile {
+  fill: #FFFFFF;
+}
+
+.sw-logo--dark .sw-logo-mark__top,
+.dark .sw-logo .sw-logo-mark__top,
+[data-theme='dark'] .sw-logo .sw-logo-mark__top {
+  stroke: var(--color-logo-suda, #004D34);
+}
+
+.sw-logo--dark .sw-logo-mark__top-cap,
+.dark .sw-logo .sw-logo-mark__top-cap,
+[data-theme='dark'] .sw-logo .sw-logo-mark__top-cap {
+  fill: var(--color-logo-suda, #004D34);
+}
+
 .sw-logo--dark .sw-logo__suda,
 .dark .sw-logo .sw-logo__suda,
 [data-theme='dark'] .sw-logo .sw-logo__suda {

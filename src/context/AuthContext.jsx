@@ -46,7 +46,7 @@ export const AuthProvider = ({ children }) => {
     setSessionExpiredHandler(() => {
       try {
         sessionStorage.removeItem(AUTH_PROVIDER_STORAGE_KEY);
-      } catch {}
+      } catch { /* storage unavailable (e.g. private mode) */ }
       setUser(null);
     });
     if (hasStoredSession()) restore();
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
     const { user: loggedUser } = await api.auth.login(email, password);
     try {
       sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'local');
-    } catch {}
+    } catch { /* storage unavailable (e.g. private mode) */ }
     setUser(loggedUser);
     return loggedUser;
   };
@@ -66,7 +66,7 @@ export const AuthProvider = ({ children }) => {
     const { user: newUser, verificationEmailSent } = await api.auth.register({ fullName: name, email: email.trim(), password, role });
     try {
       sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'local');
-    } catch {}
+    } catch { /* storage unavailable (e.g. private mode) */ }
     setUser(newUser);
     return { ...newUser, verificationEmailSent };
   };
@@ -78,7 +78,7 @@ export const AuthProvider = ({ children }) => {
     if (result.status === 'AUTHENTICATED') {
       try {
         sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'google');
-      } catch {}
+      } catch { /* storage unavailable (e.g. private mode) */ }
       const gUser = {
         ...result.user,
         isGoogle: true,
@@ -94,7 +94,7 @@ export const AuthProvider = ({ children }) => {
     const result = await api.auth.googleComplete({ registrationToken, role, fullName });
     try {
       sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'google');
-    } catch {}
+    } catch { /* storage unavailable (e.g. private mode) */ }
     const gUser = {
       ...result.user,
       isGoogle: true,
@@ -117,7 +117,7 @@ export const AuthProvider = ({ children }) => {
     } finally {
       try {
         sessionStorage.removeItem(AUTH_PROVIDER_STORAGE_KEY);
-      } catch {}
+      } catch { /* storage unavailable (e.g. private mode) */ }
       setUser(null);
     }
   };

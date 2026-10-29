@@ -89,7 +89,8 @@ export default function AdminDisputesTab({
                         <span>{disp.status === 'Open' ? 'بدء المراجعة / إصدار قرار' : 'إصدار قرار التحكيم'}</span>
                       </button>
                     )}
-                    {onDeleteReport && (
+                    {/* The API only deletes resolved cases; open disputes may still affect escrow. */}
+                    {onDeleteReport && disp.status === 'Resolved' && (
                       <button
                         type="button"
                         className="dispute-delete-btn"

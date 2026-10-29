@@ -580,7 +580,13 @@ const ProjectDetails = () => {
                 <div className="no-proposals-card">
                   <FiAlertCircle className="empty-icon" />
                   <h3>لم يتم تقديم عروض بعد</h3>
-                  <p>تم نشر مشروعك بنجاح وسيبدأ المستقلون المؤهلون في إرسال عروضهم قريباً.</p>
+                  <p>
+                    {project.status === PROJECT_STATUS.PENDING_REVIEW
+                      ? 'سيظهر مشروعك للمستقلين ويبدأ في استقبال العروض فور موافقة الإدارة عليه.'
+                      : project.status === PROJECT_STATUS.REJECTED
+                        ? 'عدّل المشروع وأعد إرساله للمراجعة ليتمكن المستقلون من تقديم عروضهم.'
+                        : 'تم نشر مشروعك بنجاح وسيبدأ المستقلون المؤهلون في إرسال عروضهم قريباً.'}
+                  </p>
                 </div>
               ) : (
                 <div className="proposals-cards-list">

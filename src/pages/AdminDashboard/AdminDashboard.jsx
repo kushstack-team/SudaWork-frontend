@@ -435,7 +435,7 @@ const AdminDashboard = () => {
     setConfirmModal({
       isOpen: true,
       title: 'حذف البلاغ نهائياً',
-      message: `هل أنت متأكد من حذف البلاغ #${disp.id.slice(0, 8)} (${disp.reason}) نهائياً؟ هذا الإجراء لا يمكن التراجع عنه.`,
+      message: `هل أنت متأكد من حذف البلاغ #${disp.id.slice(0, 8)} (${disp.reason}) نهائياً؟ سيتم الاحتفاظ بنسخة منه في سجل العمليات، ولا يمكن التراجع عن الحذف.`,
       confirmText: 'حذف البلاغ',
       cancelText: 'إلغاء',
       type: 'danger',

@@ -1,12 +1,14 @@
 import { Link } from 'react-router-dom';
+import LogoMark from './LogoMark';
 import './Logo.css';
 
 /**
  * Reusable Sudawork Wordmark Logo Component
  * 
- * Pure HTML/CSS text wordmark: "Suda" (#004D34) + "work" (#00C685).
- * Uses Google Font 'Outfit' (weight: 600).
+ * Symbol + text wordmark: "Suda" (#004D34) + "work" (#00C685).
+ * Uses Google Font 'Outfit' (weight: 600); the symbol scales with font-size.
  * Supports dark backgrounds via `theme="dark"` (renders "Suda" as #FFFFFF).
+ * Pass `showMark={false}` for the text-only wordmark.
  */
 const Logo = ({
   to = '/',
@@ -14,6 +16,7 @@ const Logo = ({
   theme = 'light',
   size = 'md',
   ariaLabel = 'Sudawork',
+  showMark = true,
   ...rest
 }) => {
   const isDark = theme === 'dark';
@@ -26,6 +29,7 @@ const Logo = ({
 
   const content = (
     <>
+      {showMark && <LogoMark />}
       <span className="sw-logo__suda">Suda</span><span className="sw-logo__work">work</span>
     </>
   );

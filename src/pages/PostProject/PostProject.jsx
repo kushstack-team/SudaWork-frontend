@@ -7,12 +7,12 @@ import Footer from '../../components/Footer';
 import { useAuth } from '../../context/auth';
 import { api } from '../../services/api';
 import useLoader from '../../hooks/useLoader';
+import { PROJECT_STATUS } from '../../constants/projectStatuses';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import {
   saveProjectDraft,
   getProjectDraft,
   clearProjectDraft,
-  hasProjectDraft,
 } from '../../utils/projectDraft';
 import {
   FiCheck,
@@ -30,6 +30,8 @@ import {
   FiCheckCircle,
   FiInfo,
 } from 'react-icons/fi';
+
+const SUBMITTED_FOR_REVIEW_MESSAGE = 'تم استلام مشروعك وإرساله لمراجعة الإدارة، وسيُنشر للمستقلين فور الموافقة عليه.';
 
 const PostProject = () => {
   const { user, logout } = useAuth();
@@ -139,7 +141,7 @@ const PostProject = () => {
             clearProjectDraft();
             navigate('/client/projects', {
               replace: true,
-              state: { projectSuccessMessage: 'تم استلام مشروعك بنجاح ونشره على منصة سوداوورك!' }
+              state: { projectSuccessMessage: SUBMITTED_FOR_REVIEW_MESSAGE }
             });
           })
           .catch((err) => {
@@ -317,13 +319,18 @@ const PostProject = () => {
 
       clearProjectDraft();
 
+      // New projects always wait for admin approval; an edit to the content of
+      // a published project also sends it back for review.
+      let projectSuccessMessage = SUBMITTED_FOR_REVIEW_MESSAGE;
+      if (isEditing) {
+        projectSuccessMessage = result?.status === PROJECT_STATUS.PENDING_REVIEW
+          ? 'تم حفظ التعديلات وإعادة إرسال المشروع لمراجعة الإدارة، وسيظهر للمستقلين فور الموافقة عليه.'
+          : 'تم حفظ تعديلات المشروع بنجاح!';
+      }
+
       navigate('/client/projects', {
         replace: true,
-        state: {
-          projectSuccessMessage: isEditing
-            ? 'تم حفظ تعديلات المشروع بنجاح!'
-            : 'تم استلام مشروعك بنجاح ونشره على منصة سوداوورك!'
-        }
+        state: { projectSuccessMessage }
       });
     } catch (err) {
       submittingRef.current = false;
