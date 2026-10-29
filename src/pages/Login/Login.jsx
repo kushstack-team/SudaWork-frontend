@@ -8,7 +8,6 @@ import { validateLoginForm } from '../../utils/validators';
 import { tokens } from '../../services/api/client';
 import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
 import useGoogleAuthFlow from '../../hooks/useGoogleAuthFlow';
-import { FiBriefcase, FiCode } from 'react-icons/fi';
 
 
 const EyeIcon = ({ visible }) => (
@@ -116,22 +115,10 @@ const Login = () => {
 
       {/* Main Container */}
       <main className="login-main">
-        {roleParam === 'client' && (
-          <div className="login-role-badge client">
-            <FiBriefcase className="role-badge-icon" />
-            <span>دخول أصحاب الأعمال (العملاء)</span>
-          </div>
-        )}
-        {roleParam === 'freelancer' && (
-          <div className="login-role-badge freelancer">
-            <FiCode className="role-badge-icon" />
-            <span>دخول المستقلين والمحترفين</span>
-          </div>
-        )}
 
         <h1 className="login-title">
           {roleParam === 'client'
-            ? 'تسجيل الدخول كعميل'
+            ? 'تسجيل الدخول كصاحب مشروع'
             : roleParam === 'freelancer'
             ? 'تسجيل الدخول كمستقل'
             : 'تسجيل الدخول إلى سوداوورك'}

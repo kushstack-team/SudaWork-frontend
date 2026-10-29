@@ -87,7 +87,7 @@ const HireTalentDropdown = ({ isOpen, onClose, lang = 'ar' }) => {
           className="upwork-dropdown-all-link"
           onClick={onClose}
         >
-          <span>{isRtl ? 'تسجيل الدخول كعميل' : 'Log in as Client'}</span>
+          <span>{isRtl ? 'تسجيل الدخول كصاحب مشروع' : 'Log in as Project Owner'}</span>
           <Arrow className="footer-link-arrow" />
         </Link>
       </div>
