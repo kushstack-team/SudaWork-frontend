@@ -301,6 +301,10 @@
 }
 
 .fund-now-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
   height: 42px;
   padding: 0 20px;
   background-color: #854d0e;
@@ -356,18 +360,21 @@
 .empty-dollar-icon {
   font-size: 3rem;
   color: #cbd5e1;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
 }
 
 .no-payments-box h3 {
-  margin: 0 0 6px 0;
+  margin: 0 0 10px 0;
   font-size: 1.25rem;
+  font-weight: 700;
   color: #1e293b;
 }
 
 .no-payments-box p {
-  margin: 0;
+  margin: 0 auto 20px auto;
   font-size: 0.95rem;
+  line-height: 1.6;
+  max-width: 520px;
 }
 
 .table-responsive {

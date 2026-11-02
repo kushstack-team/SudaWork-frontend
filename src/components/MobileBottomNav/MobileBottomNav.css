@@ -260,6 +260,13 @@
   color: #dc2626;
 }
 
-.drawer-nav-link.logout-btn:hover {
+.drawer-nav-link.logout-btn:hover,
+.drawer-nav-link.logout-btn:active {
   background-color: #fef2f2;
+  color: #b91c1c;
+}
+
+.drawer-nav-link.logout-btn:hover .drawer-nav-icon,
+.drawer-nav-link.logout-btn:active .drawer-nav-icon {
+  color: #b91c1c;
 }

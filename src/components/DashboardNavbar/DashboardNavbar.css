@@ -273,13 +273,21 @@
   color: #dc2626;
 }
 
-.dropdown-logout-btn:hover {
+.dropdown-logout-btn .dropdown-icon {
+  color: #dc2626;
+}
+
+.dropdown-logout-btn:hover,
+.dropdown-logout-btn:active {
   background-color: #fef2f2;
   color: #b91c1c;
 }
 
-.dropdown-logout-btn .dropdown-icon {
-  color: #dc2626;
+.dropdown-logout-btn:hover .dropdown-icon,
+.dropdown-logout-btn:active .dropdown-icon,
+.dropdown-menu-item.dropdown-logout-btn:hover .dropdown-icon,
+.dropdown-menu-item.dropdown-logout-btn:active .dropdown-icon {
+  color: #b91c1c;
 }
 
 /* Icon Buttons */

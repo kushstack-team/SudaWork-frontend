@@ -551,6 +551,19 @@
   margin-bottom: 12px;
 }
 
+.feed-empty-state h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 10px;
+}
+
+.feed-empty-state p {
+  font-size: 0.95rem;
+  color: #64748b;
+  line-height: 1.6;
+}
+
 .btn-browse-empty {
   display: inline-block;
   margin-top: 16px;
