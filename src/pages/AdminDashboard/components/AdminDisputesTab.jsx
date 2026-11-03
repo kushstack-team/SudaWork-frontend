@@ -69,6 +69,12 @@ export default function AdminDisputesTab({
                         <span>بلاغ عن مستخدم: {disp.reportedUserName}</span>
                       </Link>
                     )}
+                    {disp.targetType === 'general' && (
+                      <span className="contract-link">
+                        <FiFileText />
+                        <span>بلاغ عام (غير مرتبط بعقد أو مستخدم)</span>
+                      </span>
+                    )}
                     <span className="contract-link">المبلّغ: {disp.reporterName}</span>
                     {disp.contractId && (
                       <Link to={`/contracts/${disp.contractId}`} className="contract-link">

@@ -8,6 +8,7 @@ import { useAuth } from '../../context/auth';
 import { api } from '../../services/api';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import ReportModal from '../../components/ReportModal/ReportModal';
+import VerifiedBadge from '../../components/VerifiedBadge/VerifiedBadge';
 import { usePlatform } from '../../context/platform';
 import { FEATURES } from '../../constants/features';
 import { FiFlag } from 'react-icons/fi';
@@ -126,7 +127,9 @@ const ClientProfile = () => {
               </div>
 
               <div className="client-identity">
-                <h1 className="client-company-name">{companyName}</h1>
+                <h1 className="client-company-name">
+                  {companyName} {clientUser?.isVerified && <VerifiedBadge />}
+                </h1>
                 <p className="client-manager-name">مسؤول الحساب: {clientUser?.fullName}</p>
                 
                 <div className="client-meta-strip">

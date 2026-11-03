@@ -307,6 +307,27 @@ const AdminDashboard = () => {
     });
   };
 
+  const handleToggleVerified = (targetUser) => {
+    const verify = !targetUser.isVerified;
+    setConfirmModal({
+      isOpen: true,
+      title: verify ? 'توثيق الحساب' : 'إزالة التوثيق',
+      message: verify
+        ? `منح ${targetUser.fullName} علامة "موثق"؟ ستظهر العلامة على ملفه العام، فامنحها للحسابات الموثوقة فقط.`
+        : `إزالة علامة التوثيق من حساب ${targetUser.fullName}؟`,
+      confirmText: 'تأكيد',
+      cancelText: 'إلغاء',
+      type: verify ? 'success' : 'warning',
+      onConfirm: () => {
+        closeConfirm();
+        runAction(
+          () => (verify ? api.admin.verifyUser(targetUser.id) : api.admin.unverifyUser(targetUser.id)),
+          verify ? `تم توثيق حساب ${targetUser.fullName}.` : `تمت إزالة التوثيق من حساب ${targetUser.fullName}.`
+        );
+      }
+    });
+  };
+
   const handleDeleteUser = (targetUser) => {
     setConfirmModal({
       isOpen: true,
@@ -928,6 +949,7 @@ const AdminDashboard = () => {
               setUserRoleFilter={setUserRoleFilter}
               onToggleUserStatus={handleToggleUserStatus}
               onDeleteUser={handleDeleteUser}
+              onToggleVerified={handleToggleVerified}
               currentUserId={user?.id}
             />
           )}
@@ -1082,7 +1104,7 @@ const AdminDashboard = () => {
                     >
                       <option value="none">بدون إجراء إضافي</option>
                       <option value="warning">توجيه تحذير</option>
-                      <option value="suspend_user">تعليق حساب الطرف المشكو في حقه</option>
+                      {selectedDispute.reportedUserId && <option value="suspend_user">تعليق حساب الطرف المشكو في حقه</option>}
                       {selectedDispute.targetType === 'contract' && <option value="cancel_contract">إلغاء العقد</option>}
                       {selectedDispute.targetType === 'project' && <option value="close_project">إيقاف المشروع</option>}
                     </select>

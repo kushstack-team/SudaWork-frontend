@@ -10,12 +10,12 @@ import { usePlatform } from '../../context/platform';
 import { FEATURES } from '../../constants/features';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import ReportModal from '../../components/ReportModal/ReportModal';
+import VerifiedBadge from '../../components/VerifiedBadge/VerifiedBadge';
 import { FiFlag } from 'react-icons/fi';
 import defaultAvatar from '../../assets/default-avatar.svg';
 import { 
   FiStar, 
   FiMapPin, 
-  FiCheckCircle, 
   FiBriefcase, 
   FiMessageSquare, 
   FiEdit,
@@ -130,9 +130,7 @@ const FreelancerProfile = () => {
               <div className="profile-identity-info">
                 <div className="identity-title-row">
                   <h1 className="freelancer-name">{displayName}</h1>
-                  <span className="verified-badge" title="حساب موثق">
-                    <FiCheckCircle /> موثق
-                  </span>
+                  {profile?.isVerified && <VerifiedBadge />}
                 </div>
 
                 <p className="freelancer-job-title">{displayTitle}</p>
@@ -250,8 +248,14 @@ const FreelancerProfile = () => {
                   <div className="portfolio-items-grid">
                     {profile.portfolio.map((item) => (
                       <div key={item.id} className="portfolio-gallery-item">
+                        {item.image && (
+                          <a href={item.image} target="_blank" rel="noreferrer" className="portfolio-item-image-link" title="عرض الصورة بالحجم الكامل">
+                            <img src={item.image} alt={item.title} className="portfolio-item-image" loading="lazy" />
+                          </a>
+                        )}
                         <div className="portfolio-item-content">
                           <h4 className="portfolio-item-title">{item.title}</h4>
+                          {item.description && <p className="portfolio-item-description">{item.description}</p>}
                           {item.link && (
                             <a
                               href={item.link}

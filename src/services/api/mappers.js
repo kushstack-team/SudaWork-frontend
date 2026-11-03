@@ -59,6 +59,11 @@ export const mapUser = (u) => u && ({
   avatar: resolveFileUrl(u.avatar_url || u.avatar),
   status: u.is_active === false ? 'suspended' : 'active',
   isActive: u.is_active !== false,
+  // Trust mark granted by the admins (not email verification).
+  isVerified: Boolean(u.is_verified ?? u.isVerified),
+  // Why an inactive account is inactive: SELF, ADMIN or DELETED.
+  deactivationType: u.deactivation_type || null,
+  isDeleted: Boolean(u.deleted_at),
   createdAt: u.created_at || u.createdAt,
   lastLoginAt: u.last_login_at || u.lastLoginAt,
   hasPassword: u.has_password !== undefined ? u.has_password : (u.hasPassword !== undefined ? u.hasPassword : true),
@@ -102,6 +107,7 @@ export const mapFreelancer = (row, extra = {}) => {
     userId: row.user_id || row.id,
     fullName: row.full_name,
     photo: resolveFileUrl(row.avatar_url),
+    isVerified: Boolean(row.is_verified),
     title: row.title || '',
     bio: row.bio || '',
     location: row.location || '',
@@ -126,7 +132,7 @@ export const mapPublicProfile = (data) => {
     return {
       user,
       profile: mapFreelancer(
-        { ...(data.profile || {}), user_id: data.user.id, full_name: data.user.full_name, avatar_url: data.user.avatar_url },
+        { ...(data.profile || {}), user_id: data.user.id, full_name: data.user.full_name, avatar_url: data.user.avatar_url, is_verified: data.user.is_verified },
         { skills: data.skills, portfolio: data.portfolio, completedProjects: data.stats?.completed_contracts, joinedAt: data.user.created_at }
       ),
     };

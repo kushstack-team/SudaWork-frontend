@@ -52,8 +52,8 @@ export const AuthProvider = ({ children }) => {
     if (hasStoredSession()) restore();
   }, [restore]);
 
-  const login = async (email, password) => {
-    const { user: loggedUser } = await api.auth.login(email, password);
+  const login = async (email, password, options) => {
+    const { user: loggedUser } = await api.auth.login(email, password, options);
     try {
       sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'local');
     } catch { /* storage unavailable (e.g. private mode) */ }
@@ -73,8 +73,8 @@ export const AuthProvider = ({ children }) => {
 
   // Resolves with the API result: { status: 'AUTHENTICATED', user, isNewUser } or
   // { status: 'NEEDS_PROFILE', registrationToken, missingFields, profile }.
-  const loginWithGoogle = async ({ credential, role }) => {
-    const result = await api.auth.google({ credential, role });
+  const loginWithGoogle = async ({ credential, role, reactivate }) => {
+    const result = await api.auth.google({ credential, role, reactivate });
     if (result.status === 'AUTHENTICATED') {
       try {
         sessionStorage.setItem(AUTH_PROVIDER_STORAGE_KEY, 'google');

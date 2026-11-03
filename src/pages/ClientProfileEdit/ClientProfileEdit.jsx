@@ -15,7 +15,8 @@ import {
   FiMapPin, 
   FiPhone, 
   FiEye,
-  FiFileText
+  FiFileText,
+  FiTrash2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 
@@ -63,9 +64,9 @@ const ClientProfileEdit = () => {
     e.target.value = '';
     if (!file) return;
     const MAX_LOGO_BYTES = 10 * 1024 * 1024; // 10MB
-    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setErrorMessage('صيغة الشعار غير مدعومة. يرجى اختيار ملف PNG أو JPG أو WEBP.');
+      setErrorMessage('صيغة الشعار غير مدعومة. يرجى اختيار ملف PNG أو JPG.');
       return;
     }
     if (file.size > MAX_LOGO_BYTES) {
@@ -78,6 +79,20 @@ const ClientProfileEdit = () => {
       const updatedUser = await api.profiles.uploadAvatar(file);
       setLogo(updatedUser.avatar || defaultLogo);
       setUser((prev) => (prev ? { ...prev, avatar: updatedUser.avatar } : prev));
+    } catch (err) {
+      setErrorMessage(err.message);
+    } finally {
+      setUploadingLogo(false);
+    }
+  };
+
+  const handleLogoRemove = async () => {
+    setUploadingLogo(true);
+    setErrorMessage('');
+    try {
+      await api.profiles.removeAvatar();
+      setLogo(defaultLogo);
+      setUser((prev) => (prev ? { ...prev, avatar: null } : prev));
     } catch (err) {
       setErrorMessage(err.message);
     } finally {
@@ -194,8 +209,14 @@ const ClientProfileEdit = () => {
                 <div className="logo-helper-text">
                   <span className="logo-main-label">شعار الشركة أو الصورة الشخصية</span>
                   <p className="logo-sub-label">
-                    {uploadingLogo ? 'جارٍ رفع الصورة...' : 'أضف شعار علامتك التجارية لتظهر بمظهر احترافي عند نشر المشاريع والتعامل مع المستقلين.'}
+                    {uploadingLogo ? 'جارٍ تحديث الصورة...' : 'أضف شعار علامتك التجارية لتظهر بمظهر احترافي عند نشر المشاريع والتعامل مع المستقلين.'}
                   </p>
+                  {logo !== defaultLogo && (
+                    <button type="button" className="photo-remove-btn" onClick={handleLogoRemove} disabled={uploadingLogo}>
+                      <FiTrash2 />
+                      <span>إزالة الصورة</span>
+                    </button>
+                  )}
                 </div>
               </div>
 

@@ -57,7 +57,7 @@
 .account-settings-actions {
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: var(--space-3, 12px);
   margin-top: var(--space-2, 8px);
 }
@@ -95,12 +95,6 @@
 }
 
 /* Google-authenticated account info card */
-.account-settings-google-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3, 12px);
-}
-
 .account-settings-google-card {
   display: flex;
   flex-direction: column;
@@ -127,7 +121,15 @@
   line-height: 1.6;
 }
 
-.account-settings-actions--single {
-  justify-content: flex-start;
+.account-settings-google-card + .account-settings-form {
+  margin-top: var(--space-4, 16px);
+}
+
+/* Destructive actions sit apart from the save button. */
+.account-settings-danger-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3, 12px);
+  margin-inline-start: auto;
 }
 

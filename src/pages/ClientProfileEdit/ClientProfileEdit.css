@@ -352,3 +352,29 @@
     min-width: auto;
   }
 }
+
+.photo-remove-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  padding: 6px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #b91c1c;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.photo-remove-btn:hover:not(:disabled) {
+  background-color: #fef2f2;
+}
+
+.photo-remove-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

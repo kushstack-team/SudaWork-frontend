@@ -8,6 +8,7 @@ import { validateLoginForm } from '../../utils/validators';
 import { tokens } from '../../services/api/client';
 import GoogleAuthButton from '../../components/GoogleAuthButton/GoogleAuthButton';
 import useGoogleAuthFlow from '../../hooks/useGoogleAuthFlow';
+import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 
 
 const EyeIcon = ({ visible }) => (
@@ -48,6 +49,8 @@ const Login = () => {
   const [errors, setErrors] = useState({});
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  // Set when the email/password account was deactivated by its owner.
+  const [passwordReactivation, setPasswordReactivation] = useState(false);
 
   const queryParams = new URLSearchParams(location.search);
   const roleParam = queryParams.get('role'); // 'client' | 'freelancer'
@@ -63,20 +66,14 @@ const Login = () => {
     redirectTo: from || undefined,
   });
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const { isValid, errors: validationErrors } = validateLoginForm(email, password);
-    if (!isValid) {
-      setErrors(validationErrors);
-      return;
-    }
-
+  const signIn = async ({ reactivate = false } = {}) => {
     setSubmitError('');
     setIsSubmitting(true);
 
     try {
       tokens.setRemember(rememberMe);
-      const user = await login(email, password);
+      const user = await login(email, password, { reactivate });
+      setPasswordReactivation(false);
 
       // Signed in with Google first and hit an existing account: link it now
       // that the password proved ownership.
@@ -91,10 +88,32 @@ const Login = () => {
 
       navigate(from || homeForRole(user.role), { replace: true });
     } catch (err) {
+      if (err.code === 'ACCOUNT_DEACTIVATED') {
+        setPasswordReactivation(true);
+        return;
+      }
+      setPasswordReactivation(false);
       setSubmitError(err.message || 'بيانات الدخول غير صحيحة، يرجى التحقق وإعادة المحاولة');
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const { isValid, errors: validationErrors } = validateLoginForm(email, password);
+    if (!isValid) {
+      setErrors(validationErrors);
+      return;
+    }
+    signIn();
+  };
+
+  const reactivationOpen = passwordReactivation || google.needsReactivation;
+  const confirmReactivation = () => (passwordReactivation ? signIn({ reactivate: true }) : google.confirmReactivation());
+  const cancelReactivation = () => {
+    setPasswordReactivation(false);
+    google.cancelReactivation();
   };
 
   const fillQuickDemo = (demoEmail, demoPass) => {
@@ -282,6 +301,17 @@ const Login = () => {
         </div>
         )}
       </main>
+      <ConfirmModal
+        isOpen={reactivationOpen}
+        title="إعادة تفعيل الحساب"
+        message="حسابك معطّل حالياً بطلب منك. هل تريد إعادة تفعيله وتسجيل الدخول؟ ستعود ملفاتك ومشاريعك للظهور كما كانت."
+        confirmText="إعادة التفعيل"
+        cancelText="إلغاء"
+        type="success"
+        isLoading={isSubmitting || google.busy}
+        onConfirm={confirmReactivation}
+        onCancel={cancelReactivation}
+      />
     </div>
   );
 };

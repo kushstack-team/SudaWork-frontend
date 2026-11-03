@@ -1,5 +1,13 @@
 import { FiSearch } from 'react-icons/fi';
 import { formatDate } from '../../../utils/formatters';
+import VerifiedBadge from '../../../components/VerifiedBadge/VerifiedBadge';
+
+const statusLabel = (u) => {
+  if (u.status === 'active') return 'نشط';
+  if (u.deactivationType === 'DELETED') return 'محذوف';
+  if (u.deactivationType === 'SELF') return 'معطّل من المستخدم';
+  return 'معلق / محظور';
+};
 
 export default function AdminUsersTab({
   filteredUsers,
@@ -9,6 +17,7 @@ export default function AdminUsersTab({
   setUserRoleFilter,
   onToggleUserStatus,
   onDeleteUser,
+  onToggleVerified,
   currentUserId
 }) {
   return (
@@ -70,6 +79,7 @@ export default function AdminUsersTab({
                         {u.fullName ? u.fullName.charAt(0) : 'U'}
                       </div>
                       <span className="user-name-cell">{u.fullName}</span>
+                      {u.isVerified && <VerifiedBadge compact />}
                     </div>
                   </td>
                   <td className="dir-ltr text-right">{u.email}</td>
@@ -83,12 +93,21 @@ export default function AdminUsersTab({
                   <td>{formatDate(u.createdAt)}</td>
                   <td>
                     <span className={`status-pill ${u.status}`}>
-                      {u.status === 'active' ? 'نشط' : 'معلق / محظور'}
+                      {statusLabel(u)}
                     </span>
                   </td>
                   <td>
-                    {u.role !== 'admin' && u.id !== currentUserId && (
-                      <div className="user-table-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    {u.role !== 'admin' && u.id !== currentUserId && !u.isDeleted && (
+                      <div className="user-table-actions" style={{ display: 'flex', gap: '8px', alignItems: 'center', flexWrap: 'wrap' }}>
+                        {onToggleVerified && (u.status === 'active' || u.isVerified) && (
+                          <button
+                            type="button"
+                            className={`user-status-btn ${u.isVerified ? 'suspend' : 'activate'}`}
+                            onClick={() => onToggleVerified(u)}
+                          >
+                            {u.isVerified ? 'إزالة التوثيق' : 'توثيق'}
+                          </button>
+                        )}
                         <button
                           type="button"
                           className={`user-status-btn ${u.status === 'active' ? 'suspend' : 'activate'}`}

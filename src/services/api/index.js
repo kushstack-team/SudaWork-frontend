@@ -11,7 +11,9 @@ const session = (data) => {
 };
 
 export const authApi = {
-  login: async (email, password) => session(await post('/auth/login', { email, password }, { auth: false })),
+  // `reactivate` confirms bringing back an account the user deactivated.
+  login: async (email, password, { reactivate = false } = {}) =>
+    session(await post('/auth/login', { email, password, reactivate: reactivate || undefined }, { auth: false })),
   register: async ({ fullName, email, password, role }) =>
     session(await post('/auth/register', { fullName, email, password, role }, { auth: false })),
   me: async () => m.mapUser((await get('/auth/me')).user),
@@ -28,8 +30,8 @@ export const authApi = {
   resetPassword: (token, password) => post('/auth/reset-password', { token, password }, { auth: false }),
   changePassword: async (oldPassword, newPassword) => session(await post('/auth/change-password', { oldPassword, newPassword })),
   // Returns { status: 'AUTHENTICATED', user, ... } or { status: 'NEEDS_PROFILE', registrationToken, missingFields, profile }
-  google: async ({ credential, role }) => {
-    const data = await post('/auth/google', { credential, role: role || undefined }, { auth: false });
+  google: async ({ credential, role, reactivate = false }) => {
+    const data = await post('/auth/google', { credential, role: role || undefined, reactivate: reactivate || undefined }, { auth: false });
     return data.status === 'AUTHENTICATED' ? session(data) : data;
   },
   googleComplete: async ({ registrationToken, role, fullName }) =>
@@ -58,8 +60,10 @@ export const profilesApi = {
     return m.mapUser(data.user);
   },
   removeAvatar: async () => m.mapUser((await del('/users/me/avatar')).user),
-  // Soft-deactivates the account and ends every session.
+  // Deactivates the account and ends every session; signing in again reactivates it.
   deactivate: () => del('/users/me'),
+  // Permanently erases the account. `password` is required for accounts that have one.
+  deleteAccount: (password) => post('/users/me/delete-account', { confirmation: 'DELETE', password: password || '' }),
   searchFreelancers: async (params, opts) => m.mapPage(await get('/freelancers', params, opts), (r) => m.mapFreelancer(r)),
 };
 
@@ -183,6 +187,8 @@ export const adminApi = {
   users: async (params) => m.mapPage(await get('/admin/users', params), m.mapUser),
   suspendUser: (id) => post(`/admin/users/${id}/suspend`),
   activateUser: (id) => post(`/admin/users/${id}/activate`),
+  verifyUser: (id) => post(`/admin/users/${id}/verify`),
+  unverifyUser: (id) => post(`/admin/users/${id}/unverify`),
   deleteUser: (id) => del(`/admin/users/${id}`),
   projects: async (params) => m.mapPage(await get('/admin/projects', params), m.mapProject),
   moderateProject: (id, data) => patch(`/admin/projects/${id}`, data),

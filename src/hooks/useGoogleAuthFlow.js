@@ -13,6 +13,8 @@ export const GOOGLE_REGISTRATION_KEY = 'sudawork_google_registration';
  *  - new user, info missing   → /register/complete (asks only for what is missing)
  *  - email already registered → `linkCredential` is kept so the login page can
  *                               link Google after a password sign-in
+ *  - self-deactivated account  → `reactivateCredential` is kept until the user
+ *                               confirms with `confirmReactivation()`
  */
 export default function useGoogleAuthFlow({ role, redirectTo } = {}) {
   const { loginWithGoogle } = useAuth();
@@ -20,13 +22,15 @@ export default function useGoogleAuthFlow({ role, redirectTo } = {}) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [linkCredential, setLinkCredential] = useState(null);
+  const [reactivateCredential, setReactivateCredential] = useState(null);
 
-  const handleCredential = async (credential) => {
+  const handleCredential = async (credential, { reactivate = false } = {}) => {
     if (!credential) return;
     setBusy(true);
     setError('');
     try {
-      const result = await loginWithGoogle({ credential, role });
+      const result = await loginWithGoogle({ credential, role, reactivate });
+      setReactivateCredential(null);
       if (result.status === 'AUTHENTICATED') {
         navigate(redirectTo || homeForRole(result.user.role), { replace: true });
         return;
@@ -46,11 +50,25 @@ export default function useGoogleAuthFlow({ role, redirectTo } = {}) {
       navigate('/register/complete', { state: pending });
     } catch (err) {
       if (err.code === 'ACCOUNT_EXISTS') setLinkCredential(credential);
+      if (err.code === 'ACCOUNT_DEACTIVATED') {
+        setReactivateCredential(credential);
+        return;
+      }
       setError(err.message);
     } finally {
       setBusy(false);
     }
   };
 
-  return { handleCredential, busy, error, setError, linkCredential, clearLinkCredential: () => setLinkCredential(null) };
+  return {
+    handleCredential,
+    busy,
+    error,
+    setError,
+    linkCredential,
+    clearLinkCredential: () => setLinkCredential(null),
+    needsReactivation: Boolean(reactivateCredential),
+    confirmReactivation: () => handleCredential(reactivateCredential, { reactivate: true }),
+    cancelReactivation: () => setReactivateCredential(null),
+  };
 }

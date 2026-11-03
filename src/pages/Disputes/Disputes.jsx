@@ -22,6 +22,9 @@ import {
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 
+// Select value for a report that is not about one of the user's contracts.
+const GENERAL_REPORT = 'general';
+
 const Disputes = () => {
   const { user } = useAuth();
   const [reports, setReports] = useState([]);
@@ -56,16 +59,17 @@ const Disputes = () => {
   useLoader(loadReports, [user?.id], Boolean(user));
 
   const openModal = () => {
-    setRelatedContractId(contracts[0]?.id || '');
+    setRelatedContractId(contracts[0]?.id || GENERAL_REPORT);
     setModalError('');
     setIsModalOpen(true);
   };
 
-  // Disputes are filed against one of the user's contracts.
+  // A dispute is filed against one of the user's contracts; anything else
+  // goes to the administration as a general report.
   const handleCreateReport = async (e) => {
     e.preventDefault();
     if (!relatedContractId) {
-      setModalError('يرجى اختيار العقد المتعلق بالمشكلة.');
+      setModalError('يرجى اختيار موضوع البلاغ.');
       return;
     }
     if (reportDescription.trim().length < 10) {
@@ -76,9 +80,10 @@ const Disputes = () => {
     setSubmitting(true);
     setModalError('');
     try {
+      const isGeneral = relatedContractId === GENERAL_REPORT;
       await api.reports.create({
-        targetType: 'contract',
-        targetId: relatedContractId,
+        targetType: isGeneral ? 'general' : 'contract',
+        targetId: isGeneral ? undefined : relatedContractId,
         reason: reportReason,
         description: reportDescription.trim(),
         desiredResolution: desiredResolution.trim(),
@@ -164,8 +169,6 @@ const Disputes = () => {
                 type="button"
                 className="open-report-modal-btn"
                 onClick={openModal}
-                disabled={contracts.length === 0}
-                title={contracts.length === 0 ? 'تُفتح النزاعات على عقود العمل فقط' : undefined}
               >
                 <FiPlus className="btn-icon" />
                 <span>تقديم بلاغ أو شكوى جديدة</span>
@@ -272,15 +275,13 @@ const Disputes = () => {
               <h3>{reports.length === 0 ? 'لا توجد نزاعات أو بلاغات' : 'لا توجد بلاغات في هذا القسم'}</h3>
               <p>
                 {contracts.length > 0
-                  ? 'إذا واجهت مشكلة في أحد عقودك يمكنك فتح نزاع وستتولى الإدارة مراجعته.'
-                  : 'تُفتح النزاعات على عقود العمل. عند وجود عقد نشط يمكنك تقديم بلاغ من هنا أو من صفحة العقد.'}
+                  ? 'إذا واجهت مشكلة في أحد عقودك يمكنك فتح نزاع، أو إرسال بلاغ عام للإدارة عن أي مشكلة أخرى.'
+                  : 'إذا واجهت أي مشكلة على المنصة يمكنك إرسال بلاغ للإدارة وستتولى مراجعته.'}
               </p>
-              {contracts.length > 0 && (
-                <button type="button" className="empty-action-btn" onClick={openModal}>
-                  <FiPlus />
-                  <span>تقديم شكوى أو بلاغ جديد</span>
-                </button>
-              )}
+              <button type="button" className="empty-action-btn" onClick={openModal}>
+                <FiPlus />
+                <span>تقديم شكوى أو بلاغ جديد</span>
+              </button>
             </div>
           ) : (
             <div className="disputes-cards-list">
@@ -302,7 +303,10 @@ const Disputes = () => {
                         )}
                         {!report.contractId && (
                           <span className="dispute-contract-tag">
-                            {report.targetType === 'project' ? `بلاغ عن مشروع: ${report.targetTitle}` : `بلاغ عن مستخدم: ${report.reportedUserName}`}
+                            {report.targetType === 'project' && `بلاغ عن مشروع: ${report.targetTitle}`}
+                            {report.targetType === 'user' && `بلاغ عن مستخدم: ${report.reportedUserName}`}
+                            {report.targetType === 'message' && `بلاغ عن رسالة من: ${report.reportedUserName}`}
+                            {report.targetType === 'general' && 'بلاغ عام للإدارة'}
                           </span>
                         )}
                       </div>
@@ -452,7 +456,7 @@ const Disputes = () => {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="related-contract">
-                  العقد المتعلق بالمشكلة <span className="required">*</span>
+                  موضوع البلاغ <span className="required">*</span>
                 </label>
                 <select
                   id="related-contract"
@@ -461,7 +465,7 @@ const Disputes = () => {
                   onChange={(e) => setRelatedContractId(e.target.value)}
                   required
                 >
-                  <option value="">-- اختر العقد --</option>
+                  <option value={GENERAL_REPORT}>بلاغ عام للإدارة (غير مرتبط بعقد)</option>
                   {contracts.map((c) => (
                     <option key={c.id} value={c.id}>
                       {c.projectTitle} — {user?.role === 'client' ? c.freelancerName : c.clientName}

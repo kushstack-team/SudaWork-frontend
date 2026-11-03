@@ -21,7 +21,8 @@ import {
   FiUser,
   FiBriefcase,
   FiMapPin,
-  FiEye
+  FiEye,
+  FiTrash2
 } from 'react-icons/fi';
 
 const FreelancerProfileEdit = () => {
@@ -138,9 +139,9 @@ const FreelancerProfileEdit = () => {
     e.target.value = '';
     if (!file) return;
     const MAX_AVATAR_BYTES = 10 * 1024 * 1024; // 10MB
-    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg'];
+    const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/jpg'];
     if (!ALLOWED_TYPES.includes(file.type)) {
-      setErrorMessage('صيغة الصورة غير مدعومة. يرجى اختيار ملف PNG أو JPG أو WEBP.');
+      setErrorMessage('صيغة الصورة غير مدعومة. يرجى اختيار ملف PNG أو JPG.');
       return;
     }
     if (file.size > MAX_AVATAR_BYTES) {
@@ -153,6 +154,20 @@ const FreelancerProfileEdit = () => {
       const updatedUser = await api.profiles.uploadAvatar(file);
       setPhoto(updatedUser.avatar || defaultAvatar);
       setUser((prev) => (prev ? { ...prev, avatar: updatedUser.avatar } : prev));
+    } catch (err) {
+      setErrorMessage(err.message);
+    } finally {
+      setUploadingPhoto(false);
+    }
+  };
+
+  const handlePhotoRemove = async () => {
+    setUploadingPhoto(true);
+    setErrorMessage('');
+    try {
+      await api.profiles.removeAvatar();
+      setPhoto(defaultAvatar);
+      setUser((prev) => (prev ? { ...prev, avatar: null } : prev));
     } catch (err) {
       setErrorMessage(err.message);
     } finally {
@@ -279,8 +294,14 @@ const FreelancerProfileEdit = () => {
                 <div className="photo-helper-text">
                   <span className="photo-main-label">صورتك الشخصية</span>
                   <p className="photo-sub-label">
-                    {uploadingPhoto ? 'جارٍ رفع الصورة...' : 'يفضل استخدام صورة واضحة ومبتسمة بخلفية غير مشتتة (JPEG أو PNG).'}
+                    {uploadingPhoto ? 'جارٍ تحديث الصورة...' : 'يفضل استخدام صورة واضحة ومبتسمة بخلفية غير مشتتة (JPEG أو PNG).'}
                   </p>
+                  {photo !== defaultAvatar && (
+                    <button type="button" className="photo-remove-btn" onClick={handlePhotoRemove} disabled={uploadingPhoto}>
+                      <FiTrash2 />
+                      <span>إزالة الصورة</span>
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -504,6 +525,7 @@ const FreelancerProfileEdit = () => {
                 )}
                 {portfolio.map((item) => (
                   <div key={item.id} className="portfolio-preview-card">
+                    {item.image && <img src={item.image} alt={item.title} className="portfolio-card-thumb" loading="lazy" />}
                     <div className="portfolio-card-info">
                       <h4 className="portfolio-item-title">{item.title}</h4>
                       {item.link && (

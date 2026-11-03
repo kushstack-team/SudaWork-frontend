@@ -9,6 +9,7 @@ import { api } from '../../services/api';
 import useApiData from '../../hooks/useApiData';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import defaultAvatar from '../../assets/default-avatar.svg';
+import VerifiedBadge from '../../components/VerifiedBadge/VerifiedBadge';
 import {
   FiSearch,
   FiStar,
@@ -433,6 +434,7 @@ const FreelancersBrowse = () => {
                             <Link to={`/freelancers/${freelancer.id}`}>
                               {freelancer.fullName}
                             </Link>
+                            {freelancer.isVerified && <VerifiedBadge compact />}
                           </h3>
                           <p className="freelancer-title-text">{freelancer.title}</p>
                           <div className="freelancer-meta-row">
