@@ -6,6 +6,7 @@ import { api } from '../../../services/api';
 import useApiData from '../../../hooks/useApiData';
 import ErrorState from '../../../components/common/ErrorState/ErrorState';
 import defaultAvatar from '../../../assets/default-avatar.svg';
+import { PeopleGridSkeleton } from '../../../components/common/Skeleton/Skeleton';
 
 /**
  * Category explorer: real categories from the API, and the freelancers whose
@@ -63,9 +64,7 @@ const ExploreCategories = () => {
         {/* Freelancer Cards Grid */}
         <div className="services-grid-container">
           {loading ? (
-            <div className="empty-category-notice">
-              <p>جارٍ التحميل...</p>
-            </div>
+            <PeopleGridSkeleton label="جارٍ التحميل..." count={4} />
           ) : error ? (
             <ErrorState title="تعذر تحميل المستقلين" error={error} onRetry={reload} />
           ) : freelancers.length === 0 ? (

@@ -142,7 +142,7 @@ const Hero = () => {
 
         {/* Secondary Search & Categories */}
         <div className="hero-search-wrapper">
-          <SearchBar placeholder="ابحث عن اي خدمة...." className="hero-search" />
+          <SearchBar placeholder="ابحث عن أي خدمة، مثل: تصميم شعار أو ترجمة" className="hero-search" />
         </div>
 
         <div className="hero-tags">

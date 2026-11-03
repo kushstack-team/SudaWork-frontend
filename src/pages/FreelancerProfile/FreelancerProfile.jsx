@@ -23,6 +23,7 @@ import {
   FiAlertTriangle
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { ProfileSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const FreelancerProfile = () => {
   const { id } = useParams();
@@ -69,9 +70,13 @@ const FreelancerProfile = () => {
 
   if (loading) {
     return (
-      <div className="freelancer-view-loading" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل ملف المستقل...</p>
+      <div className="freelancer-profile-page" dir="rtl">
+        {isAuthenticated ? <DashboardNavbar /> : <Navbar />}
+        <main className="freelancer-profile-main">
+          <div className="freelancer-profile-container">
+            <ProfileSkeleton label="جارٍ تحميل ملف المستقل..." />
+          </div>
+        </main>
       </div>
     );
   }

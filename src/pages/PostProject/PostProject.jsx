@@ -9,6 +9,8 @@ import { api } from '../../services/api';
 import useLoader from '../../hooks/useLoader';
 import { PROJECT_STATUS } from '../../constants/projectStatuses';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
+import PageLoader from '../../components/common/PageLoader/PageLoader';
+import { FormSkeleton } from '../../components/common/Skeleton/Skeleton';
 import {
   saveProjectDraft,
   getProjectDraft,
@@ -390,10 +392,8 @@ const PostProject = () => {
     return (
       <div className="post-project-page" dir="rtl">
         <DashboardNavbar />
-        <main className="post-project-main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '380px', gap: '20px', textAlign: 'center', padding: '40px 20px' }}>
-          <div className="profile-spinner" />
-          <h2 style={{ color: '#004D34', fontSize: '1.4rem', margin: 0, fontWeight: 700 }}>جارٍ نشر مشروعك تلقائياً...</h2>
-          <p style={{ color: '#64748b', fontSize: '1.05rem', margin: 0 }}>لحظات وسننقلك إلى لوحة إدارة مشاريعك.</p>
+        <main className="post-project-main">
+          <PageLoader message="جارٍ إرسال مشروعك للمراجعة... لحظات وسننقلك إلى لوحة إدارة مشاريعك." />
         </main>
         <Footer />
       </div>
@@ -404,9 +404,10 @@ const PostProject = () => {
     return (
       <div className="post-project-page" dir="rtl">
         {user ? <DashboardNavbar /> : <Navbar />}
-        <main className="post-project-main" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: '350px', gap: '16px' }}>
-          <div className="profile-spinner" />
-          <p style={{ color: '#64748b', fontSize: '1rem' }}>جارٍ تحميل بيانات المشروع للتعديل...</p>
+        <main className="post-project-main">
+          <div className="post-project-container">
+            <FormSkeleton label="جارٍ تحميل بيانات المشروع للتعديل..." />
+          </div>
         </main>
         <Footer />
       </div>
@@ -527,7 +528,7 @@ const PostProject = () => {
                     <input
                       type="text"
                       className="form-input"
-                      placeholder="أدخل مهارة، مثلاً: Flutter, UI Design, Photoshop"
+                      placeholder="ما المهارات المطلوبة؟ مثل: تصميم جرافيك، كتابة محتوى، تصوير"
                       list="project-skill-suggestions"
                       value={skillInput}
                       onChange={(e) => setSkillInput(e.target.value)}
@@ -577,7 +578,7 @@ const PostProject = () => {
                   <textarea
                     rows="6"
                     className={`form-textarea ${errors.description ? 'has-error' : ''}`}
-                    placeholder="اشرح بوضوح: أهداف المشروع، المخرجات المتوقعة، الشاشات أو الصفحات، وأي اشتراطات خاصة..."
+                    placeholder="اشرح ما تحتاجه بكلماتك: ما الذي تريد إنجازه، وما الذي تتوقع استلامه في النهاية، وأي تفاصيل مهمة لك..."
                     value={description}
                     onChange={(e) => {
                       setDescription(e.target.value);

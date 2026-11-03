@@ -19,6 +19,7 @@ import {
   FiX
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const THREAD_POLL_MS = 20000;
 const CHAT_POLL_MS = 8000;
@@ -247,10 +248,7 @@ const Messages = () => {
               {/* Threads List */}
               <div className="threads-list">
                 {loading ? (
-                  <div className="threads-loading">
-                    <div className="profile-spinner" />
-                    <span>جارٍ تحميل المحادثات...</span>
-                  </div>
+                  <RowListSkeleton label="جارٍ تحميل المحادثات..." count={6} variant="thread" />
                 ) : loadError ? (
                   <ErrorState title="تعذر تحميل المحادثات" error={loadError} onRetry={() => { setLoading(true); loadConversations(); }} />
                 ) : threads.length === 0 ? (
@@ -461,7 +459,7 @@ const Messages = () => {
                     <input
                       type="text"
                       className="chat-text-input"
-                      placeholder="اكتب رسالتك هنا واضغط Enter..."
+                      placeholder="اكتب رسالتك هنا..."
                       value={newMessageText}
                       onChange={(e) => setNewMessageText(e.target.value)}
                     />

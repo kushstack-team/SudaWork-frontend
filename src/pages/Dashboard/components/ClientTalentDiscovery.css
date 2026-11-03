@@ -336,25 +336,6 @@
   cursor: pointer;
 }
 
-.talent-loading-box {
-  background: #ffffff;
-  border: 1px solid #e2e8f0;
-  border-radius: 12px;
-  padding: 36px 20px;
-  text-align: center;
-  color: #64748b;
-}
-
-.talent-spinner {
-  width: 32px;
-  height: 32px;
-  border: 3px solid rgba(11, 110, 79, 0.15);
-  border-top-color: var(--color-primary, #0B6E4F);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 10px auto;
-}
-
 @media (max-width: 1200px) {
   .talent-cards-grid {
     grid-template-columns: repeat(2, 1fr);

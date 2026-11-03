@@ -320,14 +320,6 @@
 }
 
 /* Loading & Not Found */
-.client-view-loading {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
 
 .client-not-found {
   min-height: 100vh;

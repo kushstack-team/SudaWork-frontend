@@ -24,6 +24,7 @@ import {
   FiEye,
   FiTrash2
 } from 'react-icons/fi';
+import { FormSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const FreelancerProfileEdit = () => {
   const { user, refreshUser, setUser } = useAuth();
@@ -223,9 +224,13 @@ const FreelancerProfileEdit = () => {
 
   if (loading) {
     return (
-      <div className="profile-edit-loading" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل بيانات الملف الشخصي...</p>
+      <div className="profile-edit-page" dir="rtl">
+        <DashboardNavbar />
+        <main className="profile-edit-main">
+          <div className="profile-edit-container">
+            <FormSkeleton sections={3} label="جارٍ تحميل بيانات الملف الشخصي..." />
+          </div>
+        </main>
       </div>
     );
   }

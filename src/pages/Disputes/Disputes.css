@@ -310,11 +310,6 @@
 }
 
 /* Loading & Empty States */
-.disputes-loading {
-  text-align: center;
-  padding: 60px 0;
-  color: #64748b;
-}
 
 .disputes-empty-card {
   text-align: center;

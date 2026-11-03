@@ -41,7 +41,7 @@ const HeroBanner = ({ userName = 'طارق' }) => {
             <input
               type="text"
               className="hero-talent-search-input"
-              placeholder="ابحث عن مهارة أو تخصص (مثال: مصمم شعارات، مطور React، مونتير...)"
+              placeholder="ما الخدمة التي تحتاجها؟ مثل: تصميم شعار، موقع إلكتروني، مونتاج فيديو"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { usePlatform } from '../../context/platform';
 import { api } from '../../services/api';
 import './Legal.css';
+import { ArticleSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 export default function Privacy() {
   const { settings: platformSettings } = usePlatform();
@@ -36,10 +37,7 @@ export default function Privacy() {
 
         <div className="legal-content-card">
           {loading ? (
-            <div className="legal-loading">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل نصوص سياسة الخصوصية...</p>
-            </div>
+            <ArticleSkeleton label="جارٍ تحميل نصوص سياسة الخصوصية..." />
           ) : privacy ? (
             <div className="legal-text-body" style={{ whiteSpace: 'pre-wrap' }}>
               {privacy}

@@ -105,15 +105,6 @@
 }
 
 /* Loading & Empty */
-.contracts-loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 60px;
-  gap: var(--space-4, 16px);
-  color: #64748b;
-}
 
 .contracts-empty-card {
   background-color: #ffffff;

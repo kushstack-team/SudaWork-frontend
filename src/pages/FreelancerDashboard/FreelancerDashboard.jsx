@@ -20,6 +20,7 @@ import DashboardNavbar from '../../components/DashboardNavbar/DashboardNavbar';
 import Footer from '../../components/Footer';
 import './FreelancerDashboard.css';
 import useLoader from '../../hooks/useLoader';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const FreelancerDashboard = () => {
   const { user } = useAuth();
@@ -265,10 +266,7 @@ const FreelancerDashboard = () => {
             </div>
 
             {loading ? (
-              <div className="feed-loading-state">
-                <div className="spinner-dots" />
-                <p>جارٍ تحميل أفضل المشاريع المطابقة لمهاراتك...</p>
-              </div>
+              <CardListSkeleton label="جارٍ تحميل أفضل المشاريع المطابقة لمهاراتك..." count={3} />
             ) : loadError ? (
               <ErrorState title="تعذر تحميل لوحة التحكم" error={loadError} onRetry={() => { setLoading(true); loadDashboardData(); }} />
             ) : !canBrowse ? (

@@ -21,6 +21,7 @@ import {
   FiBriefcase,
   FiCheckCircle
 } from 'react-icons/fi';
+import { PeopleGridSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const sudanLocations = [
   'الجميع',
@@ -144,7 +145,7 @@ const FreelancersBrowse = () => {
                 <input
                   type="text"
                   className="browse-search-input"
-                  placeholder="ابحث باسم المستقل، التخصص، أو المهارة (مثل: تسنيم، Figma، فيديو، React)..."
+                  placeholder="ابحث بالخدمة أو باسم المستقل، مثل: تصميم شعار، متجر إلكتروني، ترجمة"
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
@@ -389,10 +390,7 @@ const FreelancersBrowse = () => {
               </div>
 
               {loading ? (
-                <div className="browse-loading-state">
-                  <div className="browse-spinner" />
-                  <p>جارٍ استعراض المستقلين المتاحين...</p>
-                </div>
+                <PeopleGridSkeleton label="جارٍ استعراض المستقلين المتاحين..." count={6} />
               ) : error ? (
                 <ErrorState title="تعذر تحميل المستقلين" error={error} onRetry={reload} />
               ) : sortedFreelancers.length === 0 ? (

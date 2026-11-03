@@ -28,6 +28,7 @@ import {
   FiAlertTriangle
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { DetailsSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ContractDetails = () => {
   const { id } = useParams();
@@ -343,9 +344,13 @@ const ContractDetails = () => {
 
   if (loading) {
     return (
-      <div className="contract-loading-container" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل بيانات عقد العمل والتسليمات...</p>
+      <div className="contract-details-page" dir="rtl">
+        <DashboardNavbar />
+        <main className="contract-details-main">
+          <div className="contract-details-container">
+            <DetailsSkeleton label="جارٍ تحميل بيانات عقد العمل والتسليمات..." />
+          </div>
+        </main>
       </div>
     );
   }
@@ -996,7 +1001,7 @@ const ContractDetails = () => {
                   id="revision-notes"
                   rows="5"
                   className="modal-textarea"
-                  placeholder="يرجى تعديل ألوان الشعار لتطابق الدرجات المذكورة في الدليل، وتصدير الأيقونات بصيغة SVG..."
+                  placeholder="اكتب التعديلات التي تريدها بوضوح، مثل: تكبير الشعار وتغيير لونه إلى الأزرق..."
                   value={revisionNotes}
                   onChange={(e) => setRevisionNotes(e.target.value)}
                   required
@@ -1097,13 +1102,13 @@ const ContractDetails = () => {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="escrow-txid">
-                  رقم العملية أو الإشعار (Transaction ID) <span className="required">*</span>
+                  رقم العملية في إشعار التحويل <span className="required">*</span>
                 </label>
                 <input
                   id="escrow-txid"
                   type="text"
                   className="modal-input"
-                  placeholder="مثال: BNK-83742918"
+                  placeholder="تجده في إشعار التحويل في تطبيق بنكك"
                   value={escrowTxId}
                   onChange={(e) => setEscrowTxId(e.target.value)}
                   required

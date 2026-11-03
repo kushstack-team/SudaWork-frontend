@@ -21,6 +21,7 @@ import {
   FiClock
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const Notifications = () => {
   const { user } = useAuth();
@@ -310,10 +311,7 @@ const Notifications = () => {
 
           {/* Notifications Feed */}
           {loading ? (
-            <div className="notifications-loading">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل الإشعارات والتحديثات...</p>
-            </div>
+            <RowListSkeleton label="جارٍ تحميل الإشعارات والتحديثات..." count={6} variant="notification" />
           ) : loadError ? (
             <ErrorState title="تعذر تحميل الإشعارات" error={loadError} onRetry={() => { setLoading(true); loadNotifications(); }} />
           ) : filteredNotifications.length === 0 ? (

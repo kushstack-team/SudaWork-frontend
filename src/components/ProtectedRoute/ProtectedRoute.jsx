@@ -2,6 +2,7 @@ import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/auth';
 import { homeForRole } from '../../utils/roles';
 import ErrorState from '../common/ErrorState/ErrorState';
+import PageLoader from '../common/PageLoader/PageLoader';
 import './ProtectedRoute.css';
 
 const ProtectedRoute = ({ allowedRoles = [], children }) => {
@@ -10,12 +11,7 @@ const ProtectedRoute = ({ allowedRoles = [], children }) => {
 
   // Never render or redirect before the stored session has been resolved.
   if (loading) {
-    return (
-      <div className="protected-loading-container" dir="rtl">
-        <div className="protected-spinner" />
-        <p className="protected-loading-text">جارٍ التحقق من بيانات الدخول...</p>
-      </div>
-    );
+    return <PageLoader message="جارٍ التحقق من بيانات الدخول..." />;
   }
 
   // Server unreachable while restoring: offer a retry instead of logging out.

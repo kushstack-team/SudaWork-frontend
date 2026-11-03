@@ -1216,12 +1216,6 @@ a.task-action-btn {
    Shell content, users toolbar and the add-admin dialog
    ========================================================================== */
 
-.admin-loading {
-  padding: 48px 0;
-  color: #64748b;
-  text-align: center;
-}
-
 .add-admin-btn {
   display: inline-flex;
   align-items: center;

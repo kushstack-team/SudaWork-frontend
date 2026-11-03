@@ -19,6 +19,7 @@ import {
   FiTrash2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { FormSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ClientProfileEdit = () => {
   const { user, setUser } = useAuth();
@@ -139,9 +140,13 @@ const ClientProfileEdit = () => {
 
   if (loading) {
     return (
-      <div className="client-edit-loading" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل بيانات الملف التجاري...</p>
+      <div className="client-profile-edit-page" dir="rtl">
+        <DashboardNavbar />
+        <main className="client-profile-edit-main">
+          <div className="client-profile-edit-container">
+            <FormSkeleton label="جارٍ تحميل بيانات الملف التجاري..." />
+          </div>
+        </main>
       </div>
     );
   }

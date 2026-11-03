@@ -7,6 +7,7 @@ import { api } from '../../services/api';
 import useLoader from '../../hooks/useLoader';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
+import { TileGridSkeleton } from '../../components/common/Skeleton/Skeleton';
 import {
   FiUsers,
   FiDollarSign,
@@ -736,7 +737,7 @@ const AdminDashboard = () => {
             <ErrorState title="تعذر تحميل بيانات الإدارة" error={loadError} onRetry={() => { setLoading(true); loadAllAdminData(); }} />
           )}
 
-          {loading && <div className="admin-loading" role="status">جارٍ تحميل بيانات لوحة الإدارة...</div>}
+          {loading && <TileGridSkeleton count={8} label="جارٍ تحميل بيانات لوحة الإدارة..." />}
 
           {!loading && activeTab === 'overview' && (
             <AdminOverviewTab metrics={metrics} linkTo={linkTo} />

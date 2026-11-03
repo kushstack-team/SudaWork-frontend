@@ -461,14 +461,6 @@
 }
 
 /* Loading & Not Found */
-.freelancer-view-loading {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
 
 .freelancer-not-found {
   min-height: 100vh;

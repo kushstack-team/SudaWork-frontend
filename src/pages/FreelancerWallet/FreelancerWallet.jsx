@@ -22,6 +22,7 @@ import {
   FiBriefcase
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const FreelancerWallet = () => {
   const { user } = useAuth();
@@ -237,10 +238,7 @@ const FreelancerWallet = () => {
             </div>
 
             {loading ? (
-              <div className="wallet-loading">
-                <div className="profile-spinner" />
-                <p>جارٍ تحميل المعاملات...</p>
-              </div>
+              <RowListSkeleton label="جارٍ تحميل المعاملات..." count={5} />
             ) : loadError ? null : activeTab === 'withdrawals' ? (
               /* Withdrawals Table */
               withdrawals.length === 0 ? (

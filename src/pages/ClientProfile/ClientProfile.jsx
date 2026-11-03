@@ -24,6 +24,7 @@ import {
   FiArrowLeft
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { ProfileSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ClientProfile = () => {
   const { id } = useParams();
@@ -72,9 +73,13 @@ const ClientProfile = () => {
 
   if (loading) {
     return (
-      <div className="client-view-loading" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل ملف صاحب العمل...</p>
+      <div className="client-profile-page" dir="rtl">
+        {isAuthenticated ? <DashboardNavbar /> : <Navbar />}
+        <main className="client-profile-main">
+          <div className="client-profile-container">
+            <ProfileSkeleton label="جارٍ تحميل ملف صاحب العمل..." />
+          </div>
+        </main>
       </div>
     );
   }
@@ -293,7 +298,7 @@ const ClientProfile = () => {
                   <h4>صاحب عمل معتمد في سوداوورك</h4>
                 </div>
                 <p className="verified-card-text">
-                  تتم حماية حقوق المستقلين عبر إيداع قيمة المشروع في خدمة الضمان (Escrow) قبل بدء العمل.
+                  تتم حماية حقوق المستقلين عبر إيداع قيمة المشروع في خدمة الضمان لدى المنصة قبل بدء العمل.
                 </p>
               </div>
             </aside>

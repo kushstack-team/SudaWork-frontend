@@ -8,6 +8,7 @@ import {
   FiTag
 } from 'react-icons/fi';
 import './ClientProjectsFeed.css';
+import { CardListSkeleton } from '../../../components/common/Skeleton/Skeleton';
 
 const ClientProjectsFeed = ({ projects = [], proposalsMap = {}, loading = false }) => {
   return (
@@ -33,10 +34,7 @@ const ClientProjectsFeed = ({ projects = [], proposalsMap = {}, loading = false 
       </div>
 
       {loading ? (
-        <div className="feed-loading-box">
-          <div className="feed-spinner" />
-          <p>جارٍ تحميل بيانات مشاريعك...</p>
-        </div>
+        <CardListSkeleton label="جارٍ تحميل بيانات مشاريعك..." count={2} />
       ) : projects.length === 0 ? (
         <div className="feed-empty-box">
           <div className="empty-icon-circle">

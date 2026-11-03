@@ -8,6 +8,7 @@ import Navbar from '../Navbar';
 import Footer from '../Footer';
 import EmptyState from '../common/EmptyState/EmptyState';
 import ErrorState from '../common/ErrorState/ErrorState';
+import PageLoader from '../common/PageLoader/PageLoader';
 import '../ProtectedRoute/ProtectedRoute.css';
 
 /**
@@ -21,12 +22,7 @@ export default function FeatureRoute({ feature, children }) {
   const navigate = useNavigate();
 
   if (loading) {
-    return (
-      <div className="protected-loading-container" dir="rtl">
-        <div className="protected-spinner" />
-        <p className="protected-loading-text">جارٍ التحميل...</p>
-      </div>
-    );
+    return <PageLoader />;
   }
 
   if (isFeatureAvailable(feature)) return children;

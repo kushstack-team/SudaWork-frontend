@@ -32,6 +32,7 @@ import {
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 import { PROJECT_STATUS, CLIENT_MANAGEABLE_PROJECT_STATUSES } from '../../constants/projectStatuses';
+import { DetailsSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const STATUS_LABELS = {
   'Pending Review': 'بانتظار موافقة الإدارة',
@@ -253,9 +254,13 @@ const ProjectDetails = () => {
 
   if (loading) {
     return (
-      <div className="project-details-loading" dir="rtl">
-        <div className="profile-spinner" />
-        <p>جارٍ تحميل تفاصيل المشروع...</p>
+      <div className="project-details-page" dir="rtl">
+        {isAuthenticated ? <DashboardNavbar /> : <Navbar />}
+        <main className="project-details-main">
+          <div className="project-details-container">
+            <DetailsSkeleton label="جارٍ تحميل تفاصيل المشروع..." />
+          </div>
+        </main>
       </div>
     );
   }

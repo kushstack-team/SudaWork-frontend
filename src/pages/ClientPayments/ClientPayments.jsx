@@ -19,6 +19,7 @@ import {
   FiInfo
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ClientPayments = () => {
   const { user } = useAuth();
@@ -135,7 +136,7 @@ const ClientPayments = () => {
           {/* Header */}
           <div className="payments-header">
             <div>
-              <h1 className="payments-title">الضمان المالي والمدفوعات (Escrow)</h1>
+              <h1 className="payments-title">الضمان المالي والمدفوعات</h1>
               <p className="payments-desc">
                 إيداع مبالغ العقود بأمان عبر بنكك، ومتابعة حماية أموالك حتى استلام العمل واعتماده.
               </p>
@@ -285,10 +286,7 @@ const ClientPayments = () => {
             </div>
 
             {loading ? (
-              <div className="payments-loading">
-                <div className="profile-spinner" />
-                <p>جارٍ تحميل سجل المدفوعات...</p>
-              </div>
+              <RowListSkeleton label="جارٍ تحميل سجل المدفوعات..." count={5} />
             ) : loadError ? (
               <ErrorState title="تعذر تحميل سجل المدفوعات" error={loadError} onRetry={() => { setLoading(true); loadData(); }} />
             ) : payments.length === 0 ? (
@@ -451,13 +449,13 @@ const ClientPayments = () => {
 
               <div className="form-group">
                 <label className="form-label" htmlFor="tx-id">
-                  رقم العملية أو إشعار التحويل (Transaction ID) <span className="required">*</span>
+                  رقم العملية في إشعار التحويل <span className="required">*</span>
                 </label>
                 <input
                   id="tx-id"
                   type="text"
                   className="modal-input"
-                  placeholder="مثال: BNK-983421092"
+                  placeholder="تجده في إشعار التحويل في تطبيق بنكك"
                   value={transactionId}
                   onChange={(e) => setTransactionId(e.target.value)}
                   required

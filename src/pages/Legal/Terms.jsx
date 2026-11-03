@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { usePlatform } from '../../context/platform';
 import { api } from '../../services/api';
 import './Legal.css';
+import { ArticleSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 export default function Terms() {
   const { settings: platformSettings } = usePlatform();
@@ -36,10 +37,7 @@ export default function Terms() {
 
         <div className="legal-content-card">
           {loading ? (
-            <div className="legal-loading">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل نصوص الشروط والأحكام...</p>
-            </div>
+            <ArticleSkeleton label="جارٍ تحميل نصوص الشروط والأحكام..." />
           ) : terms ? (
             <div className="legal-text-body" style={{ whiteSpace: 'pre-wrap' }}>
               {terms}

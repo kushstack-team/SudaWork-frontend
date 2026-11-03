@@ -19,6 +19,7 @@ import {
   FiBriefcase,
   FiCalendar
 } from 'react-icons/fi';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const quickKeywords = [
   'تطوير مواقع',
@@ -386,10 +387,7 @@ const ProjectsBrowse = () => {
               </div>
 
               {loading ? (
-                <div className="browse-loading-state">
-                  <div className="browse-spinner" />
-                  <p>جارٍ تحميل الفرص المتاحة...</p>
-                </div>
+                <CardListSkeleton label="جارٍ تحميل الفرص المتاحة..." count={4} />
               ) : error ? (
                 <ErrorState title="تعذر تحميل المشاريع" error={error} onRetry={reload} />
               ) : sortedProjects.length === 0 ? (

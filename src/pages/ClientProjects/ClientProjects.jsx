@@ -21,6 +21,7 @@ import {
   FiEdit2
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ClientProjects = () => {
   const { user } = useAuth();
@@ -201,10 +202,7 @@ const ClientProjects = () => {
 
           {/* Projects List */}
           {loading ? (
-            <div className="projects-loading-state">
-              <div className="projects-spinner" />
-              <p>جارٍ تحميل مشاريعك...</p>
-            </div>
+            <CardListSkeleton label="جارٍ تحميل مشاريعك..." count={3} />
           ) : loadError ? (
             <ErrorState title="تعذر تحميل مشاريعك" error={loadError} onRetry={() => { setLoading(true); loadProjects(); }} />
           ) : filteredProjects.length === 0 ? (

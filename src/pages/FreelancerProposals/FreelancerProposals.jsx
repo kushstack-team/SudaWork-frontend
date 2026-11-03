@@ -17,6 +17,7 @@ import {
   FiBriefcase
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const FreelancerProposals = () => {
   const { user } = useAuth();
@@ -161,10 +162,7 @@ const FreelancerProposals = () => {
 
           {/* Content Loading */}
           {loading ? (
-            <div className="proposals-loading-state">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل عروضك المقدمة...</p>
-            </div>
+            <CardListSkeleton label="جارٍ تحميل عروضك المقدمة..." count={3} />
           ) : loadError ? (
             <ErrorState title="تعذر تحميل عروضك" error={loadError} onRetry={() => { setLoading(true); loadData(); }} />
           ) : filteredProposals.length === 0 ? (

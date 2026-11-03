@@ -21,6 +21,7 @@ import {
   FiFlag
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 // Select value for a report that is not about one of the user's contracts.
 const GENERAL_REPORT = 'general';
@@ -261,10 +262,7 @@ const Disputes = () => {
 
           {/* Disputes Content List */}
           {loading ? (
-            <div className="disputes-loading">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل سجل البلاغات والنزاعات...</p>
-            </div>
+            <CardListSkeleton label="جارٍ تحميل سجل البلاغات والنزاعات..." count={2} />
           ) : loadError ? (
             <ErrorState title="تعذر تحميل سجل البلاغات" error={loadError} onRetry={() => { setLoading(true); loadReports(); }} />
           ) : filteredReports.length === 0 ? (
@@ -446,7 +444,7 @@ const Disputes = () => {
                 >
                   <option value="نزاع تعاقدي أو مخالفة شروط">نزاع تعاقدي أو مخالفة شروط العقد</option>
                   <option value="تأخير غير مبرر في التسليم">تأخير غير مبرر ومماطلة في تسليم العمل</option>
-                  <option value="نزاع مالي أو مشكلة في الضمان">نزاع مالي أو مشكلة في دفعات الضمان (Escrow)</option>
+                  <option value="نزاع مالي أو مشكلة في الضمان">نزاع مالي أو مشكلة في مبلغ الضمان</option>
                   <option value="محاولة دفع أو تواصل خارج المنصة">محاولة دفع أو تواصل خارج منصة سوداوورك</option>
                   <option value="احتيال أو تضليل أو انتحال صفة">احتيال أو تضليل أو انتحال صفة</option>
                   <option value="سلوك مسيء أو مضايقة">سلوك مسيء أو مضايقة غير مقبولة</option>

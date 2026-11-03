@@ -13,6 +13,7 @@ import {
   FiBriefcase
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
+import { CardListSkeleton } from '../../components/common/Skeleton/Skeleton';
 
 const ContractsList = () => {
   const { user } = useAuth();
@@ -118,10 +119,7 @@ const ContractsList = () => {
 
           {/* Loading */}
           {loading ? (
-            <div className="contracts-loading">
-              <div className="profile-spinner" />
-              <p>جارٍ تحميل عقود العمل...</p>
-            </div>
+            <CardListSkeleton label="جارٍ تحميل عقود العمل..." count={3} withAvatar />
           ) : loadError ? (
             <ErrorState title="تعذر تحميل العقود" error={loadError} onRetry={() => { setLoading(true); loadData(); }} />
           ) : filteredContracts.length === 0 ? (

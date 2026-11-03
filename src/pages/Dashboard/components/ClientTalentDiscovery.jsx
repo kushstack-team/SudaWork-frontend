@@ -10,6 +10,7 @@ import {
 } from 'react-icons/fi';
 import './ClientTalentDiscovery.css';
 import defaultAvatar from '../../../assets/default-avatar.svg';
+import { PeopleGridSkeleton } from '../../../components/common/Skeleton/Skeleton';
 
 const talentCategories = [
   { id: 'all', label: 'كافة التخصصات' },
@@ -80,10 +81,7 @@ const ClientTalentDiscovery = ({ freelancers = [], loading = false }) => {
       </div>
 
       {loading ? (
-        <div className="talent-loading-box">
-          <div className="talent-spinner" />
-          <p>جارٍ تحميل أفضل الكفاءات والمستقلين...</p>
-        </div>
+        <PeopleGridSkeleton label="جارٍ تحميل أفضل الكفاءات والمستقلين..." count={4} />
       ) : filteredFreelancers.length === 0 ? (
         <div className="talent-empty-box">
           <FiSearch className="empty-search-icon" />

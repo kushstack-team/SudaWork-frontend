@@ -523,27 +523,6 @@
 }
 
 /* Loading */
-.profile-edit-loading {
-  min-height: 60vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
-
-.profile-spinner {
-  width: 44px;
-  height: 44px;
-  border: 4px solid rgba(11, 110, 79, 0.15);
-  border-top-color: var(--color-primary, #0B6E4F);
-  border-radius: 50%;
-  animation: p-spin 0.8s linear infinite;
-}
-
-@keyframes p-spin {
-  to { transform: rotate(360deg); }
-}
 
 @media (max-width: 768px) {
   .form-grid-two {
