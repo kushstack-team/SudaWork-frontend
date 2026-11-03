@@ -391,51 +391,6 @@
 }
 
 /* Quick Demo Box */
-.login-demo-box {
-  margin-top: var(--space-7, 32px);
-  padding: var(--space-4, 16px) var(--space-5, 20px);
-  background-color: #f8fafc;
-  border: 1px dashed #cbd5e1;
-  border-radius: 14px;
-  width: 100%;
-  max-width: 400px;
-  margin-left: auto;
-  margin-right: auto;
-  box-sizing: border-box;
-  text-align: center;
-}
-
-.login-demo-title {
-  display: block;
-  font-size: 0.88rem;
-  color: #64748b;
-  margin-bottom: var(--space-2, 8px);
-  font-weight: 600;
-}
-
-.login-demo-buttons {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.demo-pill-btn {
-  background-color: #ffffff;
-  border: 1px solid #94a3b8;
-  border-radius: 16px;
-  padding: 5px 12px;
-  font-size: 0.85rem;
-  font-family: var(--font-primary, 'Tajawal', sans-serif);
-  color: #334155;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.demo-pill-btn:hover {
-  background-color: #e2e8f0;
-  border-color: #64748b;
-}
 
 @media (max-width: 640px) {
   .login-header {
@@ -463,7 +418,5 @@
   .login-form {
     max-width: 100%;
   }
-  .login-demo-box {
-    max-width: 100%;
-  }
+  
 }

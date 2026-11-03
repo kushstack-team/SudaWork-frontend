@@ -1,4 +1,4 @@
-import { FiSearch } from 'react-icons/fi';
+import { FiSearch, FiUserPlus } from 'react-icons/fi';
 import { formatDate } from '../../../utils/formatters';
 import VerifiedBadge from '../../../components/VerifiedBadge/VerifiedBadge';
 
@@ -15,6 +15,9 @@ export default function AdminUsersTab({
   setUserSearch,
   userRoleFilter,
   setUserRoleFilter,
+  userStatusFilter = 'all',
+  setUserStatusFilter,
+  onAddAdmin,
   onToggleUserStatus,
   onDeleteUser,
   onToggleVerified,
@@ -50,6 +53,26 @@ export default function AdminUsersTab({
               <option value="freelancer">المستقلون (Freelancers)</option>
               <option value="admin">المديرون (Admins)</option>
             </select>
+
+            {setUserStatusFilter && (
+              <select
+                className="role-filter-select"
+                value={userStatusFilter}
+                onChange={(e) => setUserStatusFilter(e.target.value)}
+                aria-label="حالة الحساب"
+              >
+                <option value="all">كل الحالات</option>
+                <option value="active">نشط</option>
+                <option value="suspended">غير نشط</option>
+              </select>
+            )}
+
+            {onAddAdmin && (
+              <button type="button" className="add-admin-btn" onClick={onAddAdmin}>
+                <FiUserPlus />
+                <span>إضافة مدير</span>
+              </button>
+            )}
           </div>
         </div>
 

@@ -16,10 +16,12 @@ export default function AdminProjectsTab({
   reviewingId,
   skillsList = [],
   onOpenSkillModal,
-  onToggleSkill
+  onToggleSkill,
+  // Controlled by the dashboard URL (?tab=projects&status=Open).
+  statusFilter: projectStatusFilter = 'all',
+  setStatusFilter: setProjectStatusFilter
 }) {
   const [projectSearch, setProjectSearch] = useState('');
-  const [projectStatusFilter, setProjectStatusFilter] = useState('all');
 
   const filteredProjects = projectsList.filter((p) => {
     const term = projectSearch.trim().toLowerCase();

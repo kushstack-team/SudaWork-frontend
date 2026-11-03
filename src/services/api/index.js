@@ -189,6 +189,9 @@ export const adminApi = {
   activateUser: (id) => post(`/admin/users/${id}/activate`),
   verifyUser: (id) => post(`/admin/users/${id}/verify`),
   unverifyUser: (id) => post(`/admin/users/${id}/unverify`),
+  // Creates a separate administrator account; `currentPassword` is the acting admin's.
+  createAdmin: async ({ fullName, email, password, currentPassword }) =>
+    m.mapUser(await post('/admin/admins', { fullName, email, password, currentPassword })),
   deleteUser: (id) => del(`/admin/users/${id}`),
   projects: async (params) => m.mapPage(await get('/admin/projects', params), m.mapProject),
   moderateProject: (id, data) => patch(`/admin/projects/${id}`, data),

@@ -116,13 +116,6 @@ const Login = () => {
     google.cancelReactivation();
   };
 
-  const fillQuickDemo = (demoEmail, demoPass) => {
-    setEmail(demoEmail);
-    setPassword(demoPass);
-    setErrors({});
-    setSubmitError('');
-  };
-
   return (
     <div className="login-page" dir="rtl">
       {/* Header */}
@@ -271,35 +264,6 @@ const Login = () => {
           </div>
         </form>
 
-        {/* Demo accounts exist only in local development (npm run seed:demo). */}
-        {import.meta.env.DEV && (
-        <div className="login-demo-box">
-          <span className="login-demo-title">حسابات تجريبية سريعة للمعاينة:</span>
-          <div className="login-demo-buttons">
-            <button
-              type="button"
-              className="demo-pill-btn"
-              onClick={() => fillQuickDemo('tarig@alnilam.sd', 'password123')}
-            >
-              عميل (طارق)
-            </button>
-            <button
-              type="button"
-              className="demo-pill-btn"
-              onClick={() => fillQuickDemo('tasneem@dev.sd', 'password123')}
-            >
-              مستقلة (تسنيم)
-            </button>
-            <button
-              type="button"
-              className="demo-pill-btn"
-              onClick={() => fillQuickDemo('admin@sudawork.com', 'admin123')}
-            >
-              مدير النظام
-            </button>
-          </div>
-        </div>
-        )}
       </main>
       <ConfirmModal
         isOpen={reactivationOpen}

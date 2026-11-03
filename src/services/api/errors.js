@@ -46,6 +46,7 @@ const BY_MESSAGE = {
   'Invalid email or password': 'البريد الإلكتروني أو كلمة المرور غير صحيحة.',
   'Incorrect old password': 'كلمة المرور الحالية غير صحيحة.',
   'Incorrect password': 'كلمة المرور غير صحيحة.',
+  'Your current password is incorrect': 'كلمة المرور الحالية غير صحيحة.',
   'Only active accounts can be verified': 'يمكن توثيق الحسابات النشطة فقط.',
   'This account was deleted by its owner and cannot be changed': 'حذف صاحب هذا الحساب حسابه، ولا يمكن تعديله.',
   'This project is no longer accepting proposals': 'هذا المشروع لم يعد يستقبل العروض.',

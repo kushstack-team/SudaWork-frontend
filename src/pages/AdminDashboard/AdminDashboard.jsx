@@ -1,8 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import './AdminDashboard.css';
-import DashboardNavbar from '../../components/DashboardNavbar/DashboardNavbar';
-import Footer from '../../components/Footer';
 import { useAuth } from '../../context/auth';
 import { usePlatform } from '../../context/platform';
 import { api } from '../../services/api';
@@ -10,7 +8,6 @@ import useLoader from '../../hooks/useLoader';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import {
-  FiShield,
   FiUsers,
   FiDollarSign,
   FiCheckCircle,
@@ -18,17 +15,18 @@ import {
   FiBriefcase,
   FiSettings,
   FiTrendingUp,
-  FiActivity,
   FiCheck,
   FiX,
   FiPlus,
   FiToggleRight,
   FiFileText,
   FiList,
-  FiClock
+  FiGrid
 } from 'react-icons/fi';
 
 // Modular Tab Components
+import AdminLayout from './components/AdminLayout';
+import AddAdminModal from './components/AddAdminModal';
 import AdminOverviewTab from './components/AdminOverviewTab';
 import AdminUsersTab from './components/AdminUsersTab';
 import AdminEscrowTab from './components/AdminEscrowTab';
@@ -41,6 +39,20 @@ import AdminContractsTab from './components/AdminContractsTab';
 import AdminAuditTab from './components/AdminAuditTab';
 
 const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'contracts', 'disputes', 'projects', 'features', 'audit', 'settings'];
+
+// Title and description shown in the top bar for each section.
+const SECTION_META = {
+  overview: { title: 'نظرة عامة', subtitle: 'ملخص نشاط المنصة والعناصر التي تنتظر إجراءك.' },
+  users: { title: 'المستخدمون', subtitle: 'حسابات العملاء والمستقلين والمديرين.' },
+  projects: { title: 'المشاريع والتصنيفات', subtitle: 'مراجعة المشاريع الجديدة وإدارة التصنيفات والمهارات.' },
+  contracts: { title: 'العقود', subtitle: 'متابعة عقود العمل وحالاتها.' },
+  escrow: { title: 'تدقيق المدفوعات', subtitle: 'مطابقة إيداعات العملاء واعتمادها لتفعيل العقود.' },
+  withdrawals: { title: 'سحب الأرباح', subtitle: 'اعتماد طلبات سحب المستقلين وتسجيل التحويل.' },
+  disputes: { title: 'النزاعات والبلاغات', subtitle: 'مراجعة البلاغات وإصدار القرارات.' },
+  features: { title: 'إدارة الميزات', subtitle: 'تفعيل ميزات المنصة لكل دور.' },
+  audit: { title: 'سجل العمليات', subtitle: 'الإجراءات الإدارية والمالية المسجلة.' },
+  settings: { title: 'إعدادات النظام', subtitle: 'العمولة وبيانات الدفع والتواصل وسياسات المنصة.' },
+};
 // Notification links use the API's tab names.
 const TAB_ALIASES = { payments: 'escrow' };
 
@@ -60,12 +72,30 @@ const EMPTY_SETTINGS_FORM = {
 };
 
 const AdminDashboard = () => {
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const { reload: reloadPlatform } = usePlatform();
   const [searchParams, setSearchParams] = useSearchParams();
   const requestedTab = TAB_ALIASES[searchParams.get('tab')] || searchParams.get('tab');
   const activeTab = TABS.includes(requestedTab) ? requestedTab : 'overview';
   const setActiveTab = (tab) => setSearchParams(tab === 'overview' ? {} : { tab });
+
+  // Section filters live in the URL (?tab=users&role=freelancer), so the
+  // overview cards, links and the back button all land on the same view.
+  const linkTo = (tab, params = {}) => {
+    const query = new URLSearchParams(tab === 'overview' ? params : { tab, ...params }).toString();
+    return { pathname: '/admin', search: query ? `?${query}` : '' };
+  };
+  const setFilter = (key, value) => {
+    const next = new URLSearchParams(searchParams);
+    if (value && value !== 'all') next.set(key, value);
+    else next.delete(key);
+    setSearchParams(next, { replace: true });
+  };
+  const userRoleFilter = searchParams.get('role') || 'all';
+  const userStatusFilter = searchParams.get('status') || 'all';
+  const contractStatusFilter = activeTab === 'contracts' ? searchParams.get('status') || '' : '';
+  const projectStatusFilter = activeTab === 'projects' ? searchParams.get('status') || 'all' : 'all';
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -82,7 +112,6 @@ const AdminDashboard = () => {
   const [features, setFeatures] = useState([]);
   const [skillsList, setSkillsList] = useState([]);
   const [contractsList, setContractsList] = useState([]);
-  const [contractStatusFilter, setContractStatusFilter] = useState('');
   const [auditPage, setAuditPage] = useState({ data: [], total: 0, page: 1, totalPages: 1 });
 
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
@@ -96,7 +125,8 @@ const AdminDashboard = () => {
 
   // Filtering & Search (users are filtered on the server)
   const [userSearch, setUserSearch] = useState('');
-  const [userRoleFilter, setUserRoleFilter] = useState('all');
+  const [addAdminOpen, setAddAdminOpen] = useState(false);
+  const [unreadNotifications, setUnreadNotifications] = useState(0);
 
   // Modals & Action States
   const [selectedDispute, setSelectedDispute] = useState(null);
@@ -197,18 +227,23 @@ const AdminDashboard = () => {
   useLoader(loadAllAdminData, []);
 
   // Users: server-side search, debounced while typing.
-  const loadUsers = useCallback(async (search, role) => {
+  const loadUsers = useCallback(async (search, role, status) => {
     try {
-      setUsersPage(await api.admin.users({ search, role, limit: 100 }));
+      setUsersPage(await api.admin.users({ search, role, status: status === 'all' ? undefined : status, limit: 100 }));
     } catch (err) {
       showError(err.message);
     }
   }, []);
 
   useEffect(() => {
-    const timer = setTimeout(() => loadUsers(userSearch.trim(), userRoleFilter), 300);
+    const timer = setTimeout(() => loadUsers(userSearch.trim(), userRoleFilter, userStatusFilter), 300);
     return () => clearTimeout(timer);
-  }, [userSearch, userRoleFilter, loadUsers]);
+  }, [userSearch, userRoleFilter, userStatusFilter, loadUsers]);
+
+  const loadUnreadNotifications = useCallback(() => {
+    api.notifications.unreadCount().then(setUnreadNotifications, () => {});
+  }, []);
+  useLoader(loadUnreadNotifications, []);
 
   // Contracts and audit log load on their own filters/pages.
   const loadContracts = useCallback(async (status) => {
@@ -232,7 +267,8 @@ const AdminDashboard = () => {
 
   const refreshAll = () => {
     loadAllAdminData();
-    loadUsers(userSearch.trim(), userRoleFilter);
+    loadUsers(userSearch.trim(), userRoleFilter, userStatusFilter);
+    loadUnreadNotifications();
     if (activeTab === 'contracts') loadContracts(contractStatusFilter);
     if (activeTab === 'audit') loadAudit(auditPage.page);
   };
@@ -614,47 +650,74 @@ const AdminDashboard = () => {
     }
   };
 
-  // Metrics (from the server; a genuine zero is shown as zero)
-  // 8 Required Statistics under SRS Section 18:
-  const totalUsersCount = metrics?.users?.total ?? usersPage.total ?? 0;
-  const totalFreelancersCount = metrics?.users?.freelancers ?? 0;
-  const totalClientsCount = metrics?.users?.clients ?? 0;
-  const totalProjectsCount = metrics?.projects?.total ?? (metrics?.projects?.open != null ? (metrics.projects.open + (metrics.projects.completed || 0) + (metrics.projects.cancelled || 0)) : projectsList.length);
-  const activeProjectsCount = metrics?.projects?.open ?? metrics?.contracts?.active ?? projectsList.filter(p => p.status === 'Open').length;
-  const completedProjectsCount = metrics?.projects?.completed ?? metrics?.contracts?.completed ?? projectsList.filter(p => p.status === 'Completed').length;
+  // Pending counts for the sidebar badges (from the server).
   const pendingPaymentsCount = metrics?.payments?.pending ?? 0;
   const pendingWithdrawalsCount = (metrics?.withdrawals?.pending ?? 0) + (metrics?.withdrawals?.approved ?? 0);
   const openDisputesCount = metrics?.reports?.open ?? 0;
   const pendingProjectsCount = metrics?.projects?.pendingReview ?? pendingProjects.length;
   const filteredUsers = usersPage.items;
 
-  if (loading) {
-    return (
-      <div className="admin-dashboard-page" dir="rtl">
-        <DashboardNavbar />
-        <main className="admin-main">
-          <div className="admin-container">
-            <p>جارٍ تحميل بيانات لوحة الإدارة...</p>
-          </div>
-        </main>
-      </div>
-    );
-  }
+  const sidebarGroups = [
+    {
+      label: 'الرئيسية',
+      items: [{ id: 'overview', label: 'نظرة عامة', icon: FiGrid }],
+    },
+    {
+      label: 'الإدارة',
+      items: [
+        { id: 'users', label: 'المستخدمون', icon: FiUsers },
+        { id: 'projects', label: 'المشاريع والتصنيفات', icon: FiBriefcase, badge: pendingProjectsCount },
+        { id: 'contracts', label: 'العقود', icon: FiFileText },
+      ],
+    },
+    {
+      label: 'المالية',
+      items: [
+        { id: 'escrow', label: 'تدقيق المدفوعات', icon: FiDollarSign, badge: pendingPaymentsCount },
+        { id: 'withdrawals', label: 'سحب الأرباح', icon: FiTrendingUp, badge: pendingWithdrawalsCount },
+      ],
+    },
+    {
+      label: 'الإشراف',
+      items: [{ id: 'disputes', label: 'النزاعات والبلاغات', icon: FiAlertTriangle, badge: openDisputesCount }],
+    },
+    {
+      label: 'النظام',
+      items: [
+        { id: 'features', label: 'إدارة الميزات', icon: FiToggleRight },
+        { id: 'audit', label: 'سجل العمليات', icon: FiList },
+        { id: 'settings', label: 'إعدادات النظام', icon: FiSettings },
+      ],
+    },
+  ];
+
+  const handleLogout = async () => {
+    await logout().catch(() => {});
+    navigate('/login', { replace: true });
+  };
+
+  const handleCreateAdmin = async (data) => {
+    const admin = await api.admin.createAdmin(data);
+    setAddAdminOpen(false);
+    showSuccess(`تمت إضافة ${admin.fullName} كمدير للمنصة.`);
+    refreshAll();
+  };
+
+  const section = SECTION_META[activeTab];
 
   return (
-    <div className="admin-dashboard-page" dir="rtl">
-      <DashboardNavbar />
-
-      <main className="admin-main">
-        <div className="admin-container">
-
-          {/* Breadcrumb Navigation */}
-          <div className="admin-breadcrumb">
-            <Link to="/admin" className="breadcrumb-link">الرئيسية</Link>
-            <span className="breadcrumb-sep">/</span>
-            <span className="breadcrumb-current">لوحة الإدارة والتحكيم</span>
-          </div>
-
+    <>
+      <AdminLayout
+        groups={sidebarGroups}
+        activeId={activeTab}
+        onNavigate={setActiveTab}
+        title={section.title}
+        subtitle={section.subtitle}
+        user={user}
+        unreadNotifications={unreadNotifications}
+        onRefresh={refreshAll}
+        onLogout={handleLogout}
+      >
           {/* Feedback Alerts */}
           {feedbackSuccess && (
             <div className="admin-alert success" role="alert">
@@ -673,280 +736,22 @@ const AdminDashboard = () => {
             <ErrorState title="تعذر تحميل بيانات الإدارة" error={loadError} onRetry={() => { setLoading(true); loadAllAdminData(); }} />
           )}
 
-          {/* Admin Hero Header */}
-          <div className="admin-hero-card">
-            <div className="admin-hero-info">
-              <div className="admin-badge">
-                <FiShield />
-                <span>إدارة المنصة المركزية والتحكيم</span>
-              </div>
-              <h1 className="admin-title">لوحة تحكم منصة سوداوورك (SudaWork Control)</h1>
-              <p className="admin-subtitle">
-                متابعة حركة المنصة الحية، تدقيق إيداعات بنكك، تفعيل العقود، حل النزاعات، وإدارة الحسابات.
-              </p>
-            </div>
+          {loading && <div className="admin-loading" role="status">جارٍ تحميل بيانات لوحة الإدارة...</div>}
 
-            <div className="admin-user-tag">
-              <div className="admin-avatar-box">
-                <FiShield />
-              </div>
-              <div>
-                <span className="admin-name">{user?.fullName}</span>
-                <span className="admin-role">مدير النظام</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Platform KPI Metrics Grid (All 8 SRS Section 18 Metrics Distinctly Visible) */}
-          {metrics && (
-            <div className="admin-metrics-grid">
-              {/* 1. Total Users */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap users">
-                  <FiUsers />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{totalUsersCount}</span>
-                  <span className="metric-title">1. إجمالي المستخدمين</span>
-                </div>
-              </div>
-
-              {/* 2. Total Freelancers */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap users">
-                  <FiUsers />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{totalFreelancersCount}</span>
-                  <span className="metric-title">2. إجمالي المستقلين</span>
-                </div>
-              </div>
-
-              {/* 3. Total Clients */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap users">
-                  <FiUsers />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{totalClientsCount}</span>
-                  <span className="metric-title">3. إجمالي أصحاب الأعمال</span>
-                </div>
-              </div>
-
-              {/* 4. Total Projects */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap projects">
-                  <FiBriefcase />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{totalProjectsCount}</span>
-                  <span className="metric-title">4. إجمالي المشاريع</span>
-                </div>
-              </div>
-
-              {/* 5. Active Projects */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap projects">
-                  <FiActivity />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{activeProjectsCount}</span>
-                  <span className="metric-title">5. المشاريع النشطة</span>
-                </div>
-              </div>
-
-              {/* 6. Completed Projects */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap projects">
-                  <FiCheckCircle />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{completedProjectsCount}</span>
-                  <span className="metric-title">6. المشاريع المكتملة</span>
-                </div>
-              </div>
-
-              {/* 7. Pending Payments */}
-              <div className="metric-card alert-card">
-                <div className="metric-icon-wrap escrow">
-                  <FiClock />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{pendingPaymentsCount}</span>
-                  <span className="metric-title">7. مدفوعات معلقة (دفع)</span>
-                </div>
-              </div>
-
-              {/* 8. Pending Withdrawals */}
-              <div className="metric-card alert-card">
-                <div className="metric-icon-wrap revenue">
-                  <FiDollarSign />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{pendingWithdrawalsCount}</span>
-                  <span className="metric-title">8. طلبات سحب معلقة</span>
-                </div>
-              </div>
-
-              {/* Additional Financial & System Indicators */}
-              <div className="metric-card">
-                <div className="metric-icon-wrap escrow">
-                  <FiDollarSign />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{(metrics.contracts?.escrowHeld || 0).toLocaleString()} ج.س</span>
-                  <span className="metric-title">أموال الضمان المحتجزة</span>
-                </div>
-              </div>
-
-              <div className="metric-card">
-                <div className="metric-icon-wrap commission">
-                  <FiTrendingUp />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{(metrics.revenue?.platformFees || 0).toLocaleString()} ج.س</span>
-                  <span className="metric-title">عمولة المنصة المحققة</span>
-                </div>
-              </div>
-
-              <div className="metric-card">
-                <div className="metric-icon-wrap disputes">
-                  <FiAlertTriangle />
-                </div>
-                <div className="metric-data">
-                  <span className="metric-num">{openDisputesCount}</span>
-                  <span className="metric-title">قضايا نزاع وبلاغات</span>
-                </div>
-              </div>
-            </div>
+          {!loading && activeTab === 'overview' && (
+            <AdminOverviewTab metrics={metrics} linkTo={linkTo} />
           )}
 
-          {/* Main Navigation Tabs */}
-          <div className="admin-tabs-nav">
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'overview' ? 'active' : ''}`}
-              onClick={() => setActiveTab('overview')}
-            >
-              <FiActivity />
-              <span>طابور العمليات والمهام</span>
-              {(pendingPaymentsCount > 0 || pendingWithdrawalsCount > 0 || openDisputesCount > 0 || pendingProjectsCount > 0) && (
-                <span className="tab-alert-dot" />
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'users' ? 'active' : ''}`}
-              onClick={() => setActiveTab('users')}
-            >
-              <FiUsers />
-              <span>المستخدمون ({metrics?.users.total ?? usersPage.total})</span>
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'escrow' ? 'active' : ''}`}
-              onClick={() => setActiveTab('escrow')}
-            >
-              <FiDollarSign />
-              <span>تدقيق المدفوعات ({paymentRequests.length})</span>
-              {pendingPaymentsCount > 0 && (
-                <span className="tab-pill-badge">{pendingPaymentsCount}</span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'withdrawals' ? 'active' : ''}`}
-              onClick={() => setActiveTab('withdrawals')}
-            >
-              <FiTrendingUp />
-              <span>سحب الأرباح ({withdrawalRequests.length})</span>
-              {pendingWithdrawalsCount > 0 && (
-                <span className="tab-pill-badge">{pendingWithdrawalsCount}</span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'contracts' ? 'active' : ''}`}
-              onClick={() => setActiveTab('contracts')}
-            >
-              <FiFileText />
-              <span>العقود</span>
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'disputes' ? 'active' : ''}`}
-              onClick={() => setActiveTab('disputes')}
-            >
-              <FiAlertTriangle />
-              <span>التحكيم والنزاعات ({disputesList.length})</span>
-              {openDisputesCount > 0 && (
-                <span className="tab-pill-badge warning">{openDisputesCount}</span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'projects' ? 'active' : ''}`}
-              onClick={() => setActiveTab('projects')}
-            >
-              <FiBriefcase />
-              <span>المشاريع والتصنيفات</span>
-              {pendingProjectsCount > 0 && (
-                <span className="tab-pill-badge warning">{pendingProjectsCount}</span>
-              )}
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'features' ? 'active' : ''}`}
-              onClick={() => setActiveTab('features')}
-            >
-              <FiToggleRight />
-              <span>إدارة الميزات</span>
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'audit' ? 'active' : ''}`}
-              onClick={() => setActiveTab('audit')}
-            >
-              <FiList />
-              <span>سجل العمليات</span>
-            </button>
-
-            <button
-              type="button"
-              className={`admin-nav-tab ${activeTab === 'settings' ? 'active' : ''}`}
-              onClick={() => setActiveTab('settings')}
-            >
-              <FiSettings />
-              <span>إعدادات النظام</span>
-            </button>
-          </div>
-
-          {activeTab === 'overview' && (
-            <AdminOverviewTab
-              pendingPaymentsCount={pendingPaymentsCount}
-              pendingWithdrawalsCount={pendingWithdrawalsCount}
-              openDisputesCount={openDisputesCount}
-              pendingProjectsCount={pendingProjectsCount}
-              onRefresh={refreshAll}
-              onNavigateTab={setActiveTab}
-            />
-          )}
-
-          {activeTab === 'users' && (
+          {!loading && activeTab === 'users' && (
             <AdminUsersTab
               filteredUsers={filteredUsers}
               userSearch={userSearch}
               setUserSearch={setUserSearch}
               userRoleFilter={userRoleFilter}
-              setUserRoleFilter={setUserRoleFilter}
+              setUserRoleFilter={(role) => setFilter('role', role)}
+              userStatusFilter={userStatusFilter}
+              setUserStatusFilter={(status) => setFilter('status', status)}
+              onAddAdmin={() => setAddAdminOpen(true)}
               onToggleUserStatus={handleToggleUserStatus}
               onDeleteUser={handleDeleteUser}
               onToggleVerified={handleToggleVerified}
@@ -954,7 +759,7 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'escrow' && (
+          {!loading && activeTab === 'escrow' && (
             <AdminEscrowTab
               paymentRequests={paymentRequests}
               submittingPaymentAction={submittingPaymentAction}
@@ -967,7 +772,7 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'withdrawals' && (
+          {!loading && activeTab === 'withdrawals' && (
             <AdminWithdrawalsTab
               withdrawalRequests={withdrawalRequests}
               onApproveWithdrawal={handleApproveWithdrawal}
@@ -983,11 +788,11 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'contracts' && (
+          {!loading && activeTab === 'contracts' && (
             <AdminContractsTab
               contracts={contractsList}
               statusFilter={contractStatusFilter}
-              setStatusFilter={setContractStatusFilter}
+              setStatusFilter={(status) => setFilter('status', status)}
               onCancelContract={(c) => {
                 setContractCancelReason('');
                 setContractCancelTarget(c);
@@ -995,7 +800,7 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'audit' && (
+          {!loading && activeTab === 'audit' && (
             <AdminAuditTab
               logs={auditPage.data}
               total={auditPage.total}
@@ -1005,7 +810,7 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'disputes' && (
+          {!loading && activeTab === 'disputes' && (
             <AdminDisputesTab
               disputesList={disputesList}
               onOpenResolveDispute={(disp) => {
@@ -1018,8 +823,10 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'projects' && (
+          {!loading && activeTab === 'projects' && (
             <AdminProjectsTab
+              statusFilter={projectStatusFilter}
+              setStatusFilter={(status) => setFilter('status', status)}
               categoriesList={categoriesList}
               projectsList={projectsList}
               onOpenCategoryModal={() => setIsCategoryModalOpen(true)}
@@ -1040,11 +847,11 @@ const AdminDashboard = () => {
             />
           )}
 
-          {activeTab === 'features' && (
+          {!loading && activeTab === 'features' && (
             <AdminFeaturesTab features={features} onChange={handleFeatureChange} />
           )}
 
-          {activeTab === 'settings' && (
+          {!loading && activeTab === 'settings' && (
             <AdminSettingsTab
               settingsForm={settingsForm}
               setSettingsForm={setSettingsForm}
@@ -1053,8 +860,7 @@ const AdminDashboard = () => {
             />
           )}
 
-        </div>
-      </main>
+      </AdminLayout>
 
       {/* Dispute Mediation Decision Modal */}
       {selectedDispute && (
@@ -1458,8 +1264,12 @@ const AdminDashboard = () => {
         onCancel={closeConfirm}
       />
 
-      <Footer />
-    </div>
+      <AddAdminModal
+        isOpen={addAdminOpen}
+        onSubmit={handleCreateAdmin}
+        onClose={() => setAddAdminOpen(false)}
+      />
+    </>
   );
 };
 
