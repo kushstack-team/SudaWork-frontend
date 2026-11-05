@@ -154,6 +154,9 @@ export const notificationsApi = {
   markAllRead: () => post('/notifications/read-all'),
   remove: (id) => del(`/notifications/${id}`),
   clear: () => del('/notifications'),
+  // Push notifications: this browser's Firebase Cloud Messaging token.
+  registerPushToken: (token) => post('/notifications/push-tokens', { token }),
+  unregisterPushToken: (token) => del('/notifications/push-tokens', { body: { token } }),
 };
 
 export const messagesApi = {

@@ -1,0 +1,113 @@
+.push-settings {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 18px 20px;
+  border: 1px solid #e5e9ee;
+  border-radius: 16px;
+  background-color: #ffffff;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+}
+
+.push-settings--on {
+  border-color: #a7f3d0;
+  background-color: #f0fdf7;
+}
+
+.push-settings--blocked {
+  border-color: #fde68a;
+  background-color: #fffbeb;
+}
+
+.push-settings__icon {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  background-color: #f1f5f9;
+  color: #475569;
+  font-size: 1.25rem;
+}
+
+.push-settings--on .push-settings__icon {
+  background-color: #d1fae5;
+  color: #047857;
+}
+
+.push-settings--blocked .push-settings__icon {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.push-settings__body {
+  flex: 1;
+  min-width: 0;
+}
+
+.push-settings__title {
+  margin: 0 0 4px;
+  color: #0f172a;
+  font-size: 0.98rem;
+  font-weight: 800;
+}
+
+.push-settings__text {
+  margin: 0;
+  color: #475569;
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+.push-settings__error {
+  margin: 6px 0 0;
+  color: #b91c1c;
+  font-size: 0.85rem;
+}
+
+.push-settings__btn {
+  flex-shrink: 0;
+  height: 40px;
+  padding: 0 16px;
+  border: none;
+  border-radius: 10px;
+  background-color: var(--color-primary-dark, #004d34);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.push-settings__btn:hover:not(:disabled) {
+  background-color: var(--color-primary, #0b6e4f);
+}
+
+.push-settings__btn--secondary {
+  border: 1px solid #d1d5db;
+  background-color: #ffffff;
+  color: #334155;
+}
+
+.push-settings__btn--secondary:hover:not(:disabled) {
+  background-color: #f8fafc;
+}
+
+.push-settings__btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+@media (max-width: 640px) {
+  .push-settings {
+    flex-wrap: wrap;
+  }
+
+  .push-settings__btn {
+    width: 100%;
+  }
+}

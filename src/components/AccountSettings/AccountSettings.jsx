@@ -53,6 +53,8 @@ export default function AccountSettings({ sectionClassName, titleClassName, icon
       // The server returns a fresh session and signs out other devices.
       await api.auth.changePassword(hasPassword ? oldPassword : '', newPassword);
       await refreshUser();
+      // The server cleared this account's push devices with the other sessions.
+      window.dispatchEvent(new Event('sudawork:push-resync'));
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
