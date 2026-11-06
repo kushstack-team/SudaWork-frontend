@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import {
   FiBell,
+  FiCheck,
   FiFileText,
   FiCheckCircle,
   FiDollarSign,
@@ -63,7 +64,7 @@ export default function NotificationDropdown({
         <div className="notifications-dropdown" role="region" aria-label="الإشعارات">
           <div className="notif-dropdown-header">
             <div className="notif-header-title-wrap">
-              <span className="notif-header-title">الإشعارات والتنبيهات</span>
+              <span className="notif-header-title">الإشعارات</span>
               {unreadNotifCount > 0 && (
                 <span className="notif-unread-tag">{unreadNotifCount} جديدة</span>
               )}
@@ -73,8 +74,11 @@ export default function NotificationDropdown({
                 type="button"
                 className="notif-mark-all-read-btn"
                 onClick={onMarkAllRead}
+                aria-label="تحديد الكل كمقروء"
               >
-                تحديد الكل كمقروء
+                <FiCheck aria-hidden="true" />
+                <span className="is-long">تحديد الكل كمقروء</span>
+                <span className="is-short">قراءة الكل</span>
               </button>
             )}
           </div>

@@ -318,6 +318,12 @@ export const mapWithdrawal = (w) => w && ({
   transactionReference: w.transaction_reference || '',
   paidAt: w.paid_at,
   note: w.admin_note || '',
+  proofFileId: w.payout_proof_file_id || null,
+  // Freelancer's answer after the payout: null, 'RECEIVED' or 'NOT_RECEIVED'.
+  receiptStatus: w.receipt_status || null,
+  receiptNote: w.receipt_note || '',
+  receiptRespondedAt: w.receipt_responded_at || null,
+  conversationId: w.conversation_id || null,
   createdAt: w.created_at,
 });
 
@@ -377,21 +383,40 @@ export const mapMessage = (m) => ({
   sentAt: m.created_at,
   createdAt: m.created_at,
   attachments: (m.attachments || []).map(mapFile),
+  // 'text', 'withdrawal_proof' (payout notice) or 'withdrawal_receipt'.
+  kind: m.kind || 'text',
+  withdrawal: m.withdrawal
+    ? {
+      id: m.withdrawal.id,
+      amount: num(m.withdrawal.paid_amount ?? m.withdrawal.amount),
+      method: m.withdrawal.payout_method || m.withdrawal.payment_method || '',
+      transactionReference: m.withdrawal.transaction_reference || '',
+      rawStatus: m.withdrawal.status,
+      receiptStatus: m.withdrawal.receipt_status || null,
+      receiptNote: m.withdrawal.receipt_note || '',
+    }
+    : null,
 });
 
 export const mapConversation = (c) => ({
   id: c.id,
+  // 'support' = chat with the platform administration.
+  isSupport: c.kind === 'support',
   projectId: c.project_id,
   contractId: c.contract_id,
   projectTitle: c.project_title || '',
   contractStatus: label(CONTRACT_STATUS, c.contract_status),
   counterpartyId: c.other_id,
-  counterpartyName: c.other_name || '',
+  // Users see the administration as one party, not the admin's own name.
+  counterpartyName: c.kind === 'support' && c.other_role === 'admin' ? 'إدارة سوداوورك' : c.other_name || '',
   counterpartyAvatar: resolveFileUrl(c.other_avatar_url),
   counterpartyRole: c.other_role,
-  counterpartySubtitle: c.other_role === 'freelancer' ? c.other_title || '' : c.other_company || '',
+  counterpartyEmail: c.other_email || '',
+  counterpartySubtitle: c.kind === 'support' && c.other_role === 'admin'
+    ? 'فريق الدعم والمدفوعات'
+    : c.other_role === 'freelancer' ? c.other_title || '' : c.other_company || '',
   lastMessage: c.last_message
-    ? { id: c.last_message.id, body: c.last_message.message || '', senderId: c.last_message.sender_id, sentAt: c.last_message.created_at }
+    ? { id: c.last_message.id, body: c.last_message.message || '', senderId: c.last_message.sender_id, sentAt: c.last_message.created_at, kind: c.last_message.kind || 'text' }
     : null,
   unreadCount: Number(c.unread_count || 0),
   updatedAt: c.last_activity_at || c.updated_at,

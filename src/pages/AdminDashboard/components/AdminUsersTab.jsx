@@ -21,6 +21,7 @@ export default function AdminUsersTab({
   onToggleUserStatus,
   onDeleteUser,
   onToggleVerified,
+  onMessageUser,
   currentUserId
 }) {
   return (
@@ -129,6 +130,11 @@ export default function AdminUsersTab({
                             onClick={() => onToggleVerified(u)}
                           >
                             {u.isVerified ? 'إزالة التوثيق' : 'توثيق'}
+                          </button>
+                        )}
+                        {onMessageUser && (
+                          <button type="button" className="user-status-btn message" onClick={() => onMessageUser(u)}>
+                            مراسلة
                           </button>
                         )}
                         <button

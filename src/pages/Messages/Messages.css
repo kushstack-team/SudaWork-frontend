@@ -756,3 +756,38 @@
     animation: none;
   }
 }
+
+/* Support chat: the administration is shown with the platform logo. */
+.thread-avatar-brand,
+.chat-header-brand {
+  display: block;
+  border: none;
+  border-radius: 12px;
+}
+
+/* Payout notice: a white card on both sides of the chat. */
+.message-row .message-bubble.is-notice {
+  max-width: min(400px, 88%);
+  background-color: #ffffff;
+  color: #0f172a;
+  border: 1.5px solid #bbf7d0;
+  box-shadow: 0 4px 14px rgba(4, 120, 87, 0.08);
+}
+
+.message-row .message-bubble.is-notice .message-timestamp,
+.message-row .message-bubble.is-receipt .message-timestamp {
+  color: #64748b;
+}
+
+/* The freelancer's answer: green (received) or amber (not received). */
+.message-row .message-bubble.is-receipt.ok {
+  background-color: #dcfce7;
+  color: #065f46;
+  border: 1px solid #86efac;
+}
+
+.message-row .message-bubble.is-receipt.warn {
+  background-color: #fef3c7;
+  color: #92400e;
+  border: 1px solid #fcd34d;
+}

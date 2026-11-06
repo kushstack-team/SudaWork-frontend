@@ -127,6 +127,9 @@ export const paymentsApi = {
 export const withdrawalsApi = {
   mine: async () => (await get('/withdrawals/me')).map(m.mapWithdrawal),
   balance: () => get('/withdrawals/balance'),
+  // Freelancer confirms whether the transferred money arrived.
+  respondToReceipt: async (id, { received, note }) =>
+    m.mapWithdrawal(await post(`/withdrawals/${id}/receipt`, { received, note: note || '' })),
   create: async ({ amount, paymentMethod, accountName, accountNumber }) =>
     m.mapWithdrawal(await post('/withdrawals', { amount, paymentMethod, accountName, accountNumber })),
 };
@@ -208,8 +211,14 @@ export const adminApi = {
   withdrawals: async (params) => m.mapPage(await get('/admin/withdrawals', params), m.mapWithdrawal),
   approveWithdrawal: (id) => post(`/admin/withdrawals/${id}/approve`),
   rejectWithdrawal: (id, reason) => post(`/admin/withdrawals/${id}/reject`, { reason }),
-  markWithdrawalPaid: (id, { transactionReference, paymentMethod, note }) =>
-    post(`/admin/withdrawals/${id}/mark-paid`, { transactionReference, paymentMethod: paymentMethod || undefined, note }),
+  // Pays out (approving first if needed) with the transfer notice; the notice
+  // is sent to the freelancer's support chat.
+  markWithdrawalPaid: async (id, { transactionReference, paymentMethod, note, proofFileId }) =>
+    m.mapWithdrawal(await post(`/admin/withdrawals/${id}/mark-paid`, { transactionReference, paymentMethod: paymentMethod || undefined, note, proofFileId })),
+  // Support chat with clients and freelancers.
+  supportConversations: async (search) => (await get('/admin/conversations', { search: search || undefined })).map(m.mapConversation),
+  supportUnreadCount: async (opts) => (await get('/admin/conversations/unread-count', undefined, opts)).count,
+  startSupportConversation: async (userId) => m.mapConversation(await post('/admin/conversations', { userId })),
   reports: async (params) => m.mapPage(await get('/admin/reports', params), m.mapReport),
   reviewReport: (id) => post(`/admin/reports/${id}/review`),
   resolveReport: (id, { resolution, action }) => post(`/admin/reports/${id}/resolve`, { resolution, action }),

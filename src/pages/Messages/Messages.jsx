@@ -8,6 +8,8 @@ import { api } from '../../services/api';
 import defaultAvatar from '../../assets/default-avatar.svg';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import FilePicker from '../../components/FilePicker/FilePicker';
+import { LogoMark } from '../../components/Logo';
+import WithdrawalNoticeCard from '../../components/WithdrawalNotice/WithdrawalNoticeCard';
 import {
   FiSearch,
   FiSend,
@@ -20,7 +22,9 @@ import {
   FiClock,
   FiAlertCircle,
   FiRefreshCw,
-  FiChevronLeft
+  FiChevronLeft,
+  FiCheckCircle,
+  FiAlertTriangle
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
@@ -241,6 +245,21 @@ const Messages = () => {
     setMessages((prev) => prev.filter((m) => m.id !== msg.id));
   };
 
+  // After the freelancer answers a payout notice: update every notice for that
+  // withdrawal and fetch the answer message the server posted.
+  const handleReceiptAnswered = async (withdrawal) => {
+    setMessages((prev) => prev.map((m) => (m.withdrawal?.id === withdrawal.id
+      ? { ...m, withdrawal: { ...m.withdrawal, receiptStatus: withdrawal.receiptStatus, receiptNote: withdrawal.receiptNote } }
+      : m)));
+    if (!activeThreadId) return;
+    try {
+      const { messages: latest } = await api.messages.messages(activeThreadId);
+      setMessages((prev) => mergeMessages(prev, latest));
+    } catch {
+      // The next poll brings the answer message.
+    }
+  };
+
   const openAttachment = async (file) => {
     try {
       await api.uploads.open(file);
@@ -313,11 +332,15 @@ const Messages = () => {
                         onClick={() => handleSelectThread(thread)}
                       >
                         <div className="thread-avatar-box">
-                          <img
-                            src={thread.counterpartyAvatar || defaultAvatar}
-                            alt={thread.counterpartyName}
-                            className="thread-avatar-img"
-                          />
+                          {thread.isSupport ? (
+                            <LogoMark className="thread-avatar-img thread-avatar-brand" />
+                          ) : (
+                            <img
+                              src={thread.counterpartyAvatar || defaultAvatar}
+                              alt={thread.counterpartyName}
+                              className="thread-avatar-img"
+                            />
+                          )}
                         </div>
 
                         <div className="thread-content-box">
@@ -380,15 +403,19 @@ const Messages = () => {
                           : null;
                       const identity = (
                         <>
-                          <img
-                            src={activeThread.counterpartyAvatar || defaultAvatar}
-                            alt={activeThread.counterpartyName}
-                            className="chat-header-avatar"
-                          />
+                          {activeThread.isSupport ? (
+                            <LogoMark className="chat-header-avatar chat-header-brand" />
+                          ) : (
+                            <img
+                              src={activeThread.counterpartyAvatar || defaultAvatar}
+                              alt={activeThread.counterpartyName}
+                              className="chat-header-avatar"
+                            />
+                          )}
                           <div>
                             <h3 className="chat-header-name">{activeThread.counterpartyName}</h3>
                             <p className="chat-header-sub">
-                              {activeThread.counterpartySubtitle || (activeThread.counterpartyRole === 'client' ? 'صاحب عمل' : 'مستقل')}
+                              {activeThread.counterpartySubtitle || (activeThread.counterpartyRole === 'client' ? 'صاحب عمل' : activeThread.counterpartyRole === 'admin' ? 'إدارة المنصة' : 'مستقل')}
                             </p>
                           </div>
                         </>
@@ -440,11 +467,24 @@ const Messages = () => {
                             key={msg.id}
                             className={`message-row ${isMine ? 'outgoing' : 'incoming'} ${msg.status ? `is-${msg.status}` : ''}`}
                           >
-                            <div className="message-bubble">
-                              {msg.body && <p className="message-text">{msg.body}</p>}
+                            <div className={`message-bubble ${msg.kind === 'withdrawal_proof' ? 'is-notice' : ''} ${msg.kind === 'withdrawal_receipt' ? `is-receipt ${msg.withdrawal?.receiptStatus === 'RECEIVED' || msg.body.startsWith('تم استلام') ? 'ok' : 'warn'}` : ''}`}>
+                              {msg.kind === 'withdrawal_proof' ? (
+                                <WithdrawalNoticeCard
+                                  message={msg}
+                                  canRespond={!isMine && user?.role === 'freelancer'}
+                                  onResponded={handleReceiptAnswered}
+                                />
+                              ) : msg.kind === 'withdrawal_receipt' ? (
+                                <p className="message-text receipt-bubble">
+                                  {msg.body.startsWith('تم استلام') ? <FiCheckCircle aria-hidden="true" /> : <FiAlertTriangle aria-hidden="true" />}
+                                  <span>{msg.body}</span>
+                                </p>
+                              ) : (
+                                msg.body && <p className="message-text">{msg.body}</p>
+                              )}
 
-                              {/* Attachments */}
-                              {msg.attachments && msg.attachments.length > 0 && (
+                              {/* Attachments (the payout notice shows its own) */}
+                              {msg.kind !== 'withdrawal_proof' && msg.attachments && msg.attachments.length > 0 && (
                                 <div className="bubble-attachments">
                                   {msg.attachments.map((att) => (
                                     <button key={att.id} type="button" className="msg-attachment-chip" onClick={() => !msg.status && openAttachment(att)}>

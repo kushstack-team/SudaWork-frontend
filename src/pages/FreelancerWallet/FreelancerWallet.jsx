@@ -23,6 +23,7 @@ import {
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
+import { paymentMethodLabel } from '../../utils/formatters';
 
 const FreelancerWallet = () => {
   const { user } = useAuth();
@@ -272,7 +273,7 @@ const FreelancerWallet = () => {
                           </td>
                           <td>
                             <span className="method-pill">
-                              {w.method === 'Bankak' ? 'بنكك (بنك الخرطوم)' : w.method}
+                              {paymentMethodLabel(w.method)}
                             </span>
                           </td>
                           <td>
@@ -296,6 +297,20 @@ const FreelancerWallet = () => {
                               {w.status === 'Rejected' && 'مرفوض'}
                             </span>
                             {w.adminReason && <div className="table-date">السبب: {w.adminReason}</div>}
+                            {w.status === 'Paid' && (
+                              <div className="wallet-receipt-row">
+                                <span className={`wallet-receipt ${w.receiptStatus === 'RECEIVED' ? 'is-ok' : w.receiptStatus === 'NOT_RECEIVED' ? 'is-warn' : 'is-wait'}`}>
+                                  {w.receiptStatus === 'RECEIVED' && 'أكدت الاستلام'}
+                                  {w.receiptStatus === 'NOT_RECEIVED' && 'أبلغت بعدم الاستلام'}
+                                  {!w.receiptStatus && 'بانتظار تأكيدك'}
+                                </span>
+                                {w.conversationId && (
+                                  <Link to={`/messages?conversationId=${w.conversationId}`} className="wallet-receipt-link">
+                                    عرض إشعار التحويل
+                                  </Link>
+                                )}
+                              </div>
+                            )}
                           </td>
                         </tr>
                       ))}

@@ -606,3 +606,42 @@
   }
 }
 
+
+/* Paid withdrawals: the freelancer's receipt answer + link to the notice. */
+.wallet-receipt-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-top: 6px;
+}
+
+.wallet-receipt {
+  padding: 2px 9px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.wallet-receipt.is-ok {
+  background-color: #dcfce7;
+  color: #047857;
+}
+
+.wallet-receipt.is-warn {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.wallet-receipt.is-wait {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.wallet-receipt-link {
+  color: var(--color-primary, #0B6E4F);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-decoration: underline;
+}

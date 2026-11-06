@@ -8,6 +8,8 @@ import useLoader from '../../hooks/useLoader';
 import ConfirmModal from '../../components/common/ConfirmModal/ConfirmModal';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import { TileGridSkeleton } from '../../components/common/Skeleton/Skeleton';
+import FilePicker from '../../components/FilePicker/FilePicker';
+import { paymentMethodLabel } from '../../utils/formatters';
 import {
   FiUsers,
   FiDollarSign,
@@ -22,7 +24,8 @@ import {
   FiToggleRight,
   FiFileText,
   FiList,
-  FiGrid
+  FiGrid,
+  FiMessageSquare
 } from 'react-icons/fi';
 
 // Modular Tab Components
@@ -32,6 +35,7 @@ import AdminOverviewTab from './components/AdminOverviewTab';
 import AdminUsersTab from './components/AdminUsersTab';
 import AdminEscrowTab from './components/AdminEscrowTab';
 import AdminWithdrawalsTab from './components/AdminWithdrawalsTab';
+import AdminChatTab from './components/AdminChatTab';
 import AdminDisputesTab from './components/AdminDisputesTab';
 import AdminProjectsTab from './components/AdminProjectsTab';
 import AdminSettingsTab from './components/AdminSettingsTab';
@@ -39,7 +43,7 @@ import AdminFeaturesTab from './components/AdminFeaturesTab';
 import AdminContractsTab from './components/AdminContractsTab';
 import AdminAuditTab from './components/AdminAuditTab';
 
-const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'contracts', 'disputes', 'projects', 'features', 'audit', 'settings'];
+const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'chat', 'contracts', 'disputes', 'projects', 'features', 'audit', 'settings'];
 
 // Title and description shown in the top bar for each section.
 const SECTION_META = {
@@ -49,6 +53,7 @@ const SECTION_META = {
   contracts: { title: 'العقود', subtitle: 'متابعة عقود العمل وحالاتها.' },
   escrow: { title: 'تدقيق المدفوعات', subtitle: 'مطابقة إيداعات العملاء واعتمادها لتفعيل العقود.' },
   withdrawals: { title: 'سحب الأرباح', subtitle: 'اعتماد طلبات سحب المستقلين وتسجيل التحويل.' },
+  chat: { title: 'المحادثات', subtitle: 'التواصل مع المستخدمين وإشعارات تحويل الأرباح.' },
   disputes: { title: 'النزاعات والبلاغات', subtitle: 'مراجعة البلاغات وإصدار القرارات.' },
   features: { title: 'إدارة الميزات', subtitle: 'تفعيل ميزات المنصة لكل دور.' },
   audit: { title: 'سجل العمليات', subtitle: 'الإجراءات الإدارية والمالية المسجلة.' },
@@ -143,6 +148,8 @@ const AdminDashboard = () => {
   const [payoutTarget, setPayoutTarget] = useState(null);
   const [payoutReference, setPayoutReference] = useState('');
   const [payoutNote, setPayoutNote] = useState('');
+  const [payoutProof, setPayoutProof] = useState([]);
+  const [supportUnread, setSupportUnread] = useState(0);
   const [withdrawalRejectTarget, setWithdrawalRejectTarget] = useState(null);
   const [withdrawalRejectReason, setWithdrawalRejectReason] = useState('');
   const [submittingWithdrawalAction, setSubmittingWithdrawalAction] = useState(false);
@@ -226,6 +233,17 @@ const AdminDashboard = () => {
   }, []);
 
   useLoader(loadAllAdminData, []);
+
+  // Unread support messages (sidebar badge); refreshed while the dashboard is open.
+  useEffect(() => {
+    const load = () => api.admin.supportUnreadCount().then(setSupportUnread, () => {});
+    const first = setTimeout(load, 0);
+    const timer = setInterval(() => !document.hidden && load(), 30000);
+    return () => {
+      clearTimeout(first);
+      clearInterval(timer);
+    };
+  }, []);
 
   // Users: server-side search, debounced while typing.
   const loadUsers = useCallback(async (search, role, status) => {
@@ -424,36 +442,51 @@ const AdminDashboard = () => {
     }
   };
 
-  // 3. Withdrawals: approve → record payout (with reference) | reject
-  const handleApproveWithdrawal = (wReq) => {
-    setConfirmModal({
-      isOpen: true,
-      title: 'اعتماد طلب السحب',
-      message: `اعتماد سحب ${Number(wReq.amount || 0).toLocaleString()} ج.س لـ ${wReq.freelancerName}؟ ستسجّل التحويل الفعلي بعد تنفيذه.`,
-      confirmText: 'اعتماد',
-      cancelText: 'إلغاء',
-      type: 'success',
-      onConfirm: () => {
-        closeConfirm();
-        runAction(() => api.admin.approveWithdrawal(wReq.id), 'تم اعتماد طلب السحب. سجّل التحويل بعد تنفيذه.');
-      }
-    });
+  // 3. Withdrawals: transfer the money, then record it with the reference and
+  // the transfer notice (approves a pending request in the same step). The
+  // notice goes to the freelancer's support chat to confirm receipt.
+  const openPayout = (wReq) => {
+    setPayoutReference('');
+    setPayoutNote('');
+    setPayoutProof([]);
+    setPayoutTarget(wReq);
   };
+
+  const payoutProofFile = payoutProof.find((f) => f.status === 'done' && f.upload);
+  const payoutUploading = payoutProof.some((f) => f.status === 'uploading');
 
   const handleMarkPaid = async (e) => {
     e.preventDefault();
-    if (!payoutTarget || payoutReference.trim().length < 3) return;
+    if (!payoutTarget || payoutReference.trim().length < 3 || !payoutProofFile) return;
     setSubmittingWithdrawalAction(true);
     const ok = await runAction(
-      () => api.admin.markWithdrawalPaid(payoutTarget.id, { transactionReference: payoutReference.trim(), note: payoutNote.trim() }),
-      'تم تسجيل التحويل وإشعار المستقل برقم العملية.'
+      () => api.admin.markWithdrawalPaid(payoutTarget.id, {
+        transactionReference: payoutReference.trim(),
+        note: payoutNote.trim(),
+        proofFileId: payoutProofFile.upload.id,
+      }),
+      'تم تسجيل التحويل وإرسال إشعار التحويل إلى المستقل في المحادثات.'
     );
     if (ok) {
       setPayoutTarget(null);
       setPayoutReference('');
       setPayoutNote('');
+      setPayoutProof([]);
     }
     setSubmittingWithdrawalAction(false);
+  };
+
+  const openSupportChat = (conversationId) => {
+    setSearchParams(conversationId ? { tab: 'chat', conversationId } : { tab: 'chat' });
+  };
+
+  const handleMessageUser = async (targetUser) => {
+    try {
+      const conversation = await api.admin.startSupportConversation(targetUser.id);
+      openSupportChat(conversation.id);
+    } catch (err) {
+      showError(err.message);
+    }
   };
 
   const handleRejectWithdrawal = async (e) => {
@@ -679,6 +712,10 @@ const AdminDashboard = () => {
       ],
     },
     {
+      label: 'التواصل',
+      items: [{ id: 'chat', label: 'المحادثات', icon: FiMessageSquare, badge: supportUnread }],
+    },
+    {
       label: 'الإشراف',
       items: [{ id: 'disputes', label: 'النزاعات والبلاغات', icon: FiAlertTriangle, badge: openDisputesCount }],
     },
@@ -756,6 +793,7 @@ const AdminDashboard = () => {
               onToggleUserStatus={handleToggleUserStatus}
               onDeleteUser={handleDeleteUser}
               onToggleVerified={handleToggleVerified}
+              onMessageUser={handleMessageUser}
               currentUserId={user?.id}
             />
           )}
@@ -776,18 +814,16 @@ const AdminDashboard = () => {
           {!loading && activeTab === 'withdrawals' && (
             <AdminWithdrawalsTab
               withdrawalRequests={withdrawalRequests}
-              onApproveWithdrawal={handleApproveWithdrawal}
-              onMarkPaid={(w) => {
-                setPayoutReference('');
-                setPayoutNote('');
-                setPayoutTarget(w);
-              }}
+              onPayout={openPayout}
+              onOpenChat={openSupportChat}
               onRejectWithdrawal={(w) => {
                 setWithdrawalRejectReason('');
                 setWithdrawalRejectTarget(w);
               }}
             />
           )}
+
+          {activeTab === 'chat' && <AdminChatTab onUnreadChange={setSupportUnread} />}
 
           {!loading && activeTab === 'contracts' && (
             <AdminContractsTab
@@ -1010,23 +1046,27 @@ const AdminDashboard = () => {
         </div>
       )}
 
-      {/* Record Manual Payout Modal */}
+      {/* Payout Modal: reference + transfer notice, sent to the freelancer's chat */}
       {payoutTarget && (
         <div className="admin-modal-backdrop" onClick={() => !submittingWithdrawalAction && setPayoutTarget(null)}>
-          <div className="admin-modal-dialog" onClick={(e) => e.stopPropagation()} role="dialog">
+          <div className="admin-modal-dialog" onClick={(e) => e.stopPropagation()} role="dialog" aria-labelledby="payout-title">
             <div className="modal-header">
-              <h3>تسجيل تحويل أرباح {payoutTarget.freelancerName}</h3>
-              <button type="button" className="modal-close-btn" onClick={() => setPayoutTarget(null)} disabled={submittingWithdrawalAction}>
+              <h3 id="payout-title">تحويل أرباح {payoutTarget.freelancerName}</h3>
+              <button type="button" className="modal-close-btn" onClick={() => setPayoutTarget(null)} disabled={submittingWithdrawalAction} aria-label="إغلاق">
                 <FiX />
               </button>
             </div>
 
             <form onSubmit={handleMarkPaid} className="modal-form">
               <div className="dispute-summary-preview">
-                <p><strong>المبلغ:</strong> {Number(payoutTarget.amount).toLocaleString()} ج.س</p>
-                <p><strong>الطريقة:</strong> {payoutTarget.method}</p>
+                <p><strong>المبلغ:</strong> {Number(payoutTarget.amount).toLocaleString('en-US')} ج.س</p>
+                <p><strong>الطريقة:</strong> {paymentMethodLabel(payoutTarget.method)}</p>
                 <p><strong>الحساب:</strong> {payoutTarget.accountNumber} — {payoutTarget.accountName}</p>
               </div>
+              <p className="input-hint payout-steps-hint">
+                حوّل المبلغ أولاً إلى حساب المستقل، ثم أدخل رقم العملية وأرفق صورة إشعار التحويل.
+                سيصل الإشعار إلى المستقل في المحادثات ليؤكد الاستلام.
+              </p>
               <div className="form-group">
                 <label className="form-label" htmlFor="payout-ref">
                   رقم عملية التحويل <span className="required">*</span>
@@ -1037,24 +1077,42 @@ const AdminDashboard = () => {
                   className="modal-input"
                   value={payoutReference}
                   onChange={(e) => setPayoutReference(e.target.value)}
-                  placeholder="مثال: BNK-PAY-29384"
+                  placeholder="مثال: 29384756"
                   required
                 />
               </div>
               <div className="form-group">
-                <label className="form-label" htmlFor="payout-note">ملاحظة داخلية (اختياري)</label>
+                <label className="form-label" htmlFor="payout-proof">
+                  صورة إشعار التحويل <span className="required">*</span>
+                </label>
+                <FilePicker
+                  id="payout-proof"
+                  purpose="payout_proof"
+                  accept=".png,.jpg,.jpeg,.pdf"
+                  files={payoutProof}
+                  onChange={setPayoutProof}
+                  disabled={submittingWithdrawalAction}
+                />
+              </div>
+              <div className="form-group">
+                <label className="form-label" htmlFor="payout-note">رسالة للمستقل (اختياري)</label>
                 <input
                   id="payout-note"
                   type="text"
                   className="modal-input"
                   value={payoutNote}
                   onChange={(e) => setPayoutNote(e.target.value)}
+                  placeholder="مثال: قد يستغرق ظهور المبلغ ساعة واحدة."
                 />
               </div>
               <div className="modal-actions">
-                <button type="submit" className="modal-primary-btn" disabled={submittingWithdrawalAction || payoutReference.trim().length < 3}>
+                <button
+                  type="submit"
+                  className="modal-primary-btn"
+                  disabled={submittingWithdrawalAction || payoutUploading || payoutReference.trim().length < 3 || !payoutProofFile}
+                >
                   <FiCheck />
-                  <span>{submittingWithdrawalAction ? 'جارٍ التسجيل...' : 'تأكيد تسجيل التحويل'}</span>
+                  <span>{submittingWithdrawalAction ? 'جارٍ الإرسال...' : payoutUploading ? 'جارٍ رفع الصورة...' : 'تأكيد التحويل وإرسال الإشعار'}</span>
                 </button>
                 <button type="button" className="modal-secondary-btn" disabled={submittingWithdrawalAction} onClick={() => setPayoutTarget(null)}>
                   إلغاء

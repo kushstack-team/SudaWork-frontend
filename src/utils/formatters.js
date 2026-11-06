@@ -67,3 +67,13 @@ export const formatBudget = (min, max) => {
   const fmt = (n) => Number(n || 0).toLocaleString('en-US');
   return max ? `${fmt(min)} - ${fmt(max)} ج.س` : `${fmt(min)} ج.س`;
 };
+
+// Arabic names for the payment / payout methods stored in English by the API.
+const PAYMENT_METHOD_LABELS = {
+  Bankak: 'بنكك (بنك الخرطوم)',
+  'Bank Transfer': 'تحويل بنكي',
+  'Zain Cash': 'زين كاش',
+  'MTN Cash': 'MTN كاش',
+  Other: 'أخرى',
+};
+export const paymentMethodLabel = (method) => PAYMENT_METHOD_LABELS[method] || method || '';

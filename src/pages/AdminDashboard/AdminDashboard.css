@@ -1271,3 +1271,75 @@ a.task-action-btn {
     gap: 0;
   }
 }
+
+/* ---------- Withdrawals: payout + receipt ---------- */
+.btn-chat {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-family: 'Tajawal', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.btn-chat:hover {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}
+
+.receipt-pill-row {
+  margin-top: 6px;
+}
+
+.receipt-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.receipt-pill.is-ok {
+  background-color: #dcfce7;
+  color: #047857;
+}
+
+.receipt-pill.is-warn {
+  background-color: #fef3c7;
+  color: #b45309;
+}
+
+.receipt-pill.is-wait {
+  background-color: #f1f5f9;
+  color: #475569;
+}
+
+.payout-steps-hint {
+  margin: 0 0 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background-color: #f0fdf4;
+  color: #065f46;
+  line-height: 1.6;
+}
+
+.user-status-btn.message {
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
+}
+
+.user-status-btn.message:hover {
+  background-color: #1d4ed8;
+  color: #ffffff;
+}

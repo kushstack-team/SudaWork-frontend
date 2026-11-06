@@ -373,7 +373,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 14px 18px;
+  gap: 10px;
+  padding: 14px 16px;
   border-bottom: 1px solid #f1f5f9;
   background-color: #ffffff;
 }
@@ -382,39 +383,77 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .notif-header-title {
   font-size: 0.95rem;
   font-weight: 800;
   color: #0f172a;
+  white-space: nowrap;
 }
 
+/* Count pill: one line, number and word together. */
 .notif-unread-tag {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: 22px;
+  padding: 0 9px;
+  border-radius: 999px;
   background-color: #fee2e2;
-  color: #ef4444;
+  color: #dc2626;
   font-size: 0.72rem;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
+  font-weight: 800;
+  line-height: 1;
+  white-space: nowrap;
 }
 
 .notif-mark-all-read-btn {
-  background: none;
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  flex-shrink: 0;
+  height: 30px;
+  padding: 0 12px;
+  border: 1px solid #d1fae5;
+  border-radius: 999px;
+  background-color: #f0fdf4;
   color: var(--color-primary, #0B6E4F);
-  font-size: 0.8rem;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 0.78rem;
   font-weight: 700;
+  white-space: nowrap;
   cursor: pointer;
-  padding: 4px 6px;
-  border-radius: 6px;
-  transition: all 0.15s ease;
-  font-family: 'Tajawal', sans-serif;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
 }
 
 .notif-mark-all-read-btn:hover {
-  background-color: #f0fdf4;
-  text-decoration: underline;
+  background-color: #dcfce7;
+  border-color: #a7f3d0;
+}
+
+.notif-mark-all-read-btn .is-short {
+  display: none;
+}
+
+@media (max-width: 480px) {
+  .notif-dropdown-header {
+    padding: 12px 14px;
+  }
+
+  .notif-header-title {
+    font-size: 0.9rem;
+  }
+
+  /* Phones: shorter button text so the header stays on one line. */
+  .notif-mark-all-read-btn .is-long {
+    display: none;
+  }
+
+  .notif-mark-all-read-btn .is-short {
+    display: inline;
+  }
 }
 
 .notif-dropdown-body {
