@@ -1,0 +1,182 @@
+/*
+ * Shared behaviour for every page modal. Each page styles its own dialog;
+ * this file only fixes layering, height and phone layout in one place.
+ * Selectors start with :root so they win over the page stylesheets, which
+ * load later (lazy routes) with the same specificity.
+ */
+
+/* --- Layer: above the phone bottom bar (1050/1200) and the headers. --- */
+:root :is(
+  .proposal-modal-backdrop,
+  .contract-modal-backdrop,
+  .escrow-modal-backdrop,
+  .wallet-modal-backdrop,
+  .disputes-modal-backdrop,
+  .admin-modal-backdrop
+) {
+  z-index: 2000;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* The page behind an open modal must not scroll. */
+body:has(:is(
+  .proposal-modal-backdrop,
+  .contract-modal-backdrop,
+  .escrow-modal-backdrop,
+  .wallet-modal-backdrop,
+  .disputes-modal-backdrop,
+  .admin-modal-backdrop,
+  .confirm-modal-overlay
+)) {
+  overflow: hidden;
+}
+
+/* --- Height: never taller than the screen; the dialog scrolls inside. --- */
+:root :is(
+  .proposal-modal-dialog,
+  .contract-modal-dialog,
+  .escrow-modal-dialog,
+  .wallet-modal-dialog,
+  .disputes-modal-dialog,
+  .admin-modal-dialog,
+  .confirm-modal-box
+) {
+  max-height: calc(100vh - 40px);
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+/* Buttons keep their height when the action row stacks vertically
+   (`flex: 1` would otherwise squash them to the text height). */
+:root :is(
+  .modal-actions-footer,
+  .modal-actions,
+  .modal-actions-strip,
+  .confirm-modal-actions
+) > :is(button, a) {
+  min-height: 48px;
+  flex-shrink: 0;
+}
+
+@media (max-width: 640px) {
+  /* Phones: dialogs open as a bottom sheet. */
+  :root :is(
+    .proposal-modal-backdrop,
+    .contract-modal-backdrop,
+    .escrow-modal-backdrop,
+    .wallet-modal-backdrop,
+    .disputes-modal-backdrop,
+    .admin-modal-backdrop
+  ) {
+    align-items: flex-end;
+    padding: 0;
+  }
+
+  :root :is(
+    .proposal-modal-dialog,
+    .contract-modal-dialog,
+    .escrow-modal-dialog,
+    .wallet-modal-dialog,
+    .disputes-modal-dialog,
+    .admin-modal-dialog
+  ) {
+    width: 100%;
+    max-width: 100%;
+    max-height: 92vh;
+    max-height: 92dvh;
+    border-radius: 20px 20px 0 0;
+    padding: 20px 16px calc(20px + env(safe-area-inset-bottom, 0px));
+    animation: modal-sheet-up 0.22s ease-out;
+  }
+
+  /* Title row stays visible while the form scrolls. */
+  :root :is(
+    .proposal-modal-dialog,
+    .contract-modal-dialog,
+    .escrow-modal-dialog,
+    .wallet-modal-dialog,
+    .disputes-modal-dialog,
+    .admin-modal-dialog
+  ) > .modal-header {
+    position: sticky;
+    top: -20px;
+    z-index: 2;
+    margin: -20px -16px 16px;
+    padding: 16px 16px 12px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #eef2f6;
+  }
+
+  :root :is(.modal-header) :is(h3, .modal-title) {
+    font-size: 1.15rem;
+  }
+
+  :root .modal-subtitle {
+    white-space: normal;
+  }
+
+  /* Stacked full-width actions, primary first. */
+  :root :is(
+    .modal-actions-footer,
+    .modal-actions,
+    .modal-actions-strip,
+    .confirm-modal-actions
+  ) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  :root :is(
+    .modal-actions-footer,
+    .modal-actions,
+    .modal-actions-strip,
+    .confirm-modal-actions
+  ) > :is(button, a) {
+    flex: 0 0 auto;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* Choice pills (payment method etc.) take the full width, one per row. */
+  :root .payment-methods-options {
+    flex-direction: column;
+  }
+
+  :root .payment-methods-options > * {
+    width: 100%;
+  }
+
+  /* 16px inputs stop iOS Safari from zooming in on focus. */
+  :root :is(
+    .modal-input,
+    .modal-select,
+    .modal-textarea
+  ) {
+    font-size: 16px;
+  }
+
+  :root .confirm-modal-overlay {
+    padding: 16px;
+  }
+}
+
+@keyframes modal-sheet-up {
+  from { transform: translateY(24px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root :is(
+    .proposal-modal-dialog,
+    .contract-modal-dialog,
+    .escrow-modal-dialog,
+    .wallet-modal-dialog,
+    .disputes-modal-dialog,
+    .admin-modal-dialog
+  ) {
+    animation: none;
+  }
+}

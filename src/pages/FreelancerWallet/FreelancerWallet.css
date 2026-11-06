@@ -287,6 +287,21 @@
   border-radius: 3px 3px 0 0;
 }
 
+@media (max-width: 640px) {
+  /* Both tabs share the width and stay on one line each. */
+  .history-tabs-strip {
+    gap: 4px;
+  }
+
+  .history-tab {
+    flex: 1;
+    padding: 10px 6px;
+    font-size: 0.86rem;
+    text-align: center;
+    white-space: nowrap;
+  }
+}
+
 .empty-history-box {
   padding: 60px 20px;
   text-align: center;

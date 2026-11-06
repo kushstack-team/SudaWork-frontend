@@ -11,6 +11,14 @@
   }
 }
 
+/* Reserve room for the bar so the end of every page (footer links, the
+   last buttons) is never hidden under it. */
+@media (max-width: 768px) {
+  body:has(.mobile-bottom-nav) {
+    padding-bottom: calc(62px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
 /* Mobile Bottom Bar Container */
 .mobile-bottom-nav {
   position: fixed;

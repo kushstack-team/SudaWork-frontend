@@ -1128,6 +1128,12 @@
     flex-direction: column;
   }
 
+  /* Stacked: `flex: 1` would squash the field to the text height. */
+  .skill-input-row .form-input {
+    flex: none;
+    width: 100%;
+  }
+
   .add-btn {
     width: 100%;
   }

@@ -1,4 +1,5 @@
 @import './components/common/StatusPill/StatusPill.css';
+@import './styles/modals.css';
 
 * {
   box-sizing: border-box;

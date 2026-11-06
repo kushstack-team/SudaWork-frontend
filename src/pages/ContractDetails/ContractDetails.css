@@ -1508,15 +1508,37 @@
     justify-content: space-between;
   }
 
+  /* All four steps fit the screen: smaller circles, labels wrap. */
   .lifecycle-stepper-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    padding: var(--space-4, 16px) var(--space-3, 12px);
+    padding: var(--space-4, 16px) var(--space-2, 8px);
   }
 
   .stepper-track {
-    min-width: 460px;
-    padding: 0 8px;
+    align-items: flex-start;
+  }
+
+  .step-item {
+    flex: 0 0 64px;
+    min-width: 0;
+  }
+
+  .step-circle {
+    width: 34px;
+    height: 34px;
+    font-size: 1rem;
+  }
+
+  .step-label {
+    font-size: 0.74rem;
+    line-height: 1.35;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .step-line {
+    min-width: 6px;
+    margin: 16px 2px 0;
+    top: 0;
   }
 
   .contract-terms-grid {
