@@ -42,6 +42,8 @@ const FreelancerProfileEdit = () => {
   // Form State
   const [fullName, setFullName] = useState('');
   const [title, setTitle] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const [categories, setCategories] = useState([]);
   const [bio, setBio] = useState('');
   const [location, setLocation] = useState('');
   const [availability, setAvailability] = useState('available');
@@ -70,6 +72,7 @@ const FreelancerProfileEdit = () => {
       setPhoto(account.avatar || defaultAvatar);
       if (profile) {
         setTitle(profile.title);
+        setCategoryId(profile.categoryId || '');
         setBio(profile.bio);
         setLocation(profile.location);
         setAvailability(profile.availability || 'available');
@@ -89,6 +92,7 @@ const FreelancerProfileEdit = () => {
   useLoader(loadProfile, [user?.id], Boolean(user?.id));
   useEffect(() => {
     api.taxonomy.skills().then((list) => setSkillSuggestions(list.map((s) => s.name)), () => {});
+    api.taxonomy.categories().then(setCategories, () => {});
   }, []);
 
   const handleAddSkill = (e) => {
@@ -181,6 +185,8 @@ const FreelancerProfileEdit = () => {
     if (!user?.id) return;
     const errs = {};
     if (!title.trim()) errs.title = 'المسمى المهني مطلوب';
+    // Clients find freelancers by specialty; only enforced when categories loaded.
+    if (!categoryId && categories.length > 0) errs.categoryId = 'يرجى اختيار تخصصك الرئيسي ليظهر ملفك عند البحث';
     if (!bio.trim()) errs.bio = 'النبذة التعريفية مطلوبة';
     setFieldErrors(errs);
     if (Object.keys(errs).length > 0) return;
@@ -191,6 +197,7 @@ const FreelancerProfileEdit = () => {
     try {
       await api.profiles.updateFreelancer({
         title: title.trim(),
+        ...(categoryId ? { categoryId } : {}),
         bio: bio.trim(),
         location: location.trim(),
         availability,
@@ -323,11 +330,12 @@ const FreelancerProfileEdit = () => {
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">المسمى المهني / التخصص *</label>
+                  <label className="form-label" htmlFor="freelancer-title">المسمى المهني *</label>
                   <input
+                    id="freelancer-title"
                     type="text"
                     className="form-input"
-                    placeholder="مثال: مطور تطبيقات React Native / مصممة هوية بصرية"
+                    placeholder="مثال: مطور تطبيقات جوال / مصممة هوية بصرية"
                     value={title}
                     onChange={(e) => {
                       setTitle(e.target.value);
@@ -336,6 +344,24 @@ const FreelancerProfileEdit = () => {
                   />
                   {fieldErrors.title && <span className="form-field-error">{fieldErrors.title}</span>}
                 </div>
+              </div>
+
+              <div className="form-group">
+                <label className="form-label" htmlFor="freelancer-category">التخصص الرئيسي *</label>
+                <select
+                  id="freelancer-category"
+                  className={`form-input form-select ${fieldErrors.categoryId ? 'has-error' : ''}`}
+                  value={categoryId}
+                  onChange={(e) => {
+                    setCategoryId(e.target.value);
+                    if (fieldErrors.categoryId) setFieldErrors((p) => ({ ...p, categoryId: null }));
+                  }}
+                >
+                  <option value="">اختر المجال الذي تعمل فيه</option>
+                  {categories.map((cat) => <option key={cat.id} value={cat.id}>{cat.name}</option>)}
+                </select>
+                <span className="form-hint">يظهر ملفك لأصحاب المشاريع عند تصفية المستقلين بهذا المجال.</span>
+                {fieldErrors.categoryId && <span className="form-field-error">{fieldErrors.categoryId}</span>}
               </div>
 
               <div className="form-grid-two">
@@ -377,7 +403,7 @@ const FreelancerProfileEdit = () => {
               </div>
 
               <div className="form-group">
-                <label className="form-label">النبذة التعريفية (Bio) *</label>
+                <label className="form-label">النبذة التعريفية *</label>
                 <textarea
                   className="form-textarea"
                   rows="4"
@@ -477,7 +503,7 @@ const FreelancerProfileEdit = () => {
             <section className="profile-form-section">
               <h2 className="section-title">
                 <FiExternalLink className="section-title-icon" />
-                <span>معرض الأعمال (Portfolio)</span>
+                <span>معرض الأعمال</span>
               </h2>
               <p className="section-desc">
                 أضف نماذج من مشاريعك السابقة لتعزيز ثقة أصحاب الأعمال بقدراتك.

@@ -243,7 +243,7 @@ const ClientProfile = () => {
                         <div className="project-item-footer">
                           <div className="project-item-budget">
                             <span>الميزانية المقدرة:</span>
-                            <strong>{Number(proj.budget).toLocaleString()} ج.س</strong>
+                            <strong>{proj.budgetLabel}</strong>
                           </div>
                           <Link to={`/projects/${proj.id}`} className="view-project-link">
                             <span>تفاصيل المشروع والتقديم</span>

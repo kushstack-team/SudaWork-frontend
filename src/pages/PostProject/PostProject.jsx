@@ -11,6 +11,9 @@ import { PROJECT_STATUS } from '../../constants/projectStatuses';
 import ErrorState from '../../components/common/ErrorState/ErrorState';
 import PageLoader from '../../components/common/PageLoader/PageLoader';
 import { FormSkeleton } from '../../components/common/Skeleton/Skeleton';
+import MoneyInput from '../../components/FormControls/MoneyInput';
+import CharCounter from '../../components/FormControls/CharCounter';
+import { formatBudget } from '../../utils/formatters';
 import {
   saveProjectDraft,
   getProjectDraft,
@@ -31,7 +34,30 @@ import {
   FiBriefcase,
   FiCheckCircle,
   FiInfo,
+  FiEdit3,
+  FiRefreshCw,
 } from 'react-icons/fi';
+
+// "أخرى": the client types their own category.
+const OTHER_CATEGORY = '__other__';
+const TITLE_MIN = 8;
+const TITLE_MAX = 255;
+const DESCRIPTION_MIN = 30;
+const DESCRIPTION_MAX = 10000;
+
+const toIsoDeadline = (deadline) => (deadline.includes('T') ? deadline : new Date(`${deadline}T23:59:59`).toISOString());
+
+// One payload for publishing, editing and the post-login auto-submit.
+const buildPayload = ({ title, description, categoryId, customCategory, budgetType, budget, budgetMax, deadline, skills, attachmentIds = [] }) => ({
+  title: title.trim(),
+  description: description.trim(),
+  ...(categoryId === OTHER_CATEGORY ? { customCategory: customCategory.trim() } : { categoryId }),
+  budget: Number(budget),
+  budgetMax: budgetType === 'range' ? Number(budgetMax) : null,
+  deadline: toIsoDeadline(deadline),
+  skills,
+  attachmentIds,
+});
 
 const SUBMITTED_FOR_REVIEW_MESSAGE = 'تم استلام مشروعك وإرساله لمراجعة الإدارة، وسيُنشر للمستقلين فور الموافقة عليه.';
 
@@ -60,11 +86,15 @@ const PostProject = () => {
   // Form State (initialized from draft if available)
   const [title, setTitle] = useState(() => initialDraft?.title || '');
   const [categoryId, setCategoryId] = useState(() => initialDraft?.categoryId || '');
+  const [customCategory, setCustomCategory] = useState(() => initialDraft?.customCategory || '');
   const [skills, setSkills] = useState(() => initialDraft?.skills || []);
   const [skillInput, setSkillInput] = useState('');
 
   const [description, setDescription] = useState(() => initialDraft?.description || '');
   const [budget, setBudget] = useState(() => (initialDraft?.budget != null ? String(initialDraft.budget) : ''));
+  // 'fixed' = one amount; 'range' = budget … budgetMax.
+  const [budgetType, setBudgetType] = useState(() => initialDraft?.budgetType || 'fixed');
+  const [budgetMax, setBudgetMax] = useState(() => (initialDraft?.budgetMax ? String(initialDraft.budgetMax) : ''));
   const [deadline, setDeadline] = useState(() => initialDraft?.deadline || '');
   const [attachments, setAttachments] = useState([]);
 
@@ -78,14 +108,17 @@ const PostProject = () => {
         saveProjectDraft({
           title,
           categoryId,
+          customCategory,
           skills,
           description,
           budget,
+          budgetType,
+          budgetMax,
           deadline,
         });
       }
     }
-  }, [title, categoryId, skills, description, budget, deadline, isEditing, user]);
+  }, [title, categoryId, customCategory, skills, description, budget, budgetType, budgetMax, deadline, isEditing, user]);
 
   const fetchCats = async () => {
     try {
@@ -93,7 +126,8 @@ const PostProject = () => {
       setCategories(list);
       if (!isEditing) {
         const draft = getProjectDraft();
-        setCategoryId((current) => current || draft?.categoryId || list[0]?.id || '');
+        // Nothing is preselected: the client picks the category themselves.
+        setCategoryId((current) => current || draft?.categoryId || '');
       }
       setCatsError(null);
     } catch (err) {
@@ -115,28 +149,26 @@ const PostProject = () => {
     const isAutoSubmit = searchParams.get('autoSubmit') === 'true';
 
     if (user && user.role === 'client' && isAutoSubmit && !submittingRef.current) {
-      const draft = getProjectDraft();
-      const projectTitle = draft?.title || title;
-      const projectDesc = draft?.description || description;
-      const projectCat = draft?.categoryId || categoryId;
-      const projectBudget = draft?.budget || budget;
-      const projectDeadline = draft?.deadline || deadline;
-      const projectSkills = draft?.skills || skills;
+      const draft = getProjectDraft() || {};
+      const values = {
+        title: draft.title || title,
+        description: draft.description || description,
+        categoryId: draft.categoryId || categoryId,
+        customCategory: draft.customCategory || customCategory,
+        budgetType: draft.budgetType || budgetType,
+        budget: draft.budget || budget,
+        budgetMax: draft.budgetMax || budgetMax,
+        deadline: draft.deadline || deadline,
+        skills: draft.skills || skills,
+      };
+      const hasCategory = values.categoryId && (values.categoryId !== OTHER_CATEGORY || values.customCategory);
 
-      if (projectTitle && projectDesc && projectCat && projectBudget && projectDeadline) {
+      if (values.title && values.description && hasCategory && values.budget && values.deadline) {
         submittingRef.current = true;
         setAutoSubmitting(true);
         setSubmitError('');
 
-        const payload = {
-          title: projectTitle.trim(),
-          description: projectDesc.trim(),
-          categoryId: projectCat,
-          budget: Number(projectBudget),
-          deadline: projectDeadline.includes('T') ? projectDeadline : new Date(`${projectDeadline}T23:59:59`).toISOString(),
-          skills: projectSkills,
-          attachmentIds: [],
-        };
+        const payload = buildPayload(values);
 
         api.projects.create(payload)
           .then(() => {
@@ -154,7 +186,7 @@ const PostProject = () => {
           });
       }
     }
-  }, [user, location.search, isEditing, title, description, categoryId, budget, deadline, skills, navigate]);
+  }, [user, location.search, isEditing, title, description, categoryId, customCategory, budgetType, budget, budgetMax, deadline, skills, navigate]);
 
   // Fetch existing project if in edit mode
   useEffect(() => {
@@ -168,10 +200,17 @@ const PostProject = () => {
           return;
         }
         setTitle(proj.title || '');
-        setCategoryId(proj.categoryId || '');
+        if (proj.customCategory) {
+          setCategoryId(OTHER_CATEGORY);
+          setCustomCategory(proj.customCategory);
+        } else {
+          setCategoryId(proj.categoryId || '');
+        }
         setSkills(proj.skills || []);
         setDescription(proj.description || '');
         setBudget(proj.budget != null ? String(proj.budget) : '');
+        setBudgetType(proj.budgetMax ? 'range' : 'fixed');
+        setBudgetMax(proj.budgetMax ? String(proj.budgetMax) : '');
         setDeadline(proj.deadline ? proj.deadline.slice(0, 10) : '');
         if (proj.attachments && proj.attachments.length > 0) {
           setAttachments(
@@ -240,13 +279,17 @@ const PostProject = () => {
     setAttachments(attachments.filter((a) => a.key !== key));
   };
 
+  const rangeInvalid = budgetType === 'range' && budget && budgetMax && Number(budgetMax) <= Number(budget);
+
   const validateStep1 = () => {
     const errs = {};
-    if (!title.trim() || title.trim().length < 8) {
-      errs.title = 'يرجى إدخال عنوان واضح للمشروع (8 أحرف على الأقل)';
+    if (title.trim().length < TITLE_MIN) {
+      errs.title = `يرجى إدخال عنوان واضح للمشروع (${TITLE_MIN} أحرف على الأقل)`;
     }
     if (!categoryId) {
-      errs.categoryId = 'يرجى اختيار التخصص الأنسب للمشروع';
+      errs.categoryId = 'يرجى اختيار تصنيف المشروع';
+    } else if (categoryId === OTHER_CATEGORY && customCategory.trim().length < 2) {
+      errs.customCategory = 'يرجى كتابة تصنيف مشروعك';
     }
     setErrors(errs);
     return Object.keys(errs).length === 0;
@@ -254,11 +297,15 @@ const PostProject = () => {
 
   const validateStep2 = () => {
     const errs = {};
-    if (!description.trim() || description.trim().length < 30) {
-      errs.description = 'يرجى كتابة تفاصيل وافية لمتطلبات مشروعك (30 حرف على الأقل)';
+    if (description.trim().length < DESCRIPTION_MIN) {
+      errs.description = `يرجى كتابة تفاصيل وافية لمتطلبات مشروعك (${DESCRIPTION_MIN} حرفاً على الأقل)`;
     }
     if (!budget || Number(budget) <= 0) {
-      errs.budget = 'يرجى تحديد ميزانية تقديرية مناسبة للمشروع';
+      errs.budget = budgetType === 'range' ? 'يرجى إدخال الحد الأدنى للميزانية' : 'يرجى تحديد ميزانية تقديرية مناسبة للمشروع';
+    }
+    if (budgetType === 'range') {
+      if (!budgetMax || Number(budgetMax) <= 0) errs.budgetMax = 'يرجى إدخال الحد الأعلى للميزانية';
+      else if (rangeInvalid) errs.budgetMax = 'يجب أن يكون الحد الأعلى أكبر من الحد الأدنى';
     }
     if (!deadline) {
       errs.deadline = 'يرجى تحديد موعد أقصى لتسليم المشروع';
@@ -287,9 +334,12 @@ const PostProject = () => {
       saveProjectDraft({
         title: title.trim(),
         categoryId,
+        customCategory: customCategory.trim(),
         skills,
         description: description.trim(),
         budget: Number(budget),
+        budgetType,
+        budgetMax: budgetType === 'range' ? Number(budgetMax) : '',
         deadline,
       });
       setStep(4);
@@ -305,15 +355,10 @@ const PostProject = () => {
     setSubmitError('');
 
     try {
-      const payload = {
-        title: title.trim(),
-        description: description.trim(),
-        categoryId,
-        budget: Number(budget),
-        deadline: deadline.includes('T') ? deadline : new Date(`${deadline}T23:59:59`).toISOString(),
-        skills,
+      const payload = buildPayload({
+        title, description, categoryId, customCategory, budgetType, budget, budgetMax, deadline, skills,
         attachmentIds: attachments.filter((a) => a.upload).map((a) => a.upload.id),
-      };
+      });
 
       const result = isEditing
         ? await api.projects.update(editProjectId, payload)
@@ -337,8 +382,8 @@ const PostProject = () => {
     } catch (err) {
       submittingRef.current = false;
       const fieldErrors = err.fieldErrors || {};
-      if (fieldErrors.title || fieldErrors.categoryId) setStep(1);
-      else if (fieldErrors.description || fieldErrors.budget || fieldErrors.deadline) setStep(2);
+      if (fieldErrors.title || fieldErrors.categoryId || fieldErrors.customCategory) setStep(1);
+      else if (fieldErrors.description || fieldErrors.budget || fieldErrors.budgetMax || fieldErrors.deadline) setStep(2);
       setSubmitError(err.message || (isEditing ? 'تعذر حفظ تعديلات المشروع، يرجى المحاولة ثانية.' : 'تعذر نشر المشروع، يرجى المحاولة ثانية.'));
     } finally {
       setSubmitting(false);
@@ -346,6 +391,12 @@ const PostProject = () => {
   };
 
   const selectedCatObj = categories.find((c) => c.id === categoryId);
+  const categoryLabel = categoryId === OTHER_CATEGORY ? customCategory.trim() : selectedCatObj?.name;
+
+  const selectCategory = (id) => {
+    setCategoryId(id);
+    setErrors((prev) => ({ ...prev, categoryId: null, customCategory: null }));
+  };
 
   // Freelancer guard: show clear explanation with account switch option
   if (user && user.role === 'freelancer') {
@@ -359,7 +410,7 @@ const PostProject = () => {
             </div>
             <h2 className="warning-title">نشر المشاريع مخصص لأصحاب الأعمال</h2>
             <p className="warning-desc">
-              أنت مسجل حالياً بحساب مستقل (Freelancer). نشر المشاريع واستقبال العروض ميزة مخصصة لحسابات أصحاب الأعمال (العملاء) فقط.
+              أنت مسجل حالياً بحساب مستقل. نشر المشاريع واستقبال العروض ميزة مخصصة لحسابات أصحاب الأعمال (العملاء) فقط.
             </p>
             <div className="warning-actions">
               <button
@@ -479,53 +530,96 @@ const PostProject = () => {
                 </p>
 
                 <div className="form-group">
-                  <label className="form-label">عنوان المشروع *</label>
+                  <label className="form-label" htmlFor="project-title">عنوان المشروع *</label>
                   <input
+                    id="project-title"
                     type="text"
+                    maxLength={TITLE_MAX}
                     className={`form-input ${errors.title ? 'has-error' : ''}`}
                     placeholder="مثال: تصميم تطبيق جوال لحجز رحلات باللغتين العربية والإنجليزية"
                     value={title}
+                    aria-describedby="project-title-hint"
+                    aria-invalid={Boolean(errors.title) || undefined}
                     onChange={(e) => {
                       setTitle(e.target.value);
                       if (errors.title) setErrors((prev) => ({ ...prev, title: null }));
                     }}
                   />
-                  {errors.title && <span className="form-field-error">{errors.title}</span>}
+                  <CharCounter id="project-title-hint" value={title} min={TITLE_MIN} max={TITLE_MAX} />
+                  {errors.title && <span className="form-field-error" role="alert">{errors.title}</span>}
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">تصنيف المشروع *</label>
+                  <span className="form-label" id="category-label">تصنيف المشروع *</span>
                   {loadingCats ? (
-                    <p>جارٍ تحميل التصنيفات...</p>
-                  ) : catsError ? (
-                    <ErrorState title="تعذر تحميل التصنيفات" error={catsError} onRetry={() => { setLoadingCats(true); fetchCats(); }} />
-                  ) : categories.length === 0 ? (
-                    <p>لا توجد تصنيفات متاحة حالياً. يرجى التواصل مع إدارة المنصة.</p>
-                  ) : (
-                    <div className="categories-selection-grid">
-                      {categories.map((cat) => (
-                        <button
-                          key={cat.id}
-                          type="button"
-                          className={`category-select-pill ${categoryId === cat.id ? 'selected' : ''}`}
-                          onClick={() => {
-                            setCategoryId(cat.id);
-                            if (errors.categoryId) setErrors((prev) => ({ ...prev, categoryId: null }));
-                          }}
-                        >
-                          <FiTag className="cat-icon" />
-                          <span>{cat.name}</span>
-                        </button>
-                      ))}
+                    <div className="categories-selection-grid" aria-busy="true">
+                      {Array.from({ length: 6 }, (_, i) => <span key={i} className="category-pill-skeleton" />)}
                     </div>
+                  ) : (
+                    <>
+                      {catsError && (
+                        <div className="inline-notice" role="alert">
+                          <FiInfo aria-hidden="true" />
+                          <span>تعذر تحميل التصنيفات. اختر «أخرى» واكتب تصنيف مشروعك، أو</span>
+                          <button type="button" onClick={() => { setLoadingCats(true); fetchCats(); }}>
+                            <FiRefreshCw aria-hidden="true" /> أعد المحاولة
+                          </button>
+                        </div>
+                      )}
+                      <div className="categories-selection-grid" role="group" aria-labelledby="category-label">
+                        {categories.map((cat) => (
+                          <button
+                            key={cat.id}
+                            type="button"
+                            className={`category-select-pill ${categoryId === cat.id ? 'selected' : ''}`}
+                            aria-pressed={categoryId === cat.id}
+                            onClick={() => selectCategory(cat.id)}
+                          >
+                            <FiTag className="cat-icon" />
+                            <span>{cat.name}</span>
+                          </button>
+                        ))}
+                        <button
+                          type="button"
+                          className={`category-select-pill category-select-pill--other ${categoryId === OTHER_CATEGORY ? 'selected' : ''}`}
+                          aria-pressed={categoryId === OTHER_CATEGORY}
+                          onClick={() => selectCategory(OTHER_CATEGORY)}
+                        >
+                          <FiEdit3 className="cat-icon" />
+                          <span>أخرى</span>
+                        </button>
+                      </div>
+                      {categoryId === OTHER_CATEGORY && (
+                        <div className="custom-category-box">
+                          <label className="form-sublabel" htmlFor="custom-category">اكتب تصنيف مشروعك</label>
+                          <input
+                            id="custom-category"
+                            type="text"
+                            maxLength={100}
+                            autoFocus
+                            className={`form-input ${errors.customCategory ? 'has-error' : ''}`}
+                            placeholder="مثال: تصميم ديكور داخلي، تدريس خصوصي، تنظيم فعاليات"
+                            value={customCategory}
+                            onChange={(e) => {
+                              setCustomCategory(e.target.value);
+                              if (errors.customCategory) setErrors((prev) => ({ ...prev, customCategory: null }));
+                            }}
+                          />
+                          {errors.customCategory && <span className="form-field-error" role="alert">{errors.customCategory}</span>}
+                        </div>
+                      )}
+                    </>
                   )}
-                  {errors.categoryId && <span className="form-field-error">{errors.categoryId}</span>}
+                  {errors.categoryId && <span className="form-field-error" role="alert">{errors.categoryId}</span>}
                 </div>
 
                 <div className="form-group">
-                  <label className="form-label">المهارات المطلوبة (اختياري)</label>
+                  <label className="form-label" htmlFor="project-skill-input">
+                    المهارات المطلوبة <span className="form-optional">(اختياري)</span>
+                  </label>
                   <div className="skill-input-row">
                     <input
+                      id="project-skill-input"
                       type="text"
                       className="form-input"
                       placeholder="ما المهارات المطلوبة؟ مثل: تصميم جرافيك، كتابة محتوى، تصوير"
@@ -542,18 +636,21 @@ const PostProject = () => {
                     <datalist id="project-skill-suggestions">
                       {skillSuggestions.map((name) => <option key={name} value={name} />)}
                     </datalist>
-                    <button type="button" className="add-btn" onClick={handleAddSkill}>
-                      <FiPlus /> إضافة
+                    <button type="button" className="add-btn" onClick={handleAddSkill} disabled={!skillInput.trim()}>
+                      <FiPlus aria-hidden="true" />
+                      <span>إضافة</span>
                     </button>
                   </div>
-                  <div className="skills-tags-wrap">
-                    {skills.map((s) => (
-                      <span key={s} className="skill-tag">
-                        <span>{s}</span>
-                        <button type="button" onClick={() => handleRemoveSkill(s)}><FiX /></button>
-                      </span>
-                    ))}
-                  </div>
+                  {skills.length > 0 && (
+                    <div className="skills-tags-wrap">
+                      {skills.map((s) => (
+                        <span key={s} className="skill-tag">
+                          <span>{s}</span>
+                          <button type="button" onClick={() => handleRemoveSkill(s)} aria-label={`إزالة ${s}`}><FiX /></button>
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
                 <div className="wizard-actions">
@@ -574,56 +671,122 @@ const PostProject = () => {
                 </p>
 
                 <div className="form-group">
-                  <label className="form-label">تفاصيل ومتطلبات المشروع *</label>
+                  <label className="form-label" htmlFor="project-description">تفاصيل ومتطلبات المشروع *</label>
                   <textarea
+                    id="project-description"
                     rows="6"
+                    maxLength={DESCRIPTION_MAX}
                     className={`form-textarea ${errors.description ? 'has-error' : ''}`}
                     placeholder="اشرح ما تحتاجه بكلماتك: ما الذي تريد إنجازه، وما الذي تتوقع استلامه في النهاية، وأي تفاصيل مهمة لك..."
                     value={description}
+                    aria-describedby="project-description-hint"
+                    aria-invalid={Boolean(errors.description) || undefined}
                     onChange={(e) => {
                       setDescription(e.target.value);
                       if (errors.description) setErrors((prev) => ({ ...prev, description: null }));
                     }}
                   />
-                  {errors.description && <span className="form-field-error">{errors.description}</span>}
+                  <CharCounter id="project-description-hint" value={description} min={DESCRIPTION_MIN} max={DESCRIPTION_MAX} />
+                  {errors.description && <span className="form-field-error" role="alert">{errors.description}</span>}
                 </div>
 
-                <div className="form-grid-two">
-                  <div className="form-group">
-                    <label className="form-label">
-                      <FiDollarSign className="field-icon" />
-                      <span>الميزانية المقدرة (بالجنيه السوداني ج.س) *</span>
-                    </label>
-                    <input
-                      type="number"
-                      className={`form-input ${errors.budget ? 'has-error' : ''}`}
-                      placeholder="مثال: 350000"
+                <div className="form-group">
+                  <span className="form-label" id="budget-label">
+                    <FiDollarSign className="field-icon" aria-hidden="true" />
+                    <span>الميزانية المقدرة (بالجنيه السوداني) *</span>
+                  </span>
+                  <div className="budget-type-toggle" role="radiogroup" aria-labelledby="budget-label">
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={budgetType === 'fixed'}
+                      className={`budget-type-option ${budgetType === 'fixed' ? 'selected' : ''}`}
+                      onClick={() => {
+                        setBudgetType('fixed');
+                        setErrors((prev) => ({ ...prev, budgetMax: null }));
+                      }}
+                    >
+                      <strong>سعر محدد</strong>
+                      <small>مبلغ واحد للمشروع كاملاً</small>
+                    </button>
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={budgetType === 'range'}
+                      className={`budget-type-option ${budgetType === 'range' ? 'selected' : ''}`}
+                      onClick={() => setBudgetType('range')}
+                    >
+                      <strong>نطاق سعري</strong>
+                      <small>من ... إلى، مثل 300,000 - 400,000</small>
+                    </button>
+                  </div>
+
+                  {budgetType === 'fixed' ? (
+                    <MoneyInput
+                      id="project-budget"
                       value={budget}
-                      onChange={(e) => {
-                        setBudget(e.target.value);
+                      placeholder="مثال: 350,000"
+                      hasError={Boolean(errors.budget)}
+                      aria-labelledby="budget-label"
+                      onChange={(v) => {
+                        setBudget(v);
                         if (errors.budget) setErrors((prev) => ({ ...prev, budget: null }));
                       }}
                     />
-                    {errors.budget && <span className="form-field-error">{errors.budget}</span>}
-                  </div>
+                  ) : (
+                    <div className="budget-range-row">
+                      <div className="budget-range-field">
+                        <label className="form-sublabel" htmlFor="project-budget-min">من</label>
+                        <MoneyInput
+                          id="project-budget-min"
+                          value={budget}
+                          placeholder="300,000"
+                          hasError={Boolean(errors.budget)}
+                          onChange={(v) => {
+                            setBudget(v);
+                            if (errors.budget) setErrors((prev) => ({ ...prev, budget: null }));
+                          }}
+                        />
+                      </div>
+                      <span className="budget-range-dash" aria-hidden="true">—</span>
+                      <div className="budget-range-field">
+                        <label className="form-sublabel" htmlFor="project-budget-max">إلى</label>
+                        <MoneyInput
+                          id="project-budget-max"
+                          value={budgetMax}
+                          placeholder="400,000"
+                          hasError={Boolean(errors.budgetMax || rangeInvalid)}
+                          onChange={(v) => {
+                            setBudgetMax(v);
+                            if (errors.budgetMax) setErrors((prev) => ({ ...prev, budgetMax: null }));
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  {errors.budget && <span className="form-field-error" role="alert">{errors.budget}</span>}
+                  {(errors.budgetMax || rangeInvalid) && (
+                    <span className="form-field-error" role="alert">{errors.budgetMax || 'يجب أن يكون الحد الأعلى أكبر من الحد الأدنى'}</span>
+                  )}
+                </div>
 
-                  <div className="form-group">
-                    <label className="form-label">
-                      <FiCalendar className="field-icon" />
-                      <span>الموعد النهائي المتوقع للتسليم *</span>
-                    </label>
-                    <input
-                      type="date"
-                      min={minDeadline}
-                      className={`form-input ${errors.deadline ? 'has-error' : ''}`}
-                      value={deadline}
-                      onChange={(e) => {
-                        setDeadline(e.target.value);
-                        if (errors.deadline) setErrors((prev) => ({ ...prev, deadline: null }));
-                      }}
-                    />
-                    {errors.deadline && <span className="form-field-error">{errors.deadline}</span>}
-                  </div>
+                <div className="form-group">
+                  <label className="form-label" htmlFor="project-deadline">
+                    <FiCalendar className="field-icon" aria-hidden="true" />
+                    <span>الموعد النهائي المتوقع للتسليم *</span>
+                  </label>
+                  <input
+                    id="project-deadline"
+                    type="date"
+                    min={minDeadline}
+                    className={`form-input form-input--date ${errors.deadline ? 'has-error' : ''}`}
+                    value={deadline}
+                    onChange={(e) => {
+                      setDeadline(e.target.value);
+                      if (errors.deadline) setErrors((prev) => ({ ...prev, deadline: null }));
+                    }}
+                  />
+                  {errors.deadline && <span className="form-field-error" role="alert">{errors.deadline}</span>}
                 </div>
 
                 {/* Attachments */}
@@ -710,7 +873,7 @@ const PostProject = () => {
 
                   <div className="review-row">
                     <span className="review-lbl">التصنيف:</span>
-                    <span className="review-pill">{selectedCatObj?.name || 'عام'}</span>
+                    <span className="review-pill">{categoryLabel || 'عام'}</span>
                   </div>
 
                   {skills.length > 0 && (
@@ -727,7 +890,8 @@ const PostProject = () => {
                   <div className="review-row">
                     <span className="review-lbl">الميزانية المقدرة:</span>
                     <strong className="review-val budget-highlight">
-                      {Number(budget).toLocaleString()} ج.س
+                      {formatBudget(budget, budgetType === 'range' ? budgetMax : null)}
+                      <span className="review-budget-type">{budgetType === 'range' ? 'نطاق سعري' : 'سعر محدد'}</span>
                     </strong>
                   </div>
 

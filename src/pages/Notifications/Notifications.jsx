@@ -116,7 +116,7 @@ const Notifications = () => {
   const filteredNotifications = notifications.filter((n) => {
     if (activeTab === 'unread') return !n.isRead;
     if (activeTab === 'projects') {
-      return ['proposal_received', 'proposal_accepted', 'proposal_rejected', 'proposal_withdrawn', 'project_moderated',
+      return ['proposal_received', 'proposal_accepted', 'proposal_rejected', 'proposal_withdrawn', 'proposal_updated', 'project_moderated',
         'project_submitted', 'project_approved', 'project_rejected'].includes(n.type);
     }
     if (activeTab === 'contracts') {
@@ -164,6 +164,8 @@ const Notifications = () => {
         return { icon: <FiFileText />, label: 'تحديث على عرض', theme: 'proposal' };
       case 'proposal_withdrawn':
         return { icon: <FiFileText />, label: 'سحب عرض', theme: 'proposal' };
+      case 'proposal_updated':
+        return { icon: <FiFileText />, label: 'تعديل عرض', theme: 'proposal' };
       case 'payment_rejected':
         return { icon: <FiDollarSign />, label: 'رفض إثبات الدفع', theme: 'dispute' };
       case 'payment_submitted':

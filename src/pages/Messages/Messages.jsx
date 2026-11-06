@@ -16,7 +16,11 @@ import {
   FiArrowRight,
   FiMessageSquare,
   FiShield,
-  FiX
+  FiX,
+  FiClock,
+  FiAlertCircle,
+  FiRefreshCw,
+  FiChevronLeft
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
@@ -37,6 +41,8 @@ const Messages = () => {
   const contractIdParam = searchParams.get('contractId');
   const userIdParam = searchParams.get('userId');
   const conversationIdParam = searchParams.get('conversationId');
+  // Set when a client messages a bidder from a project page (pre-hire chat).
+  const projectIdParam = searchParams.get('projectId');
 
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState(null);
@@ -49,16 +55,16 @@ const Messages = () => {
   const [newMessageText, setNewMessageText] = useState('');
   const [attachments, setAttachments] = useState([]);
   const [isAttaching, setIsAttaching] = useState(false);
-  const [sending, setSending] = useState(false);
+  // Number of messages on their way to the server (shown as "sending" bubbles).
+  const [sendingCount, setSendingCount] = useState(0);
+  const sending = sendingCount > 0;
   const [searchQuery, setSearchQuery] = useState('');
   const [mobileShowChat, setMobileShowChat] = useState(false);
 
-  const messagesEndRef = useRef(null);
+  const feedRef = useRef(null);
   const activeIdRef = useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const scrolledThreadRef = useRef(null);
+  const pendingSeqRef = useRef(0);
 
   const markThreadRead = async (threadId) => {
     try {
@@ -96,7 +102,7 @@ const Messages = () => {
         selected = list.find((t) => t.counterpartyId === userIdParam);
         if (!selected) {
           // Starting a new conversation from a profile page.
-          const created = await api.messages.start({ participantId: userIdParam });
+          const created = await api.messages.start({ participantId: userIdParam, projectId: projectIdParam || undefined });
           list = await api.messages.conversations();
           selected = list.find((t) => t.id === created.id);
         }
@@ -144,9 +150,16 @@ const Messages = () => {
     };
   }, [user]);
 
+  // Keep the newest message in view. Only the message list scrolls (never the
+  // page), and loading older messages above doesn't jump back to the bottom.
+  const lastMessageId = messages[messages.length - 1]?.id;
   useEffect(() => {
-    scrollToBottom();
-  }, [messages.length]);
+    const feed = feedRef.current;
+    if (!feed || !lastMessageId) return;
+    const firstInThread = scrolledThreadRef.current !== activeThreadId;
+    scrolledThreadRef.current = activeThreadId;
+    feed.scrollTo({ top: feed.scrollHeight, behavior: firstInThread ? 'auto' : 'smooth' });
+  }, [lastMessageId, activeThreadId]);
 
   const loadOlder = async () => {
     if (!activeThreadId || messages.length === 0) return;
@@ -171,33 +184,61 @@ const Messages = () => {
   const readyAttachments = attachments.filter((a) => a.upload);
   const uploading = attachments.some((a) => a.status === 'uploading');
 
+  // Sends one message. It shows at once as a "sending" bubble, is replaced by
+  // the saved message on success, and stays as "failed" (with retry) otherwise.
+  const deliver = async (threadId, pending) => {
+    setSendingCount((n) => n + 1);
+    try {
+      const sentMsg = await api.messages.send(threadId, {
+        message: pending.body,
+        attachmentIds: pending.attachmentIds,
+      });
+      if (activeIdRef.current === threadId) {
+        setMessages((prev) => mergeMessages(prev.filter((m) => m.id !== pending.id), [sentMsg]));
+      }
+      setThreads((prev) =>
+        prev
+          .map((t) => (t.id === threadId ? { ...t, lastMessage: sentMsg, updatedAt: sentMsg.sentAt } : t))
+          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
+      );
+    } catch {
+      if (activeIdRef.current === threadId) {
+        setMessages((prev) => prev.map((m) => (m.id === pending.id ? { ...m, status: 'failed' } : m)));
+      }
+    } finally {
+      setSendingCount((n) => n - 1);
+    }
+  };
+
   const handleSendMessage = async (e) => {
     if (e) e.preventDefault();
     const text = newMessageText.trim();
-    if ((!text && readyAttachments.length === 0) || !activeThreadId || sending || uploading) return;
+    if ((!text && readyAttachments.length === 0) || !activeThreadId || uploading) return;
 
-    setSending(true);
+    const pending = {
+      id: `pending-${(pendingSeqRef.current += 1)}`,
+      senderId: user?.id,
+      body: text,
+      attachments: readyAttachments.map((a) => ({ id: a.upload.id, name: a.upload.name || a.file?.name || 'ملف' })),
+      attachmentIds: readyAttachments.map((a) => a.upload.id),
+      sentAt: new Date().toISOString(),
+      status: 'sending',
+    };
     setChatError('');
-    try {
-      const sentMsg = await api.messages.send(activeThreadId, {
-        message: text,
-        attachmentIds: readyAttachments.map((a) => a.upload.id),
-      });
-      setMessages((prev) => mergeMessages(prev, [sentMsg]));
-      setNewMessageText('');
-      setAttachments([]);
-      setIsAttaching(false);
-      setThreads((prev) =>
-        prev
-          .map((t) => (t.id === activeThreadId ? { ...t, lastMessage: sentMsg, updatedAt: sentMsg.sentAt } : t))
-          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
-      );
-    } catch (err) {
-      // The typed text is kept so nothing is lost.
-      setChatError(err.message);
-    } finally {
-      setSending(false);
-    }
+    setMessages((prev) => [...prev, pending]);
+    setNewMessageText('');
+    setAttachments([]);
+    setIsAttaching(false);
+    deliver(activeThreadId, pending);
+  };
+
+  const retryMessage = (msg) => {
+    setMessages((prev) => prev.map((m) => (m.id === msg.id ? { ...m, status: 'sending' } : m)));
+    deliver(activeThreadId, { ...msg, status: 'sending' });
+  };
+
+  const discardMessage = (msg) => {
+    setMessages((prev) => prev.filter((m) => m.id !== msg.id));
   };
 
   const openAttachment = async (file) => {
@@ -331,33 +372,48 @@ const Messages = () => {
                       <FiArrowRight />
                     </button>
 
-                    <div className="chat-counterparty-info">
-                      <img
-                        src={activeThread.counterpartyAvatar || defaultAvatar}
-                        alt={activeThread.counterpartyName}
-                        className="chat-header-avatar"
-                      />
-                      <div>
-                        <h3 className="chat-header-name">{activeThread.counterpartyName}</h3>
-                        <p className="chat-header-sub">
-                          {activeThread.counterpartySubtitle || (activeThread.counterpartyRole === 'client' ? 'صاحب عمل' : 'مستقل')}
-                        </p>
-                      </div>
-                    </div>
-
-                    {/* Contract Link if associated */}
-                    {activeThread.contractId && (
-                      <div className="chat-contract-pill">
-                        <FiShield className="contract-icon" />
-                        <Link to={`/contracts/${activeThread.contractId}`} className="contract-link">
-                          <span>عرض العقد</span>
+                    {(() => {
+                      const profilePath = activeThread.counterpartyRole === 'freelancer'
+                        ? `/freelancers/${activeThread.counterpartyId}`
+                        : activeThread.counterpartyRole === 'client'
+                          ? `/clients/${activeThread.counterpartyId}`
+                          : null;
+                      const identity = (
+                        <>
+                          <img
+                            src={activeThread.counterpartyAvatar || defaultAvatar}
+                            alt={activeThread.counterpartyName}
+                            className="chat-header-avatar"
+                          />
+                          <div>
+                            <h3 className="chat-header-name">{activeThread.counterpartyName}</h3>
+                            <p className="chat-header-sub">
+                              {activeThread.counterpartySubtitle || (activeThread.counterpartyRole === 'client' ? 'صاحب عمل' : 'مستقل')}
+                            </p>
+                          </div>
+                        </>
+                      );
+                      return profilePath ? (
+                        <Link to={profilePath} className="chat-counterparty-info is-link" title="عرض الملف الشخصي">
+                          {identity}
                         </Link>
-                      </div>
+                      ) : (
+                        <div className="chat-counterparty-info">{identity}</div>
+                      );
+                    })()}
+
+                    {/* Contract button if associated */}
+                    {activeThread.contractId && (
+                      <Link to={`/contracts/${activeThread.contractId}`} className="chat-contract-pill">
+                        <FiShield className="contract-icon" />
+                        <span>عرض العقد</span>
+                        <FiChevronLeft className="contract-arrow" />
+                      </Link>
                     )}
                   </div>
 
                   {/* Messages Feed */}
-                  <div className="messages-feed">
+                  <div className="messages-feed" ref={feedRef}>
                     {chatError && (
                       <div className="empty-feed-state" role="alert">
                         <p>{chatError}</p>
@@ -382,7 +438,7 @@ const Messages = () => {
                         return (
                           <div
                             key={msg.id}
-                            className={`message-row ${isMine ? 'outgoing' : 'incoming'}`}
+                            className={`message-row ${isMine ? 'outgoing' : 'incoming'} ${msg.status ? `is-${msg.status}` : ''}`}
                           >
                             <div className="message-bubble">
                               {msg.body && <p className="message-text">{msg.body}</p>}
@@ -391,7 +447,7 @@ const Messages = () => {
                               {msg.attachments && msg.attachments.length > 0 && (
                                 <div className="bubble-attachments">
                                   {msg.attachments.map((att) => (
-                                    <button key={att.id} type="button" className="msg-attachment-chip" onClick={() => openAttachment(att)}>
+                                    <button key={att.id} type="button" className="msg-attachment-chip" onClick={() => !msg.status && openAttachment(att)}>
                                       <FiPaperclip />
                                       <span>{att.name}</span>
                                     </button>
@@ -406,16 +462,35 @@ const Messages = () => {
                                     minute: '2-digit',
                                   })}
                                 </span>
-                                {isMine && (
+                                {isMine && msg.status === 'sending' && (
+                                  <span className="message-status sending" role="status">
+                                    <FiClock className="message-status-icon" aria-hidden="true" />
+                                    جارٍ الإرسال...
+                                  </span>
+                                )}
+                                {isMine && msg.status === 'failed' && (
+                                  <span className="message-status failed" role="alert">
+                                    <FiAlertCircle className="message-status-icon" aria-hidden="true" />
+                                    لم تُرسل
+                                  </span>
+                                )}
+                                {isMine && !msg.status && (
                                   <FiCheck className={`read-check ${msg.isRead ? 'read' : ''}`} />
                                 )}
                               </div>
+                              {msg.status === 'failed' && (
+                                <div className="message-retry-row">
+                                  <button type="button" onClick={() => retryMessage(msg)}>
+                                    <FiRefreshCw aria-hidden="true" /> إعادة المحاولة
+                                  </button>
+                                  <button type="button" onClick={() => discardMessage(msg)}>حذف</button>
+                                </div>
+                              )}
                             </div>
                           </div>
                         );
                       })
                     )}
-                    <div ref={messagesEndRef} />
                   </div>
 
                   {/* Attachment Bar if active */}
@@ -429,7 +504,6 @@ const Messages = () => {
                           maxFiles={5}
                           files={attachments}
                           onChange={setAttachments}
-                          disabled={sending}
                         />
                       </div>
                       <button
@@ -466,11 +540,12 @@ const Messages = () => {
 
                     <button
                       type="submit"
-                      className="send-message-btn"
-                      disabled={sending || uploading || (!newMessageText.trim() && readyAttachments.length === 0)}
-                      aria-label="إرسال"
+                      className={`send-message-btn ${sending ? 'is-sending' : ''}`}
+                      disabled={uploading || (!newMessageText.trim() && readyAttachments.length === 0)}
+                      aria-label={sending ? 'جارٍ الإرسال' : 'إرسال'}
+                      aria-busy={sending}
                     >
-                      <FiSend className="send-icon" />
+                      {sending ? <span className="send-spinner" aria-hidden="true" /> : <FiSend className="send-icon" />}
                     </button>
                   </form>
                 </>

@@ -264,6 +264,29 @@
   gap: 14px;
 }
 
+/* Opens the other person's profile. */
+.chat-counterparty-info.is-link {
+  margin: -6px;
+  padding: 6px;
+  border-radius: 12px;
+  color: inherit;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.chat-counterparty-info.is-link:hover {
+  background-color: #f1f5f9;
+}
+
+.chat-counterparty-info.is-link:hover .chat-header-name {
+  color: var(--color-primary, #0B6E4F);
+}
+
+.chat-counterparty-info.is-link:focus-visible {
+  outline: 2px solid var(--color-primary, #0B6E4F);
+  outline-offset: 2px;
+}
+
 .chat-header-avatar {
   width: 44px;
   height: 44px;
@@ -293,11 +316,38 @@
 .chat-contract-pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   background-color: #ecfdf5;
   border: 1px solid #a7f3d0;
   border-radius: 12px;
-  padding: 6px 14px;
+  padding: 8px 14px;
+  color: var(--color-primary-dark, #00543B);
+  font-size: 0.86rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chat-contract-pill:hover {
+  background-color: #d1fae5;
+  border-color: #6ee7b7;
+  box-shadow: 0 2px 8px rgba(5, 150, 105, 0.15);
+}
+
+.chat-contract-pill:focus-visible {
+  outline: 2px solid #059669;
+  outline-offset: 2px;
+}
+
+.chat-contract-pill .contract-arrow {
+  font-size: 0.95rem;
+  transition: transform 0.15s ease;
+}
+
+.chat-contract-pill:hover .contract-arrow {
+  transform: translateX(-2px);
 }
 
 .chat-contract-pill .contract-icon {
@@ -305,16 +355,6 @@
   font-size: 1rem;
 }
 
-.chat-contract-pill .contract-link {
-  color: var(--color-primary-dark, #00543B);
-  font-size: 0.84rem;
-  font-weight: 700;
-  text-decoration: none;
-}
-
-.chat-contract-pill .contract-link:hover {
-  text-decoration: underline;
-}
 
 /* Messages Feed */
 .messages-feed {
@@ -630,5 +670,89 @@
 
   .chat-contract-pill {
     display: none; /* Hide contract pill in chat header on tiny screens so sender name doesn't clip */
+  }
+}
+
+/* ---------- Sending states ---------- */
+
+.send-message-btn.is-sending {
+  cursor: progress;
+}
+
+.send-spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #ffffff;
+  border-radius: 50%;
+  animation: chat-spin 0.7s linear infinite;
+}
+
+.message-row.is-sending .message-bubble {
+  opacity: 0.78;
+  animation: chat-pending 1.4s ease-in-out infinite;
+}
+
+.message-row.is-failed .message-bubble {
+  background-color: #fef2f2;
+  color: #7f1d1d;
+  border: 1px solid #fecaca;
+}
+
+.message-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.message-status.sending .message-status-icon {
+  animation: chat-spin 1.6s linear infinite;
+}
+
+.message-status.failed {
+  color: #b91c1c;
+}
+
+.message-retry-row {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.message-retry-row button {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background-color: #ffffff;
+  color: #b91c1c;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.message-retry-row button:hover {
+  background-color: #fee2e2;
+}
+
+@keyframes chat-spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes chat-pending {
+  0%, 100% { opacity: 0.78; }
+  50% { opacity: 0.6; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .send-spinner,
+  .message-status.sending .message-status-icon,
+  .message-row.is-sending .message-bubble {
+    animation: none;
   }
 }

@@ -78,7 +78,7 @@ export default function AdminProjectsTab({
                   <td className="font-mono">{proj.clientName}</td>
                   <td className="font-bold">{proj.title}</td>
                   <td>{proj.categoryName || '—'}</td>
-                  <td>{Number(proj.budget || 0).toLocaleString()} ج.س</td>
+                  <td>{proj.budgetLabel}</td>
                   <td>{formatDate(proj.submittedAt || proj.createdAt)}</td>
                   <td>
                     <div className="table-action-btns">
@@ -235,7 +235,7 @@ export default function AdminProjectsTab({
                 <tr key={proj.id}>
                   <td className="font-mono">{proj.clientName}</td>
                   <td className="font-bold">{proj.title}</td>
-                  <td>{Number(proj.budget || 0).toLocaleString()} ج.س</td>
+                  <td>{proj.budgetLabel}</td>
                   <td>{formatDate(proj.createdAt)}</td>
                   <td>
                     <span className={`project-status-tag ${proj.status.toLowerCase().replace(/\s+/g, '-')}`}>

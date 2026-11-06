@@ -7,6 +7,7 @@ export const NOTIFICATION_TYPES = Object.freeze({
   PROPOSAL_ACCEPTED: 'proposal_accepted',
   PROPOSAL_REJECTED: 'proposal_rejected',
   PROPOSAL_WITHDRAWN: 'proposal_withdrawn',
+  PROPOSAL_UPDATED: 'proposal_updated',
   PROJECT_MODERATED: 'project_moderated',
   PAYMENT_SUBMITTED: 'payment_submitted',
   ESCROW_FUNDED: 'escrow_funded',

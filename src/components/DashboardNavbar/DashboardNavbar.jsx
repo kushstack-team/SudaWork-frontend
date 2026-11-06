@@ -13,16 +13,13 @@ import { homeForRole } from '../../utils/roles';
 import NavbarSearch from './components/NavbarSearch';
 import UserDropdown from './components/UserDropdown';
 import NotificationDropdown from './components/NotificationDropdown';
-import NavbarCategories from './components/NavbarCategories';
 
 const COUNTS_POLL_MS = 30000;
 
-const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
+const DashboardNavbar = ({ onSearch }) => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategory, setActiveCategory] = useState('');
-  const [navCategories, setNavCategories] = useState([]);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState(false);
   const [unreadMsgCount, setUnreadMsgCount] = useState(0);
   const [notifications, setNotifications] = useState([]);
@@ -33,14 +30,8 @@ const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
 
   const { isFeatureAvailable } = usePlatform();
   const isClient = user?.role === 'client';
-  const shouldHideCategories = hideCategories || isClient || !isFeatureAvailable(FEATURES.PROJECT_BROWSING);
   const showMessages = user?.role !== 'admin' && isFeatureAvailable(FEATURES.MESSAGING);
   const showNotifications = isFeatureAvailable(FEATURES.NOTIFICATIONS);
-
-  useEffect(() => {
-    if (shouldHideCategories) return;
-    api.taxonomy.categories().then(setNavCategories, () => setNavCategories([]));
-  }, [shouldHideCategories]);
 
   // Unread counts and the latest notifications, refreshed periodically.
   const loadNotifications = useCallback(() => {
@@ -125,13 +116,8 @@ const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
     }
   };
 
-  const handleCategoryClick = (catId) => {
-    setActiveCategory(catId);
-    navigate(`/projects?category=${catId}`);
-  };
-
   return (
-    <header className={`dashboard-header ${shouldHideCategories ? 'no-categories-nav' : ''}`} dir="rtl">
+    <header className="dashboard-header" dir="rtl">
       {/* Top Header Bar */}
       <div className="dashboard-topbar">
         <div className="dashboard-topbar-container">
@@ -196,15 +182,6 @@ const DashboardNavbar = ({ onSearch, hideCategories = false }) => {
 
         </div>
       </div>
-
-      {/* Sub-Header: Category Navigation (Only for non-clients) */}
-      {!shouldHideCategories && (
-        <NavbarCategories
-          categories={navCategories}
-          activeCategory={activeCategory}
-          onCategoryClick={handleCategoryClick}
-        />
-      )}
     </header>
   );
 };

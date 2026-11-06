@@ -54,7 +54,7 @@ const ClientProjectsFeed = ({ projects = [], proposalsMap = {}, loading = false 
           {projects.slice(0, 4).map((project) => {
             const proposalCount = proposalsMap[project.id] || 0;
             const isOpen = project.status === 'Open';
-            const budgetFormatted = `${Number(project.budget || 0).toLocaleString()} ج.س`;
+            const budgetFormatted = project.budgetLabel;
             const statusText = {
               'Pending Review': 'بانتظار موافقة الإدارة',
               Rejected: 'مرفوض - يحتاج تعديل',

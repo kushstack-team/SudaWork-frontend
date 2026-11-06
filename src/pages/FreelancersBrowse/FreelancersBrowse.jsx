@@ -22,6 +22,7 @@ import {
   FiCheckCircle
 } from 'react-icons/fi';
 import { PeopleGridSkeleton } from '../../components/common/Skeleton/Skeleton';
+import RatingBadge from '../../components/RatingBadge/RatingBadge';
 
 const sudanLocations = [
   'الجميع',
@@ -436,10 +437,7 @@ const FreelancersBrowse = () => {
                           </h3>
                           <p className="freelancer-title-text">{freelancer.title}</p>
                           <div className="freelancer-meta-row">
-                            <span className="rating-badge">
-                              <FiStar className="star-icon" />
-                              <span>{freelancer.totalReviews > 0 ? `${Number(freelancer.avgRating).toFixed(1)} (${freelancer.totalReviews})` : 'جديد'}</span>
-                            </span>
+                            <RatingBadge rating={freelancer.avgRating} count={freelancer.totalReviews} />
                             {freelancer.location && (
                               <span className="location-tag">
                                 <FiMapPin className="pin-icon" />

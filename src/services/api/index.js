@@ -2,7 +2,7 @@
  * Domain API for the SudaWork frontend. Every method calls the real backend
  * (see backend-endpoints.md) and returns UI-shaped data via the mappers.
  */
-import { get, post, put, patch, del, uploadFile, openProtectedFile, tokens } from './client.js';
+import { get, post, put, patch, del, uploadFile, openProtectedFile, fetchFileBlob, tokens } from './client.js';
 import * as m from './mappers.js';
 
 const session = (data) => {
@@ -175,14 +175,14 @@ export const messagesApi = {
 export const uploadsApi = {
   // Resolves with the mapped file ({ id, name, url, ... }).
   upload: async (file, { purpose = 'other', onProgress, signal } = {}) => m.mapFile(await uploadFile(file, { purpose, onProgress, signal })),
-  // Public files open directly; private ones are fetched with the session token.
+  // Opens the file in the in-app viewer (components/FileViewer), which shows
+  // images and PDFs inside the platform and offers a download for the rest.
   open: async (file) => {
-    if (file.isPublic) {
-      window.open(file.url, '_blank', 'noopener');
-      return;
-    }
-    await openProtectedFile(file.rawUrl || file.url, file.name);
+    window.dispatchEvent(new CustomEvent('sudawork:open-file', { detail: file }));
   },
+  // Raw download, e.g. for the viewer's download button.
+  download: (file) => openProtectedFile(file.rawUrl || file.url, file.name),
+  fetchBlob: (file) => fetchFileBlob(file.rawUrl || file.url),
 };
 
 export const adminApi = {

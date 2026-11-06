@@ -434,7 +434,7 @@ const ProjectsBrowse = () => {
                           <div className="project-budget-badge">
                             <span className="budget-lbl">الميزانية المقدرة</span>
                             <span className="budget-amt">
-                              {`${Number(project.budget || 0).toLocaleString()} ج.س`}
+                              {project.budgetLabel}
                             </span>
                           </div>
                         </div>

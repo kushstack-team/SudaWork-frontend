@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  FiStar,
   FiMapPin,
   FiBriefcase,
   FiArrowLeft,
@@ -11,6 +10,7 @@ import {
 import './ClientTalentDiscovery.css';
 import defaultAvatar from '../../../assets/default-avatar.svg';
 import { PeopleGridSkeleton } from '../../../components/common/Skeleton/Skeleton';
+import RatingBadge from '../../../components/RatingBadge/RatingBadge';
 
 const talentCategories = [
   { id: 'all', label: 'كافة التخصصات' },
@@ -99,7 +99,6 @@ const ClientTalentDiscovery = ({ freelancers = [], loading = false }) => {
       ) : (
         <div className="talent-cards-grid">
           {filteredFreelancers.slice(0, 4).map((freelancer) => {
-            const ratingFormatted = Number(freelancer.avgRating || 0).toFixed(1);
             const reviews = freelancer.totalReviews;
 
             return (
@@ -125,17 +124,7 @@ const ClientTalentDiscovery = ({ freelancers = [], loading = false }) => {
                     <p className="talent-title">{freelancer.title || 'مستقل'}</p>
                     
                     <div className="talent-location-rating">
-                      <span className="talent-rating">
-                        <FiStar className="star-icon" />
-                        {reviews > 0 ? (
-                          <>
-                            <strong>{ratingFormatted}</strong>
-                            <span className="rating-count">({reviews})</span>
-                          </>
-                        ) : (
-                          <span className="rating-count">جديد</span>
-                        )}
-                      </span>
+                      <RatingBadge rating={freelancer.avgRating} count={reviews} size="sm" />
                       {freelancer.location && (
                         <span className="talent-location">
                           <FiMapPin className="pin-icon" />

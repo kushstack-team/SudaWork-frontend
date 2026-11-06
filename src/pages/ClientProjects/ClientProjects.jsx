@@ -267,7 +267,7 @@ const ClientProjects = () => {
                     <div className="card-info-strip">
                       <div className="info-badge">
                         <FiDollarSign className="info-icon" />
-                        <span>الميزانية: <strong>{Number(p.budget).toLocaleString()} ج.س</strong></span>
+                        <span>الميزانية: <strong>{p.budgetLabel}</strong></span>
                       </div>
                       <div className="info-badge">
                         <FiClock className="info-icon" />

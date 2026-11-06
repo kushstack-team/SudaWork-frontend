@@ -5,6 +5,7 @@
  * stays null/empty so the UI can show an honest empty state.
  */
 import { resolveFileUrl } from './client.js';
+import { formatBudget } from '../../utils/formatters.js';
 import {
   PROJECT_STATUS,
   CONTRACT_STATUS,
@@ -108,6 +109,9 @@ export const mapFreelancer = (row, extra = {}) => {
     fullName: row.full_name,
     photo: resolveFileUrl(row.avatar_url),
     isVerified: Boolean(row.is_verified),
+    // Main specialty (platform category).
+    categoryId: row.category_id || '',
+    categoryName: row.category_name || '',
     title: row.title || '',
     bio: row.bio || '',
     location: row.location || '',
@@ -169,6 +173,10 @@ export const mapProject = (p) => p && ({
   category: p.category_name || '',
   categoryName: p.category_name || '',
   budget: num(p.budget),
+  // Upper end of a budget range; null for a fixed budget.
+  budgetMax: num(p.budget_max),
+  budgetLabel: formatBudget(p.budget, p.budget_max),
+  customCategory: p.custom_category || '',
   deadline: dateOnly(p.deadline),
   deadlineAt: p.deadline,
   duration: durationLabel(p.deadline),
@@ -209,6 +217,8 @@ export const mapProposal = (p) => p && ({
   projectTitle: p.project_title || '',
   projectStatus: label(PROJECT_STATUS, p.project_status),
   projectBudget: num(p.project_budget),
+  projectBudgetMax: num(p.project_budget_max),
+  projectBudgetLabel: formatBudget(p.project_budget, p.project_budget_max),
   projectDeadline: dateOnly(p.project_deadline),
   categoryName: p.category_name || '',
   clientId: p.client_id,

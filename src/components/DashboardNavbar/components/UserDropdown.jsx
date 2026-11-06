@@ -57,7 +57,7 @@ export default function UserDropdown({
               onClick={() => setIsProfileMenuOpen(false)}
             >
               <FiShield className="dropdown-icon" style={{ color: '#16a34a' }} />
-              <span>لوحة الإدارة والتحكيم (Admin)</span>
+              <span>لوحة الإدارة والتحكيم</span>
             </Link>
           )}
           {!isAdmin && (

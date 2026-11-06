@@ -24,6 +24,7 @@ export default function NotificationDropdown({
       case 'proposal_viewed':
       case 'proposal_accepted':
       case 'proposal_withdrawn':
+      case 'proposal_updated':
         return <FiFileText className="notif-item-icon proposal" />;
       case 'work_submitted':
       case 'deliverable_approved':

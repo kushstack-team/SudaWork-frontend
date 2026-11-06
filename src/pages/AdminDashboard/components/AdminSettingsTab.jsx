@@ -58,7 +58,7 @@ export default function AdminSettingsTab({
 
           {/* 3. Payment Instructions */}
           <div style={{ marginTop: '24px', marginBottom: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>3. تعليمات الإيداع والتحويل البنكي (Payment Instructions)</h4>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>3. تعليمات الإيداع والتحويل البنكي</h4>
           </div>
 
           <div className="form-group">
@@ -90,7 +90,7 @@ export default function AdminSettingsTab({
 
           {/* 4. Withdrawal Instructions */}
           <div style={{ marginTop: '24px', marginBottom: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>4. تعليمات وضوابط سحب الأرباح (Withdrawal Instructions)</h4>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>4. تعليمات وضوابط سحب الأرباح</h4>
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="withdrawalInstructions">
@@ -101,7 +101,7 @@ export default function AdminSettingsTab({
 
           {/* 5. Contact Information */}
           <div style={{ marginTop: '24px', marginBottom: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>5. معلومات التواصل والدعم الفني (Contact Information)</h4>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>5. معلومات التواصل والدعم الفني</h4>
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="contactEmail">بريد الدعم والمراسلات</label>
@@ -114,7 +114,7 @@ export default function AdminSettingsTab({
 
           {/* 6. Terms & Conditions */}
           <div style={{ marginTop: '24px', marginBottom: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>6. الشروط والأحكام (Terms & Conditions)</h4>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>6. الشروط والأحكام</h4>
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="termsAndConditions">نصوص الشروط والأحكام المنظمة للمنصة</label>
@@ -123,7 +123,7 @@ export default function AdminSettingsTab({
 
           {/* 7. Privacy Policy */}
           <div style={{ marginTop: '24px', marginBottom: '8px', borderTop: '1px solid #e2e8f0', paddingTop: '16px' }}>
-            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>7. سياسة الخصوصية (Privacy Policy)</h4>
+            <h4 style={{ margin: '0 0 12px 0', fontSize: '1rem', color: '#1e293b' }}>7. سياسة الخصوصية</h4>
           </div>
           <div className="form-group">
             <label className="form-label" htmlFor="privacyPolicy">نص سياسة الخصوصية وحماية البيانات</label>

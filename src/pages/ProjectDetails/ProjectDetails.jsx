@@ -19,7 +19,7 @@ import {
   FiTag,
   FiCheckCircle,
   FiXCircle,
-  FiStar,
+  FiMessageSquare,
   FiFileText,
   FiPaperclip,
   FiBriefcase,
@@ -28,11 +28,15 @@ import {
   FiSend,
   FiTrash2,
   FiInfo,
-  FiEdit2
+  FiEdit2,
+  FiEdit3
 } from 'react-icons/fi';
 import useLoader from '../../hooks/useLoader';
 import { PROJECT_STATUS, CLIENT_MANAGEABLE_PROJECT_STATUSES } from '../../constants/projectStatuses';
 import { DetailsSkeleton } from '../../components/common/Skeleton/Skeleton';
+import RatingBadge from '../../components/RatingBadge/RatingBadge';
+import MoneyInput from '../../components/FormControls/MoneyInput';
+import { toDigits } from '../../utils/numbers';
 
 const STATUS_LABELS = {
   'Pending Review': 'بانتظار موافقة الإدارة',
@@ -53,6 +57,8 @@ const ProjectDetails = () => {
 
   const { isFeatureAvailable, commissionPercent } = usePlatform();
   const canSubmitProposals = isFeatureAvailable(FEATURES.PROPOSALS);
+  // Clients can talk to a bidder before deciding.
+  const canMessage = isFeatureAvailable(FEATURES.MESSAGING);
 
   const [project, setProject] = useState(null);
   const [proposals, setProposals] = useState([]);
@@ -66,6 +72,8 @@ const ProjectDetails = () => {
   const [isProposalModalOpen, setIsProposalModalOpen] = useState(false);
   const [bidAmount, setBidAmount] = useState('');
   const [deliveryTime, setDeliveryTime] = useState('7');
+  // Set while the freelancer edits their pending proposal (same form).
+  const [editingProposalId, setEditingProposalId] = useState(null);
   const [coverLetter, setCoverLetter] = useState('');
   const [submittingProposal, setSubmittingProposal] = useState(false);
   const [proposalError, setProposalError] = useState('');
@@ -177,9 +185,19 @@ const ProjectDetails = () => {
       navigate(`/login?role=freelancer&redirect=/projects/${project?.id || id}`);
       return;
     }
-    setBidAmount(project?.budget || '');
-    setDeliveryTime(7);
+    setEditingProposalId(null);
+    setBidAmount(project?.budget ? String(Math.round(project.budget)) : '');
+    setDeliveryTime('7');
     setCoverLetter('');
+    setProposalError('');
+    setIsProposalModalOpen(true);
+  };
+
+  const handleOpenEditProposal = (proposal) => {
+    setEditingProposalId(proposal.id);
+    setBidAmount(String(Math.round(Number(proposal.bidAmount) || 0)));
+    setDeliveryTime(String(proposal.deliveryTime || ''));
+    setCoverLetter(proposal.coverLetter || '');
     setProposalError('');
     setIsProposalModalOpen(true);
   };
@@ -196,8 +214,8 @@ const ProjectDetails = () => {
       setProposalError('يرجى إدخال قيمة عرض صالحة بالجنيه السوداني');
       return;
     }
-    if (!numDays || numDays < 1) {
-      setProposalError('يرجى تحديد مدة تسليم صالحة (يوم واحد على الأقل)');
+    if (!numDays || numDays < 1 || numDays > 365) {
+      setProposalError('يرجى تحديد مدة تسليم صالحة بين يوم و365 يوماً');
       return;
     }
     if (!coverLetter.trim() || coverLetter.trim().length < 20) {
@@ -207,13 +225,14 @@ const ProjectDetails = () => {
 
     setSubmittingProposal(true);
     try {
-      await api.proposals.submit(project.id, {
-        bidAmount: numBid,
-        deliveryDays: numDays,
-        coverLetter: coverLetter.trim(),
-      });
+      const terms = { bidAmount: numBid, deliveryDays: numDays, coverLetter: coverLetter.trim() };
+      if (editingProposalId) await api.proposals.update(editingProposalId, terms);
+      else await api.proposals.submit(project.id, terms);
       setIsProposalModalOpen(false);
-      setActionSuccess('تم إرسال عرضك بنجاح إلى صاحب المشروع!');
+      setActionSuccess(editingProposalId
+        ? 'تم تحديث عرضك، وأُبلغ صاحب المشروع بالتعديل.'
+        : 'تم إرسال عرضك بنجاح إلى صاحب المشروع!');
+      setEditingProposalId(null);
       setTimeout(() => setActionSuccess(''), 4000);
       loadData();
     } catch (err) {
@@ -412,7 +431,7 @@ const ProjectDetails = () => {
 
               <div className="budget-box">
                 <span className="budget-label">الميزانية المقدرة</span>
-                <span className="budget-amount">{Number(project.budget).toLocaleString()} ج.س</span>
+                <span className="budget-amount">{project.budgetLabel}</span>
               </div>
             </div>
 
@@ -531,6 +550,14 @@ const ProjectDetails = () => {
                         <div className="proposal-withdraw-strip">
                           <button
                             type="button"
+                            className="edit-proposal-btn"
+                            onClick={() => handleOpenEditProposal(existingFreelancerProposal)}
+                          >
+                            <FiEdit3 />
+                            <span>تعديل العرض</span>
+                          </button>
+                          <button
+                            type="button"
                             className="withdraw-proposal-btn"
                             disabled={withdrawingId === existingFreelancerProposal.id}
                             onClick={() => handleWithdrawProposal(existingFreelancerProposal.id)}
@@ -617,8 +644,7 @@ const ProjectDetails = () => {
                               </Link>
                               <p className="fl-title-text">{fl.title}</p>
                               <div className="fl-rating-row">
-                                <FiStar className="star-icon" />
-                                <span>{fl.reviews > 0 ? `${Number(fl.rating).toFixed(1)} (${fl.reviews})` : 'لا توجد تقييمات بعد'}</span>
+                                <RatingBadge rating={fl.rating} count={fl.reviews} size="sm" />
                               </div>
                             </div>
                           </div>
@@ -660,6 +686,16 @@ const ProjectDetails = () => {
                               <span>قبول العرض وبدء العقد</span>
                             </button>
 
+                            {canMessage && (
+                              <Link
+                                to={`/messages?userId=${prop.freelancerId}&projectId=${project.id}`}
+                                className="message-proposal-btn"
+                              >
+                                <FiMessageSquare />
+                                <span>مراسلة المستقل</span>
+                              </Link>
+                            )}
+
                             <button
                               type="button"
                               className="reject-proposal-btn"
@@ -696,7 +732,7 @@ const ProjectDetails = () => {
           <div className="proposal-modal-dialog" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
             <div className="modal-header">
               <div>
-                <h3 className="modal-title">تقديم عرض على المشروع</h3>
+                <h3 className="modal-title">{editingProposalId ? 'تعديل عرضك على المشروع' : 'تقديم عرض على المشروع'}</h3>
                 <p className="modal-subtitle">{project.title}</p>
               </div>
               <button
@@ -710,10 +746,10 @@ const ProjectDetails = () => {
               </button>
             </div>
 
-            <form onSubmit={handleSubmitProposal} className="proposal-modal-form">
+            <form noValidate onSubmit={handleSubmitProposal} className="proposal-modal-form">
               <div className="modal-project-meta-box">
                 <span className="meta-item">
-                  الميزانية المقدرة: <strong>{Number(project.budget).toLocaleString()} ج.س</strong>
+                  الميزانية المقدرة: <strong>{project.budgetLabel}</strong>
                 </span>
                 <span className="meta-item">
                   موعد التسليم المطلوب: <strong>{project.deadline}</strong>
@@ -732,20 +768,12 @@ const ProjectDetails = () => {
                   <label className="form-label" htmlFor="proposal-bid">
                     قيمة عرضك (بالجنيه السوداني) <span className="required">*</span>
                   </label>
-                  <div className="input-with-affix">
-                    <input
-                      id="proposal-bid"
-                      type="number"
-                      min="1000"
-                      step="1000"
-                      className="modal-input"
-                      placeholder="مثال: 150000"
-                      value={bidAmount}
-                      onChange={(e) => setBidAmount(e.target.value)}
-                      required
-                    />
-                    <span className="affix">ج.س</span>
-                  </div>
+                  <MoneyInput
+                    id="proposal-bid"
+                    placeholder="مثال: 150,000"
+                    value={bidAmount}
+                    onChange={setBidAmount}
+                  />
                 </div>
 
                 <div className="form-group">
@@ -755,14 +783,13 @@ const ProjectDetails = () => {
                   <div className="input-with-affix">
                     <input
                       id="proposal-delivery"
-                      type="number"
-                      min="1"
-                      max="365"
+                      type="text"
+                      inputMode="numeric"
+                      dir="ltr"
                       className="modal-input"
                       placeholder="مثال: 7"
                       value={deliveryTime}
-                      onChange={(e) => setDeliveryTime(e.target.value)}
-                      required
+                      onChange={(e) => setDeliveryTime(toDigits(e.target.value).slice(0, 3))}
                     />
                     <span className="affix">أيام</span>
                   </div>
@@ -814,7 +841,11 @@ const ProjectDetails = () => {
                   disabled={submittingProposal}
                 >
                   <FiSend />
-                  <span>{submittingProposal ? 'جارٍ إرسال العرض...' : 'تأكيد وإرسال العرض'}</span>
+                  <span>
+                    {submittingProposal
+                      ? (editingProposalId ? 'جارٍ حفظ التعديل...' : 'جارٍ إرسال العرض...')
+                      : (editingProposalId ? 'حفظ التعديلات' : 'تأكيد وإرسال العرض')}
+                  </span>
                 </button>
                 <button
                   type="button"

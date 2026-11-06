@@ -566,7 +566,7 @@ const ContractDetails = () => {
                 <strong className="term-val">{new Date(contract.createdAt).toLocaleDateString('ar-EG')}</strong>
               </div>
               <div className="term-card">
-                <span className="term-label">حماية الضمان (Escrow)</span>
+                <span className="term-label">حماية الضمان</span>
                 <strong className="term-val escrow-safe">
                   <FiShield className="shield-icon" />
                   <span>محمي عبر سوداوورك</span>
@@ -1272,7 +1272,7 @@ const ContractDetails = () => {
                 >
                   <option value="عدم الالتزام بمتطلبات العمل">عدم الالتزام بمتطلبات العمل المتفق عليها</option>
                   <option value="تأخير غير مبرر في التسليم">تأخير غير مبرر ومخالفة للجدول الزمني</option>
-                  <option value="نزاع مالي أو دفعات الضمان">نزاع مالي أو مشكلة في دفعات الضمان (Escrow)</option>
+                  <option value="نزاع مالي أو دفعات الضمان">نزاع مالي أو مشكلة في دفعات الضمان</option>
                   <option value="انقطاع الاتصال أو عدم التجاوب">انقطاع الاتصال أو عدم التجاوب من الطرف الآخر</option>
                   <option value="طلب تعديلات خارج نطاق العقد">طلب تعديلات متكررة خارج نطاق العقد المحدد</option>
                   <option value="سلوك غير لائق أو مضايقة">سلوك غير لائق أو انتهاك لسياسات المنصة</option>

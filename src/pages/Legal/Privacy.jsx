@@ -29,7 +29,7 @@ export default function Privacy() {
       <div className="legal-container">
         <div className="legal-header">
           <span className="legal-badge">الخصوصية والأمان</span>
-          <h1 className="legal-title">سياسة الخصوصية وسرية البيانات (Privacy Policy)</h1>
+          <h1 className="legal-title">سياسة الخصوصية وسرية البيانات</h1>
           <p className="legal-subtitle">
             بيان التزام منصة سوداوورك بحماية البيانات الشخصية والمالية للمستخدمين والعملاء والمستقلين.
           </p>

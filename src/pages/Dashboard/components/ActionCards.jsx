@@ -68,7 +68,7 @@ const ActionCards = ({
                 <strong className="stat-value">{activeContractsCount}</strong>
               </div>
               <div className="metric-stat">
-                <span className="stat-label">محجوز بالضمان (Escrow):</span>
+                <span className="stat-label">محجوز بالضمان:</span>
                 <strong className="stat-value">{escrowAmount.toLocaleString()} ج.س</strong>
               </div>
             </div>

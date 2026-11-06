@@ -59,3 +59,11 @@ export const formatTimeAgo = (isoString) => {
 export const formatNumber = (num) => {
   return Number(num || 0).toLocaleString('ar-EG');
 };
+
+/**
+ * Project budget for display: "6,000 ج.س" (fixed) or "300,000 - 400,000 ج.س" (range).
+ */
+export const formatBudget = (min, max) => {
+  const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+  return max ? `${fmt(min)} - ${fmt(max)} ج.س` : `${fmt(min)} ج.س`;
+};

@@ -546,6 +546,31 @@
   background-color: #fef2f2;
 }
 
+.message-proposal-btn {
+  height: 42px;
+  padding: 0 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1.5px solid var(--color-primary, #0B6E4F);
+  border-radius: 21px;
+  background-color: #ffffff;
+  color: var(--color-primary-dark, #00543B);
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: background-color 0.15s ease;
+}
+
+.message-proposal-btn:hover {
+  background-color: #ecfdf5;
+}
+
+.proposal-actions-strip {
+  flex-wrap: wrap;
+}
+
 .accepted-contract-notice {
   display: inline-flex;
   align-items: center;
@@ -702,6 +727,8 @@
 
 .proposal-withdraw-strip {
   display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
   justify-content: flex-end;
   border-top: 1px solid #e2e8f0;
   padding-top: 14px;
@@ -1149,3 +1176,23 @@
   }
 }
 
+
+.edit-proposal-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 20px;
+  border: 1.5px solid var(--color-primary, #0B6E4F);
+  border-radius: 999px;
+  background-color: #ffffff;
+  color: var(--color-primary-dark, #00543B);
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.edit-proposal-btn:hover {
+  background-color: #ecfdf5;
+}

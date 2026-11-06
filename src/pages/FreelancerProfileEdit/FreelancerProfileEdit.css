@@ -626,3 +626,29 @@
   flex: 1;
   min-width: 0;
 }
+
+/* Main specialty picker */
+.profile-edit-page .form-select {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-inline-start: 16px;
+  padding-inline-end: 40px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: left 14px center;
+  cursor: pointer;
+}
+
+.profile-edit-page .form-input.has-error {
+  border-color: #ef4444;
+}
+
+.profile-edit-page .form-hint {
+  color: #64748b;
+  font-size: 0.82rem;
+}
+
+.profile-edit-page .form-field-error {
+  color: #dc2626;
+  font-weight: 600;
+}

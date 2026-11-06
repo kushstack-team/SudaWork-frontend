@@ -216,9 +216,14 @@ export function uploadFile(file, { purpose = 'other', path = '/uploads', onProgr
 /**
  * Opens a private file (Bearer-protected) by downloading it as a blob.
  */
-export async function openProtectedFile(url, fileName) {
+/** Downloads an uploaded file (with the session token for private files). */
+export async function fetchFileBlob(url) {
   const res = await request(url.replace(/^.*\/api\/v1/, ''), { raw: true });
-  const blob = await res.blob();
+  return res.blob();
+}
+
+export async function openProtectedFile(url, fileName) {
+  const blob = await fetchFileBlob(url);
   const objectUrl = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = objectUrl;

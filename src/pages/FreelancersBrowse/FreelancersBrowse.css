@@ -473,49 +473,48 @@
 
 .freelancer-main-info {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
-.freelancer-name {
-  font-size: 1.15rem;
-  font-weight: 700;
+/* Scoped to the card: the profile page also defines .freelancer-name (much larger). */
+.freelancer-card .freelancer-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
   margin: 0;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.3;
 }
 
-.freelancer-name a {
+.freelancer-card .freelancer-name a {
+  overflow: hidden;
   color: #0f172a;
   text-decoration: none;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
 
-.freelancer-name a:hover {
+.freelancer-card .freelancer-name a:hover {
   color: var(--color-primary, #0B6E4F);
 }
 
-.freelancer-title-text {
-  font-size: 0.9rem;
+.freelancer-card .freelancer-title-text {
+  margin: 0;
   color: #475569;
-  margin: 4px 0 6px 0;
+  font-size: 0.9rem;
   line-height: 1.4;
 }
 
-.freelancer-meta-row {
+.freelancer-card .freelancer-meta-row {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 12px;
-}
-
-.rating-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  font-size: 0.88rem;
-  font-weight: 700;
-  color: #0f172a;
-}
-
-.star-icon {
-  color: #eab308;
-  fill: #eab308;
-  font-size: 0.9rem;
+  margin-top: 2px;
 }
 
 .location-tag {
@@ -693,7 +692,7 @@
     height: 52px;
   }
 
-  .freelancer-name {
+  .freelancer-card .freelancer-name {
     font-size: 1.05rem;
   }
 }

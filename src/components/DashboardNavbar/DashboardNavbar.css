@@ -16,11 +16,6 @@
 .dashboard-topbar {
   width: 100%;
   padding: 14px 0;
-  border-bottom: 1px solid #f1f5f9;
-}
-
-.dashboard-header.no-categories-nav .dashboard-topbar {
-  border-bottom: none;
 }
 
 .dashboard-topbar-container {
@@ -154,8 +149,9 @@
 
 .user-avatar-wrapper {
   position: relative;
-  width: 42px;
-  height: 42px;
+  /* Sized to sit level with the bell and message icons beside it. */
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   cursor: pointer;
   transition: transform 0.2s ease;
@@ -170,15 +166,15 @@
   height: 100%;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #e2e8f0;
+  border: 1.5px solid #e2e8f0;
 }
 
 .online-badge {
   position: absolute;
   bottom: 0;
   right: 0;
-  width: 12px;
-  height: 12px;
+  width: 10px;
+  height: 10px;
   background-color: #10b981;
   border: 2px solid #ffffff;
   border-radius: 50%;
@@ -579,37 +575,6 @@
 }
 
 /* Sub-Header: Category Navigation */
-.dashboard-category-nav {
-  width: 100%;
-  background-color: #ffffff;
-  padding: 8px 0;
-}
-
-.dashboard-category-container {
-  max-width: 1320px;
-  margin: 0 auto;
-  padding: 0 24px;
-}
-
-.category-menu-list {
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 36px;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-
-.category-menu-list::-webkit-scrollbar {
-  display: none;
-}
-
-.category-menu-item {
-  flex-shrink: 0;
-}
 
 .category-menu-link {
   background: none;
@@ -650,9 +615,7 @@
   .dashboard-topbar-container {
     gap: 16px;
   }
-  .category-menu-list {
-    gap: 20px;
-  }
+  
 }
 
 @media (max-width: 768px) {
@@ -674,9 +637,7 @@
   .dashboard-topbar-container {
     padding: 0 16px;
   }
-  .dashboard-category-container {
-    padding: 0 16px;
-  }
+  
   .dashboard-logo-img {
     height: 36px;
   }

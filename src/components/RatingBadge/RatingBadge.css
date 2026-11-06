@@ -1,0 +1,45 @@
+.rating-badge-ui {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  line-height: 1;
+  white-space: nowrap;
+  direction: rtl;
+}
+
+.rating-badge-ui__star {
+  flex-shrink: 0;
+  width: 1em;
+  height: 1em;
+  color: #f59e0b;
+  fill: #f59e0b;
+}
+
+.rating-badge-ui__score {
+  color: #0f172a;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.rating-badge-ui__count {
+  color: #64748b;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}
+
+.rating-badge-new {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border: 1px solid #a7f3d0;
+  border-radius: 999px;
+  background-color: #ecfdf5;
+  color: #047857;
+  font-weight: 700;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.rating-badge--sm { font-size: 0.8rem; }
+.rating-badge--md { font-size: 0.9rem; }
+.rating-badge--lg { font-size: 1rem; }

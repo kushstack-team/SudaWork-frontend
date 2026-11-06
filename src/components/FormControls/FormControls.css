@@ -1,0 +1,84 @@
+/* ---------- MoneyInput ---------- */
+
+.money-input {
+  display: flex;
+  align-items: center;
+  height: 50px;
+  border: 1.5px solid #d6dde5;
+  border-radius: 12px;
+  background-color: #ffffff;
+  overflow: hidden;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.money-input:focus-within {
+  border-color: var(--color-primary, #0b6e4f);
+  box-shadow: 0 0 0 4px rgba(11, 110, 79, 0.12);
+}
+
+.money-input.has-error {
+  border-color: #ef4444;
+}
+
+.money-input.has-error:focus-within {
+  box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.12);
+}
+
+.money-input__field {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  padding: 0 16px;
+  border: none;
+  outline: none;
+  background: none;
+  color: #0f172a;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  font-size: 1.05rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.money-input__field::placeholder {
+  color: #9aa6b5;
+  font-weight: 500;
+}
+
+.money-input__suffix {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  padding: 0 14px;
+  border-inline-start: 1px solid #e5e9ee;
+  background-color: #f8fafc;
+  color: #475569;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+/* ---------- CharCounter ---------- */
+
+.char-counter {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 6px;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.char-counter.is-short {
+  color: #dc2626;
+}
+
+.char-counter.is-ok {
+  color: #059669;
+}
+
+.char-counter__count {
+  margin-inline-start: 6px;
+  color: #94a3b8;
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+}

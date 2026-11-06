@@ -49,9 +49,9 @@ export default function AdminUsersTab({
               onChange={(e) => setUserRoleFilter(e.target.value)}
             >
               <option value="all">جميع الأدوار</option>
-              <option value="client">أصحاب الأعمال (Clients)</option>
-              <option value="freelancer">المستقلون (Freelancers)</option>
-              <option value="admin">المديرون (Admins)</option>
+              <option value="client">أصحاب الأعمال</option>
+              <option value="freelancer">المستقلون</option>
+              <option value="admin">المديرون</option>
             </select>
 
             {setUserStatusFilter && (

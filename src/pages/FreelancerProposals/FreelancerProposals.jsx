@@ -233,7 +233,7 @@ const FreelancerProposals = () => {
                       </div>
                       <div className="financial-item">
                         <span className="item-label">ميزانية المشروع</span>
-                        <strong className="item-val budget">{Number(prop.projectBudget || 0).toLocaleString()} ج.س</strong>
+                        <strong className="item-val budget">{prop.projectBudgetLabel}</strong>
                       </div>
                     </div>
 

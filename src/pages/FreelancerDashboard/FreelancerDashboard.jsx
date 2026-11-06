@@ -162,7 +162,7 @@ const FreelancerDashboard = () => {
                       </strong>
                     </div>
                     <div className="figure-item">
-                      <span className="figure-label">في الضمان (Escrow):</span>
+                      <span className="figure-label">في الضمان:</span>
                       <span className="figure-val">
                         {inEscrowLocked.toLocaleString()} ج.س
                       </span>
@@ -287,7 +287,7 @@ const FreelancerDashboard = () => {
             ) : (
               <div className="matched-projects-grid">
                 {matchingProjects.map((project) => {
-                  const budgetFormatted = Number(project.budget || 0).toLocaleString();
+                  const budgetFormatted = project.budgetLabel;
 
                   return (
                     <div key={project.id} className="project-feed-card">
@@ -343,7 +343,7 @@ const FreelancerDashboard = () => {
                       <div className="project-card-bottom">
                         <div className="project-budget">
                           <span className="budget-label">الميزانية المقدرة:</span>
-                          <strong className="budget-val">{budgetFormatted} ج.س</strong>
+                          <strong className="budget-val">{budgetFormatted}</strong>
                         </div>
 
                         <Link

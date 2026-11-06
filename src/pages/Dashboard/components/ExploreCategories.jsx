@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { FiStar } from 'react-icons/fi';
 import './ExploreCategories.css';
 import { api } from '../../../services/api';
 import useApiData from '../../../hooks/useApiData';
 import ErrorState from '../../../components/common/ErrorState/ErrorState';
 import defaultAvatar from '../../../assets/default-avatar.svg';
 import { PeopleGridSkeleton } from '../../../components/common/Skeleton/Skeleton';
+import RatingBadge from '../../../components/RatingBadge/RatingBadge';
 
 /**
  * Category explorer: real categories from the API, and the freelancers whose
@@ -109,15 +109,7 @@ const ExploreCategories = () => {
                     </h3>
 
                     <div className="explore-card-rating">
-                      <FiStar className="star-icon" />
-                      {fl.totalReviews > 0 ? (
-                        <>
-                          <span className="rating-score">{fl.avgRating.toFixed(1)}</span>
-                          <span className="reviews-count">({fl.totalReviews})</span>
-                        </>
-                      ) : (
-                        <span className="reviews-count">لا توجد تقييمات بعد</span>
-                      )}
+                      <RatingBadge rating={fl.avgRating} count={fl.totalReviews} size="sm" />
                     </div>
                   </div>
 
