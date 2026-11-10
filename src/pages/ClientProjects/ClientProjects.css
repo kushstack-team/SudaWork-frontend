@@ -149,6 +149,11 @@
   padding: var(--space-6, 24px) var(--space-7, 32px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
   transition: all 0.2s ease;
+  margin-bottom: var(--space-6, 24px);
+}
+
+.project-manage-card:last-child {
+  margin-bottom: 0;
 }
 
 .project-manage-card:hover {
@@ -323,49 +328,66 @@
 
 .open-actions-group {
   display: flex;
-  gap: var(--space-3, 12px);
+  align-items: center;
+  gap: var(--space-4, 16px);
 }
 
 .action-icon-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
-  border-radius: 8px;
+  justify-content: center;
+  gap: 8px;
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 10px;
   font-family: var(--font-primary, 'Tajawal', sans-serif);
-  font-size: 0.85rem;
-  font-weight: 600;
+  font-size: 0.88rem;
+  font-weight: 700;
   cursor: pointer;
-  background: transparent;
-  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  box-sizing: border-box;
 }
 
+/* Edit Button: Primary dark/accent background */
 .edit-btn {
-  border: 1px solid #bfdbfe;
-  color: #2563eb;
-  text-decoration: none;
+  background-color: var(--color-primary-dark, #004D34);
+  color: #ffffff;
+  border-color: var(--color-primary-dark, #004D34);
+  box-shadow: 0 2px 5px rgba(0, 77, 52, 0.2);
 }
 
 .edit-btn:hover {
-  background-color: #eff6ff;
+  background-color: var(--color-primary, #0B6E4F);
+  border-color: var(--color-primary, #0B6E4F);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 77, 52, 0.25);
 }
 
+/* Delete Button: Destructive red background */
 .delete-btn {
-  border: 1px solid #fecaca;
-  color: #dc2626;
+  background-color: #dc2626;
+  color: #ffffff;
+  border-color: #b91c1c;
+  box-shadow: 0 2px 5px rgba(220, 38, 38, 0.2);
 }
 
-.delete-btn:hover {
-  background-color: #fef2f2;
+.delete-btn:hover:not(:disabled) {
+  background-color: #b91c1c;
+  border-color: #991b1b;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.25);
 }
 
-.close-btn {
-  border: 1px solid #cbd5e1;
-  color: #475569;
-}
-
-.close-btn:hover {
+.delete-btn:disabled {
   background-color: #f1f5f9;
+  color: #94a3b8;
+  border-color: #e2e8f0;
+  cursor: not-allowed;
+  opacity: 0.65;
+  box-shadow: none;
+  transform: none;
 }
 
 /* Empty & Loading */

@@ -93,21 +93,6 @@ const ClientProjects = () => {
     });
   };
 
-  const handleCloseProject = (id) => {
-    setConfirmModal({
-      isOpen: true,
-      title: 'إغلاق المشروع',
-      message: 'هل تريد إغلاق هذا المشروع وإيقاف استقبال العروض؟ سيتم إبلاغ المستقلين الذين قدموا عروضاً.',
-      confirmText: 'إغلاق المشروع',
-      cancelText: 'إلغاء',
-      type: 'warning',
-      onConfirm: () => {
-        setConfirmModal(prev => ({ ...prev, isOpen: false }));
-        runAction(() => api.projects.close(id), 'تم إغلاق المشروع وإلغاء استقبال العروض.');
-      }
-    });
-  };
-
   // "In progress" covers every hired stage (awaiting payment through delivery).
   const IN_PROGRESS = ['Awaiting Payment', 'In Progress', 'Submitted'];
   // "Under review" covers projects waiting for admin approval and those sent back for changes.
@@ -308,19 +293,10 @@ const ClientProjects = () => {
                             className="action-icon-btn delete-btn"
                             onClick={() => handleDelete(p.id)}
                             disabled={count > 0}
-                            title={count > 0 ? 'لا يمكن حذف مشروع لديه عروض، يمكنك إغلاقه' : 'حذف المشروع'}
+                            title={count > 0 ? 'لا يمكن حذف مشروع لديه عروض مقدمة' : 'حذف المشروع'}
                           >
                             <FiTrash2 />
                             <span>حذف</span>
-                          </button>
-                          <button
-                            type="button"
-                            className="action-icon-btn close-btn"
-                            onClick={() => handleCloseProject(p.id)}
-                            title="إغلاق المشروع"
-                          >
-                            <FiXCircle />
-                            <span>إغلاق</span>
                           </button>
                         </div>
                       )}
