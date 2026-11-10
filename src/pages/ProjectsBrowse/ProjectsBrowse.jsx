@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import './ProjectsBrowse.css';
+import Pagination from '../../components/common/Pagination/Pagination';
 import DashboardNavbar from '../../components/DashboardNavbar/DashboardNavbar';
 import Navbar from '../../components/Navbar';
 import Footer from '../../components/Footer';
@@ -116,7 +117,11 @@ const ProjectsBrowse = () => {
   };
   const handleDurationSelect = (dur) => updateUrlParams({ duration: dur });
   const handleSortChange = (sortOption) => updateUrlParams({ sort: sortOption === 'newest' ? '' : sortOption });
-  const goToPage = (page) => updateUrlParams({ page: page > 1 ? String(page) : '' });
+  // Changing page shows the new results from the top.
+  const goToPage = (page) => {
+    updateUrlParams({ page: page > 1 ? String(page) : '' });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   const handleClearFilters = () => {
     setSearchTerm('');
@@ -482,17 +487,7 @@ const ProjectsBrowse = () => {
                       </article>
                     );
                   })}
-                  {totalPages > 1 && (
-                    <nav className="browse-pagination" aria-label="التنقل بين الصفحات">
-                      <button type="button" className="pager-btn" disabled={applied.page <= 1} onClick={() => goToPage(applied.page - 1)}>
-                        السابق
-                      </button>
-                      <span className="pager-status">صفحة {applied.page} من {totalPages}</span>
-                      <button type="button" className="pager-btn" disabled={applied.page >= totalPages} onClick={() => goToPage(applied.page + 1)}>
-                        التالي
-                      </button>
-                    </nav>
-                  )}
+                  <Pagination page={applied.page} totalPages={totalPages} onChange={goToPage} />
                 </div>
               )}
             </section>

@@ -1,0 +1,125 @@
+.sw-pagination {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 8px;
+  padding: 12px 0 4px;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+  direction: rtl;
+}
+
+.sw-pagination__nav,
+.sw-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 42px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #ffffff;
+  color: #334155;
+  font-family: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.sw-pagination__nav {
+  gap: 6px;
+  padding: 0 16px;
+  font-size: 0.9rem;
+}
+
+.sw-pagination__nav svg {
+  font-size: 1.1rem;
+}
+
+.sw-pagination__page {
+  min-width: 42px;
+  padding: 0 10px;
+  font-size: 0.92rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.sw-pagination__nav:hover:not(:disabled),
+.sw-pagination__page:hover:not(.is-current) {
+  border-color: var(--color-primary, #0B6E4F);
+  background-color: #f0fdf4;
+  color: var(--color-primary-dark, #00543B);
+}
+
+.sw-pagination__page.is-current {
+  border-color: var(--color-primary-dark, #00543B);
+  background-color: var(--color-primary-dark, #00543B);
+  color: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 84, 59, 0.22);
+  cursor: default;
+}
+
+.sw-pagination__nav:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.sw-pagination__nav:focus-visible,
+.sw-pagination__page:focus-visible {
+  outline: 3px solid rgba(11, 110, 79, 0.35);
+  outline-offset: 2px;
+}
+
+.sw-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.sw-pagination__gap {
+  min-width: 24px;
+  color: #94a3b8;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Only on phones (instead of the numbers). */
+.sw-pagination__status {
+  display: none;
+  color: #475569;
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.sw-pagination__status strong {
+  color: #0f172a;
+}
+
+@media (max-width: 640px) {
+  .sw-pagination {
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .sw-pagination__pages {
+    display: none;
+  }
+
+  .sw-pagination__status {
+    display: inline;
+  }
+
+  .sw-pagination__nav {
+    height: 44px;
+    padding: 0 14px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sw-pagination__nav,
+  .sw-pagination__page {
+    transition: none;
+  }
+}
