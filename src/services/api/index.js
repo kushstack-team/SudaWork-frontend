@@ -219,6 +219,19 @@ export const adminApi = {
   supportConversations: async (search) => (await get('/admin/conversations', { search: search || undefined })).map(m.mapConversation),
   supportUnreadCount: async (opts) => (await get('/admin/conversations/unread-count', undefined, opts)).count,
   startSupportConversation: async (userId) => m.mapConversation(await post('/admin/conversations', { userId })),
+  // Email campaigns.
+  emailAudience: async (params) => {
+    const data = await get('/admin/email/audience', params);
+    return { ...m.mapPage(data, m.mapAudienceClient), summary: data.summary || {} };
+  },
+  emailAudienceCount: async (audience) => (await post('/admin/email/audience/count', { audience })).count,
+  emailPreview: (content) => post('/admin/email/preview', content),
+  emailTest: (content) => post('/admin/email/test', content),
+  emailCampaigns: async (params) => m.mapPage(await get('/admin/email/campaigns', params), m.mapCampaign),
+  emailCampaign: async (id) => m.mapCampaign(await get(`/admin/email/campaigns/${id}`)),
+  createEmailCampaign: async (data) => m.mapCampaign(await post('/admin/email/campaigns', data)),
+  cancelEmailCampaign: async (id) => m.mapCampaign(await post(`/admin/email/campaigns/${id}/cancel`)),
+  resumeEmailCampaign: async (id) => m.mapCampaign(await post(`/admin/email/campaigns/${id}/resume`)),
   reports: async (params) => m.mapPage(await get('/admin/reports', params), m.mapReport),
   reviewReport: (id) => post(`/admin/reports/${id}/review`),
   resolveReport: (id, { resolution, action }) => post(`/admin/reports/${id}/resolve`, { resolution, action }),
@@ -240,6 +253,15 @@ export const adminApi = {
   auditLogs: (params) => get('/admin/audit-logs', params),
 };
 
+// Campaign email preferences and the public unsubscribe links.
+export const emailApi = {
+  unsubscribeStatus: ({ u, t }) => get('/email/unsubscribe', { u, t }, { auth: false }),
+  unsubscribe: ({ u, t }) => post(`/email/unsubscribe?u=${encodeURIComponent(u)}&t=${encodeURIComponent(t)}`, undefined, { auth: false }),
+  resubscribe: ({ u, t }) => post('/email/resubscribe', { u, t }, { auth: false }),
+  preferences: () => get('/email/preferences'),
+  updatePreferences: (marketingEmails) => put('/email/preferences', { marketingEmails }),
+};
+
 export const api = {
   auth: authApi,
   settings: settingsApi,
@@ -257,6 +279,7 @@ export const api = {
   messages: messagesApi,
   uploads: uploadsApi,
   admin: adminApi,
+  email: emailApi,
 };
 
 export { ApiError, resolveFileUrl } from './client.js';

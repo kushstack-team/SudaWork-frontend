@@ -26,6 +26,7 @@ const BY_CODE = {
   GOOGLE_ALREADY_LINKED: 'حساب قوقل هذا مرتبط بحساب آخر.',
   REGISTRATION_EXPIRED: 'انتهت مهلة إكمال التسجيل. يرجى المتابعة مع قوقل مرة أخرى.',
   INVALID_RESET_TOKEN: 'رابط إعادة التعيين غير صالح أو منتهي الصلاحية. اطلب رابطاً جديداً.',
+  AUDIENCE_CHANGED: 'تغيّر عدد المستلمين منذ المراجعة. راجع الحملة وأكّد مرة أخرى.',
   DUPLICATE_PROPOSAL: 'لقد قدمت عرضاً على هذا المشروع بالفعل.',
   DUPLICATE_REVIEW: 'لقد قمت بتقييم هذا العقد بالفعل.',
   DUPLICATE_REPORT: 'لديك بلاغ مفتوح بالفعل على هذا العنصر.',
@@ -80,6 +81,26 @@ const BY_MESSAGE = {
   'Message cannot be empty': 'لا يمكن إرسال رسالة فارغة.',
   'You already have an open report for this item': 'لديك بلاغ مفتوح بالفعل على هذا العنصر.',
   'Please choose a valid category': 'يرجى اختيار تصنيف صالح.',
+  // Withdrawal payouts and receipts
+  'This withdrawal can no longer be paid': 'لم يعد بالإمكان تحويل هذا الطلب.',
+  'This withdrawal has not been paid yet': 'لم يتم تحويل هذا الطلب بعد.',
+  'You already confirmed receiving this payout': 'لقد أكدت استلام هذا المبلغ مسبقاً.',
+  'You already reported this': 'تم تسجيل ردك مسبقاً.',
+  'Not your withdrawal': 'هذا الطلب لا يخصك.',
+  'One or more attachments are invalid.': 'يرجى رفع صورة إشعار التحويل مرة أخرى.',
+  // Support chat
+  'Support conversations are with clients and freelancers': 'المحادثات متاحة مع العملاء والمستقلين فقط.',
+  'You are not a participant in this conversation': 'ليست لديك صلاحية لهذه المحادثة.',
+  // Email campaigns
+  'No client in this audience can receive emails.': 'لا يوجد عميل في هذه الفئة يمكنه استلام الرسائل.',
+  'Email sending is not configured on the server (RESEND_API_KEY / EMAIL_FROM).': 'خدمة إرسال البريد غير مهيأة على الخادم.',
+  'The email provider did not accept the test email. Check the sender domain in Resend.':
+    'رفضت خدمة البريد الرسالة التجريبية. تحقق من توثيق نطاق المرسل في Resend.',
+  'Only a campaign that is sending or paused can be cancelled': 'يمكن إيقاف الحملات الجارية أو المتوقفة مؤقتاً فقط.',
+  'Only a paused campaign can be resumed': 'يمكن استئناف الحملات المتوقفة مؤقتاً فقط.',
+  'Campaign not found': 'الحملة غير موجودة.',
+  'This unsubscribe link is invalid.': 'رابط إلغاء الاشتراك غير صالح.',
+  'Account not found': 'الحساب غير موجود.',
 };
 
 export const translateError = (code, message, status) => {

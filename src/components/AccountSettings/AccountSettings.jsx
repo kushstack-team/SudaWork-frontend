@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FiLock, FiCheck } from 'react-icons/fi';
+import { FiLock, FiCheck, FiMail } from 'react-icons/fi';
 import { api } from '../../services/api';
 import { useAuth } from '../../context/auth';
 import { isGoogleUser } from '../../utils/auth';
@@ -16,6 +16,53 @@ import './AccountSettings.css';
  * - Deactivation: reversible; signing in again offers to reactivate.
  * - Deletion: permanent; personal data is erased.
  */
+// Offers and tips by email (campaigns). Account emails are always sent.
+function EmailPreference({ user, refreshUser }) {
+  const [enabled, setEnabled] = useState(user?.marketingEmails !== false);
+  const [saving, setSaving] = useState(false);
+  const [note, setNote] = useState('');
+
+  const toggle = async () => {
+    const next = !enabled;
+    setEnabled(next);
+    setSaving(true);
+    setNote('');
+    try {
+      await api.email.updatePreferences(next);
+      setNote(next ? 'ستصلك رسائل العروض والنصائح.' : 'لن تصلك رسائل العروض والنصائح بعد الآن.');
+      refreshUser?.().catch(() => {});
+    } catch (err) {
+      setEnabled(!next);
+      setNote(err.message);
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <div className="account-settings-pref">
+      <div className="account-settings-pref__text">
+        <span className="account-settings-pref__title"><FiMail aria-hidden="true" /> رسائل العروض والنصائح</span>
+        <span className="account-settings-pref__desc">
+          رسائل بريدية من سوداوورك عن الميزات الجديدة ونصائح للاستفادة من المنصة. رسائل حسابك المهمة تصلك دائماً.
+        </span>
+        {note && <span className="account-settings-pref__note" role="status">{note}</span>}
+      </div>
+      <button
+        type="button"
+        role="switch"
+        aria-checked={enabled}
+        aria-label="رسائل العروض والنصائح"
+        className={`account-settings-switch ${enabled ? 'is-on' : ''}`}
+        onClick={toggle}
+        disabled={saving}
+      >
+        <span className="account-settings-switch__knob" />
+      </button>
+    </div>
+  );
+}
+
 export default function AccountSettings({ sectionClassName, titleClassName, iconClassName }) {
   const { user, isGoogle: authIsGoogle, refreshUser, logout } = useAuth();
   const navigate = useNavigate();
@@ -114,6 +161,8 @@ export default function AccountSettings({ sectionClassName, titleClassName, icon
           </p>
         </div>
       )}
+
+      {user?.role !== 'admin' && <EmailPreference user={user} refreshUser={refreshUser} />}
 
       <form onSubmit={handlePassword} className="account-settings-form" noValidate>
         <p className="account-settings-hint">

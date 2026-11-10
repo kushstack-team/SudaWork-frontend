@@ -133,3 +133,95 @@
   margin-inline-start: auto;
 }
 
+
+/* Email preference (campaign emails) */
+.account-settings-pref {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+  padding: 14px 16px;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  background-color: #f8fafc;
+}
+
+.account-settings-pref__text {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.account-settings-pref__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #0f172a;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.account-settings-pref__desc {
+  color: #64748b;
+  font-size: 0.82rem;
+  line-height: 1.6;
+}
+
+.account-settings-pref__note {
+  color: var(--color-primary-dark, #00543B);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.account-settings-switch {
+  position: relative;
+  flex-shrink: 0;
+  width: 48px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background-color: #cbd5e1;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.account-settings-switch.is-on {
+  background-color: var(--color-primary, #0B6E4F);
+}
+
+.account-settings-switch__knob {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.25);
+  transition: transform 0.2s ease;
+}
+
+/* RTL: "on" moves the knob to the left. */
+.account-settings-switch.is-on .account-settings-switch__knob {
+  transform: translateX(-20px);
+}
+
+.account-settings-switch:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.account-settings-switch:focus-visible {
+  outline: 3px solid rgba(11, 110, 79, 0.35);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-settings-switch,
+  .account-settings-switch__knob {
+    transition: none;
+  }
+}

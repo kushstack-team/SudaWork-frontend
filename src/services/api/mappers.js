@@ -71,6 +71,8 @@ export const mapUser = (u) => u && ({
   // Accounts from list endpoints (admin) don't carry the flag; treat as verified.
   emailVerified: u.email_verified !== false && u.emailVerified !== false,
   googleLinked: Boolean(u.google_linked || u.googleLinked),
+  // Campaign emails (offers and tips); account emails are always sent.
+  marketingEmails: u.marketing_emails !== false && u.marketingEmails !== false,
   googleId: u.google_id || u.googleId || null,
   provider: u.provider || u.auth_provider || u.authProvider || null,
   authProvider: u.auth_provider || u.authProvider || u.provider || null,
@@ -429,6 +431,42 @@ export const mapCategory = (c) => ({
   isActive: c.is_active !== false,
   skillsCount: c.skills_count !== undefined ? Number(c.skills_count) : undefined,
   projectsCount: c.projects_count !== undefined ? Number(c.projects_count) : undefined,
+});
+
+// A client in the email-campaign audience.
+export const mapAudienceClient = (c) => ({
+  id: c.id,
+  fullName: c.full_name || '',
+  email: c.email || '',
+  avatar: resolveFileUrl(c.avatar_url),
+  createdAt: c.created_at,
+  lastLoginAt: c.last_login_at,
+  projectsCount: Number(c.projects_count || 0),
+  lastProjectAt: c.last_project_at || null,
+  isActive: c.is_active !== false,
+  emailVerified: Boolean(c.email_verified_at),
+  unsubscribed: Boolean(c.marketing_opt_out_at),
+  canReceive: Boolean(c.can_receive),
+});
+
+export const mapCampaign = (c) => c && ({
+  id: c.id,
+  subject: c.subject || '',
+  message: c.message || '',
+  ctaLabel: c.cta_label || '',
+  ctaUrl: c.cta_url || '',
+  audience: c.audience || {},
+  status: c.status,
+  statusReason: c.status_reason || '',
+  total: Number(c.total_recipients || 0),
+  sent: Number(c.sent_count || 0),
+  failed: Number(c.failed_count || 0),
+  skipped: Number(c.skipped_count || 0),
+  createdByName: c.created_by_name || '',
+  createdAt: c.created_at,
+  startedAt: c.started_at,
+  finishedAt: c.finished_at,
+  problems: (c.problems || []).map((p) => ({ id: p.id, email: p.email, name: p.full_name || '', status: p.status, error: p.error || '' })),
 });
 
 export const mapPage = (page, mapper) => ({

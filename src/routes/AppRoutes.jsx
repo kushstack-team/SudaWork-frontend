@@ -40,6 +40,7 @@ const AdminDashboard = lazy(() => import('../pages/AdminDashboard/AdminDashboard
 const NotFound = lazy(() => import('../pages/NotFound/NotFound'));
 const GoogleRegistrationComplete = lazy(() => import('../pages/GoogleRegistrationComplete/GoogleRegistrationComplete'));
 const VerifyEmail = lazy(() => import('../pages/VerifyEmail/VerifyEmail'));
+const Unsubscribe = lazy(() => import('../pages/Unsubscribe/Unsubscribe'));
 
 // New SRS informational & legal pages
 const Terms = lazy(() => import('../pages/Legal/Terms'));
@@ -92,6 +93,7 @@ export default function AppRoutes() {
         <Route path="/register/freelancer" element={<GuestRoute><FreelancerRegister /></GuestRoute>} />
         <Route path="/register/complete" element={<GoogleRegistrationComplete />} />
         <Route path="/verify-email" element={<VerifyEmail />} />
+        <Route path="/unsubscribe" element={<Unsubscribe />} />
 
         {/* Authentication & Recovery Pages */}
         <Route path="/login" element={<GuestRoute><Login /></GuestRoute>} />

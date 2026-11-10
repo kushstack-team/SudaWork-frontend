@@ -1,0 +1,127 @@
+.unsub-page {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f8fafc;
+  font-family: var(--font-primary, 'Tajawal', sans-serif);
+}
+
+.unsub-header {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px;
+}
+
+.unsub-main {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 16px 16px 48px;
+}
+
+.unsub-card {
+  width: min(460px, 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  padding: 32px 24px;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 10px 30px -12px rgba(15, 23, 42, 0.15);
+  text-align: center;
+}
+
+.unsub-card h1 {
+  margin: 0;
+  color: #0f172a;
+  font-size: 1.35rem;
+  font-weight: 800;
+}
+
+.unsub-card p {
+  margin: 0;
+  color: #475569;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+
+.unsub-icon {
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  font-size: 1.6rem;
+}
+
+.unsub-icon.is-ok { background-color: #dcfce7; color: #047857; }
+.unsub-icon.is-warn { background-color: #fef3c7; color: #b45309; }
+
+.unsub-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 6px;
+  border: none;
+  border-radius: 12px;
+  background-color: var(--color-primary-dark, #00543B);
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.unsub-btn.is-danger { background-color: #dc2626; }
+.unsub-btn.is-danger:hover:not(:disabled) { background-color: #b91c1c; }
+
+.unsub-btn.is-outline {
+  border: 1.5px solid var(--color-primary, #0B6E4F);
+  background-color: #ffffff;
+  color: var(--color-primary-dark, #00543B);
+}
+
+.unsub-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.unsub-link {
+  color: var(--color-primary, #0B6E4F);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.unsub-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #64748b;
+}
+
+.unsub-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(11, 110, 79, 0.2);
+  border-top-color: var(--color-primary, #0B6E4F);
+  border-radius: 50%;
+  animation: unsub-spin 0.8s linear infinite;
+}
+
+@keyframes unsub-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .unsub-spinner { animation: none; }
+}

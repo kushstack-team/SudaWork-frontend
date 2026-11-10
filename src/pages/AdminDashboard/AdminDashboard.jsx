@@ -25,7 +25,8 @@ import {
   FiFileText,
   FiList,
   FiGrid,
-  FiMessageSquare
+  FiMessageSquare,
+  FiMail
 } from 'react-icons/fi';
 
 // Modular Tab Components
@@ -36,6 +37,7 @@ import AdminUsersTab from './components/AdminUsersTab';
 import AdminEscrowTab from './components/AdminEscrowTab';
 import AdminWithdrawalsTab from './components/AdminWithdrawalsTab';
 import AdminChatTab from './components/AdminChatTab';
+import AdminEmailTab from './components/AdminEmailTab';
 import AdminDisputesTab from './components/AdminDisputesTab';
 import AdminProjectsTab from './components/AdminProjectsTab';
 import AdminSettingsTab from './components/AdminSettingsTab';
@@ -43,7 +45,7 @@ import AdminFeaturesTab from './components/AdminFeaturesTab';
 import AdminContractsTab from './components/AdminContractsTab';
 import AdminAuditTab from './components/AdminAuditTab';
 
-const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'chat', 'contracts', 'disputes', 'projects', 'features', 'audit', 'settings'];
+const TABS = ['overview', 'users', 'escrow', 'withdrawals', 'chat', 'email', 'contracts', 'disputes', 'projects', 'features', 'audit', 'settings'];
 
 // Title and description shown in the top bar for each section.
 const SECTION_META = {
@@ -53,6 +55,7 @@ const SECTION_META = {
   contracts: { title: 'العقود', subtitle: 'متابعة عقود العمل وحالاتها.' },
   escrow: { title: 'تدقيق المدفوعات', subtitle: 'مطابقة إيداعات العملاء واعتمادها لتفعيل العقود.' },
   withdrawals: { title: 'سحب الأرباح', subtitle: 'اعتماد طلبات سحب المستقلين وتسجيل التحويل.' },
+  email: { title: 'حملات البريد', subtitle: 'مراسلة العملاء بالبريد الإلكتروني، مثل دعوة من لم ينشر مشروعاً بعد.' },
   chat: { title: 'المحادثات', subtitle: 'التواصل مع المستخدمين وإشعارات تحويل الأرباح.' },
   disputes: { title: 'النزاعات والبلاغات', subtitle: 'مراجعة البلاغات وإصدار القرارات.' },
   features: { title: 'إدارة الميزات', subtitle: 'تفعيل ميزات المنصة لكل دور.' },
@@ -713,7 +716,10 @@ const AdminDashboard = () => {
     },
     {
       label: 'التواصل',
-      items: [{ id: 'chat', label: 'المحادثات', icon: FiMessageSquare, badge: supportUnread }],
+      items: [
+        { id: 'chat', label: 'المحادثات', icon: FiMessageSquare, badge: supportUnread },
+        { id: 'email', label: 'حملات البريد', icon: FiMail },
+      ],
     },
     {
       label: 'الإشراف',
@@ -824,6 +830,8 @@ const AdminDashboard = () => {
           )}
 
           {activeTab === 'chat' && <AdminChatTab onUnreadChange={setSupportUnread} />}
+
+          {activeTab === 'email' && <AdminEmailTab onSuccess={showSuccess} onError={showError} />}
 
           {!loading && activeTab === 'contracts' && (
             <AdminContractsTab
