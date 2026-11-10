@@ -161,6 +161,7 @@ export default function GoogleAuthButton({
     window.addEventListener('resize', scheduleRender);
     window.addEventListener('orientationchange', scheduleRender);
 
+    const hostNode = hostRef.current;
     return () => {
       isMounted = false;
       if (debounceTimerRef.current) {
@@ -171,8 +172,8 @@ export default function GoogleAuthButton({
       }
       window.removeEventListener('resize', scheduleRender);
       window.removeEventListener('orientationchange', scheduleRender);
-      if (hostRef.current) {
-        hostRef.current.innerHTML = '';
+      if (hostNode) {
+        hostNode.innerHTML = '';
       }
     };
   }, [googleClientId, text, theme, shape, size, type, logo_alignment, locale, retryKey]);

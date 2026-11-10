@@ -306,20 +306,23 @@
   justify-content: center;
   text-decoration: none;
   height: 42px;
-  padding: 0 20px;
-  background-color: #854d0e;
+  padding: 0 24px;
+  background-color: var(--color-primary-dark, #004D34);
   color: #ffffff;
   border: none;
   border-radius: 21px;
   font-family: var(--font-primary, 'Tajawal', sans-serif);
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 2px 6px rgba(0, 77, 52, 0.2);
 }
 
 .fund-now-btn:hover {
-  background-color: #713f12;
+  background-color: var(--color-primary, #0B6E4F);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(0, 77, 52, 0.3);
 }
 
 /* Transactions Table */

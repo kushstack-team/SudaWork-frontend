@@ -165,8 +165,10 @@ const PostProject = () => {
 
       if (values.title && values.description && hasCategory && values.budget && values.deadline) {
         submittingRef.current = true;
-        setAutoSubmitting(true);
-        setSubmitError('');
+        queueMicrotask(() => {
+          setAutoSubmitting(true);
+          setSubmitError('');
+        });
 
         const payload = buildPayload(values);
 
