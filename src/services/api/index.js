@@ -17,11 +17,16 @@ export const authApi = {
   register: async ({ fullName, email, password, role }) =>
     session(await post('/auth/register', { fullName, email, password, role }, { auth: false })),
   me: async () => m.mapUser((await get('/auth/me')).user),
+  // Signs out this device only. Sends this browser's push token so the server
+  // stops notifications here (the user's other devices keep receiving them).
   logout: async () => {
+    let pushToken = null;
+    try { pushToken = localStorage.getItem('sudawork_push_token'); } catch { /* storage unavailable */ }
     try {
-      if (tokens.access) await post('/auth/logout');
+      if (tokens.access) await post('/auth/logout', pushToken ? { pushToken } : undefined);
     } finally {
       tokens.clear();
+      try { localStorage.removeItem('sudawork_push_token'); } catch { /* storage unavailable */ }
     }
   },
   verifyEmail: async (code) => m.mapUser((await post('/auth/verify-email', { code })).user),
@@ -160,6 +165,9 @@ export const notificationsApi = {
   // Push notifications: this browser's Firebase Cloud Messaging token.
   registerPushToken: (token) => post('/notifications/push-tokens', { token }),
   unregisterPushToken: (token) => del('/notifications/push-tokens', { body: { token } }),
+  // Which notifications this user wants (projectAlerts: new projects in their specialty).
+  preferences: () => get('/notifications/preferences'),
+  updatePreferences: (prefs) => put('/notifications/preferences', prefs),
 };
 
 export const messagesApi = {

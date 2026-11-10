@@ -23,6 +23,7 @@ import {
 import useLoader from '../../hooks/useLoader';
 import { RowListSkeleton } from '../../components/common/Skeleton/Skeleton';
 import PushSettingsCard from '../../components/PushManager/PushSettingsCard';
+import ProjectAlertsCard from '../../components/PushManager/ProjectAlertsCard';
 
 const Notifications = () => {
   const { user } = useAuth();
@@ -117,7 +118,7 @@ const Notifications = () => {
     if (activeTab === 'unread') return !n.isRead;
     if (activeTab === 'projects') {
       return ['proposal_received', 'proposal_accepted', 'proposal_rejected', 'proposal_withdrawn', 'proposal_updated', 'project_moderated',
-        'project_submitted', 'project_approved', 'project_rejected'].includes(n.type);
+        'project_submitted', 'project_approved', 'project_rejected', 'project_match'].includes(n.type);
     }
     if (activeTab === 'contracts') {
       return ['work_submitted', 'revision_requested', 'contract_cancelled', 'new_message'].includes(n.type);
@@ -156,6 +157,8 @@ const Notifications = () => {
         return { icon: <FiClock />, label: 'مشروع بانتظار المراجعة', theme: 'delivery' };
       case 'project_approved':
         return { icon: <FiCheckCircle />, label: 'نشر مشروع', theme: 'success' };
+      case 'project_match':
+        return { icon: <FiFileText />, label: 'مشروع جديد في تخصصك', theme: 'proposal' };
       case 'project_rejected':
         return { icon: <FiAlertTriangle />, label: 'رفض نشر مشروع', theme: 'dispute' };
       case 'proposal_received':
@@ -261,6 +264,7 @@ const Notifications = () => {
           </div>
 
           <PushSettingsCard />
+          {user?.role === 'freelancer' && <ProjectAlertsCard />}
 
           {/* Filter Tabs Bar */}
           <div className="notifications-tabs-bar">

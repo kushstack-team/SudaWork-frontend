@@ -12,6 +12,9 @@
 const DEFAULT_TITLE = 'سوداوورك';
 const ICON = '/icon-512.png';
 const BADGE = '/notification-badge.png';
+// Safari / iOS (WebKit without Chrome or Firefox engines).
+const UA = self.navigator?.userAgent || '';
+const IS_APPLE_WEBKIT = /AppleWebKit/.test(UA) && !/Chrome|Chromium|CriOS|Edg|Firefox|FxiOS|Android/.test(UA);
 
 self.addEventListener('install', () => self.skipWaiting());
 self.addEventListener('activate', (event) => event.waitUntil(self.clients.claim()));
@@ -37,8 +40,11 @@ self.addEventListener('push', (event) => {
     const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
     windows.forEach((client) => client.postMessage({ type: 'sudawork:push', payload: { title, body, link, type: data.type } }));
 
-    // The user is looking at the site: the in-app toast is enough.
-    if (windows.some((client) => client.focused && client.visibilityState === 'visible')) return;
+    // The user is looking at the site: the in-app toast is enough. Not on
+    // Apple devices: Safari requires every push to show a notification and
+    // may revoke the permission of sites that skip it.
+    const looking = windows.some((client) => client.focused && client.visibilityState === 'visible');
+    if (looking && !IS_APPLE_WEBKIT) return;
 
     await self.registration.showNotification(title, {
       body,
@@ -46,8 +52,21 @@ self.addEventListener('push', (event) => {
       badge: BADGE,
       dir: 'rtl',
       lang: 'ar',
+      // One entry per page: a newer notification about the same thing
+      // replaces the older one instead of piling up.
+      tag: link,
+      renotify: true,
       data: { link },
     });
+  })());
+});
+
+// The browser replaced this device's push subscription: open tabs re-register
+// it now; otherwise the app does on its next visit.
+self.addEventListener('pushsubscriptionchange', (event) => {
+  event.waitUntil((async () => {
+    const windows = await self.clients.matchAll({ type: 'window', includeUncontrolled: true });
+    windows.forEach((client) => client.postMessage({ type: 'sudawork:push-resubscribe' }));
   })());
 });
 

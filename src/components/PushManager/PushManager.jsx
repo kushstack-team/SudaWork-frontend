@@ -81,6 +81,10 @@ export default function PushManager() {
     if (!supported) return undefined;
     let timer;
     const onMessage = (event) => {
+      if (event.data?.type === 'sudawork:push-resubscribe') {
+        window.dispatchEvent(new Event('sudawork:push-resync'));
+        return;
+      }
       if (event.data?.type !== 'sudawork:push') return;
       window.dispatchEvent(new Event('sudawork:notifications-changed'));
       setToast(event.data.payload);

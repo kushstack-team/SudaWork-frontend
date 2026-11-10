@@ -99,11 +99,25 @@ const fetchToken = async () => {
  * the user hasn't opted out. Safe to call on every sign-in/session refresh.
  */
 export const syncPushToken = async () => {
-  if (!(await isPushSupported()) || getPermission() !== 'granted' || isOptedOut()) return false;
+  if (!(await isPushSupported())) return false;
+  const previous = storage.get(TOKEN_KEY);
+
+  // Permission was removed in the browser settings (or the user opted out):
+  // tell the server to stop sending to this browser.
+  if (getPermission() !== 'granted' || isOptedOut()) {
+    if (previous) {
+      storage.set(TOKEN_KEY, null);
+      await api.notifications.unregisterPushToken(previous).catch(() => {});
+    }
+    return false;
+  }
+
   const token = await fetchToken();
   if (!token) return false;
   await api.notifications.registerPushToken(token);
   storage.set(TOKEN_KEY, token);
+  // Firebase rotated this browser's token: drop the old one on the server.
+  if (previous && previous !== token) await api.notifications.unregisterPushToken(previous).catch(() => {});
   return true;
 };
 
